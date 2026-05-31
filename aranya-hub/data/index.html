@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Aranya Resort — Guest Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header neu">
+      <div class="header-brand">
+        <div class="header-logo">&#127793;</div>
+        <div class="header-info">
+          <span class="header-title">Aranya Resort</span>
+          <span class="header-subtitle">Guest Dashboard</span>
+        </div>
+      </div>
+      <div class="header-clock">
+        <div class="clock-time" id="clockTime">--:--</div>
+        <div class="clock-date" id="clockDate">---</div>
+      </div>
+    </header>
+
+    <!-- ===== CONNECTION STATUS ===== -->
+    <div class="conn-bar neu-sm" id="connBar">
+      <span class="conn-dot" id="connDot"></span>
+      <span id="connText">Connecting...</span>
+    </div>
+
+    <!-- ===== SCENE SELECTOR ===== -->
+    <section class="section neu" id="scenesSection">
+      <div class="section-header">
+        <div class="section-title"><span class="icon">&#127917;</span> Quick Scenes</div>
+        <span class="section-action" id="refreshScenes">Refresh</span>
+      </div>
+      <div class="scenes-grid" id="scenesGrid"></div>
+    </section>
+
+    <!-- ===== ROOM CONTROLS ===== -->
+    <section class="section neu" id="roomSection">
+      <div class="section-header">
+        <div class="section-title"><span class="icon">&#127968;</span> Room Controls</div>
+        <span class="section-action" id="roomStatus"></span>
+      </div>
+      <select class="room-selector" id="roomSelector">
+        <option value="">-- Select a room --</option>
+      </select>
+      <div id="roomControls" style="margin-top:1rem;"></div>
+    </section>
+
+    <!-- ===== LIGHTING PRESETS ===== -->
+    <section class="section neu" id="lightingSection">
+      <div class="section-header">
+        <div class="section-title"><span class="icon">&#128161;</span> Lighting Presets</div>
+        <span class="section-action" id="lightStatus">All off</span>
+      </div>
+      <div class="lighting-grid" id="lightingGrid"></div>
+    </section>
+
+    <!-- ===== SERVICE BAR ===== -->
+    <section class="section neu" id="serviceSection">
+      <div class="section-header">
+        <div class="section-title"><span class="icon">&#128736;</span> Guest Services</div>
+        <span class="section-action" id="serviceStatus">None active</span>
+      </div>
+      <div class="service-grid" id="serviceGrid"></div>
+    </section>
+
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div id="toastContainer"></div>
+
+  <!-- ===== SERVICE MODAL ===== -->
+  <div class="svc-modal" id="svcModal">
+    <div class="svc-modal-card">
+      <div class="svc-modal-icon" id="svcModalIcon">&#129309;</div>
+      <div class="svc-modal-title" id="svcModalTitle">Service Requested</div>
+      <div class="svc-modal-desc" id="svcModalDesc">Your request has been sent to the front desk.</div>
+      <div class="svc-modal-time" id="svcModalTime">Just now</div>
+      <button class="svc-modal-btn" id="svcModalBtn">Got it</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
