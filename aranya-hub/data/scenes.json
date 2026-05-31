@@ -1,0 +1,40 @@
+{
+  "scenes": [
+    {
+      "id": 0,
+      "name": "Campfire Night",
+      "icon": "\ud83d\udd25",
+      "description": "Warm amber glow across the amphitheater",
+      "target_node": 3,
+      "presets": {
+        "lighting": "dusk",
+        "ac": 22,
+        "blinds": "close"
+      }
+    },
+    {
+      "id": 1,
+      "name": "Poolside Vibes",
+      "icon": "\ud83c\udfca",
+      "description": "Cool blue ambiance around the pool area",
+      "target_node": 4,
+      "presets": {
+        "lighting": "reading",
+        "ac": 24,
+        "blinds": "open"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Movie Night",
+      "icon": "\ud83c\udfac",
+      "description": "Dim lights, comfort climate for screening",
+      "target_node": 0,
+      "presets": {
+        "lighting": "sunrise",
+        "ac": 20,
+        "blinds": "close"
+      }
+    }
+  ]
+}

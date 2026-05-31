@@ -1,0 +1,32 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Glass Room A",
+      "mac": "AA:BB:CC:DD:EE:01"
+    },
+    {
+      "id": 2,
+      "name": "Glass Room B",
+      "mac": "AA:BB:CC:DD:EE:02"
+    },
+    {
+      "id": 3,
+      "name": "Amphitheater",
+      "mac": "AA:BB:CC:DD:EE:03"
+    },
+    {
+      "id": 4,
+      "name": "Pool Area",
+      "mac": "AA:BB:CC:DD:EE:04"
+    }
+  ],
+  "ws_url": "ws://farmhouse.local/ws",
+  "reconnect_interval": 3000,
+  "device_types": {
+    "1": "Light",
+    "2": "AC",
+    "3": "Blind",
+    "4": "Service"
+  }
+}
