@@ -7,23 +7,7 @@
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
 #include "config.h"
-
-// ESP-NOW Packet Structure
-struct __attribute__((packed)) EspNowPacket {
-    uint8_t room_id;      // 0-255 (room identifier)
-    uint8_t device_type;  // 0=AC, 1=Blinds, 2=Light, 3=LED, 4=Scene
-    uint8_t action_value; // 0-255 (depends on device_type)
-    uint8_t checksum;     // Simple XOR checksum
-};
-
-// Device Type Constants
-enum DeviceType {
-    DEVICE_AC = 0,      // Air Conditioner
-    DEVICE_BLINDS = 1,  // Motorized Blinds
-    DEVICE_LIGHT = 2,   // Room Light
-    DEVICE_LED = 3,     // Addressable LEDs
-    DEVICE_SCENE = 4    // Service Request
-};
+#include "packet_struct.h"
 
 // Global Objects
 IRsend irSender(IR_SEND_PIN);  // IR Blaster
@@ -40,7 +24,7 @@ uint8_t calculateChecksum(const EspNowPacket& packet) {
     uint8_t checksum = 0;
     checksum ^= packet.room_id;
     checksum ^= packet.device_type;
-    checksum ^= packet.action_value;
+    checksum ^= packet.action_value; // This works for both legacy and extended formats
     return checksum;
 }
 
@@ -53,19 +37,37 @@ bool validatePacket(const EspNowPacket& packet) {
 }
 
 // Handle AC Command
-void handleAcCommand(uint8_t action) {
-    switch(action) {
-        case 0: irSender.sendNEC(0x00FF, 32); break; // Power Off
-        case 1: irSender.sendNEC(0x00FE, 32); break; // Power On
-        case 2: irSender.sendNEC(0x40BF, 32); break; // Temp Up
-        case 3: irSender.sendNEC(0xC03F, 32); break; // Temp Down
-        case 4: irSender.sendNEC(0x807F, 32); break; // Fan Speed
-        case 5: irSender.sendNEC(0x02FD, 32); break; // Mode
-        default: break;
+void handleAcCommand(const EspNowPacket& packet) {
+    // Check if using extended AC format
+    if (packet.isExtendedAcFormat()) {
+        // Extract parameters from extended format
+        bool power = packet.ac_payload.power;
+        int temp = packet.ac_payload.temp + 16; // Convert from 0-14 offset to 16-30°C
+        int fan = packet.ac_payload.fan_speed;
+        int mode = packet.ac_payload.mode;
+        
+        #if DEBUG_SERIAL
+            Serial.printf("AC Extended Command: power=%d, temp=%d, fan=%d, mode=%d\n", 
+                         power, temp, fan, mode);
+        #endif
+        
+        // Send complete AC configuration
+        sendAcConfig(power ? 1 : 0, temp, fan, mode);
+    } else {
+        // Legacy format - maintain backward compatibility
+        switch(packet.action_value) {
+            case 0: irSender.sendNEC(0x00FF, 32); break; // Power Off
+            case 1: irSender.sendNEC(0x00FE, 32); break; // Power On
+            case 2: irSender.sendNEC(0x40BF, 32); break; // Temp Up
+            case 3: irSender.sendNEC(0xC03F, 32); break; // Temp Down
+            case 4: irSender.sendNEC(0x807F, 32); break; // Fan Speed
+            case 5: irSender.sendNEC(0x02FD, 32); break; // Mode
+            default: break;
+        }
+        #if DEBUG_SERIAL
+            Serial.printf("AC Command (Legacy): %d\n", packet.action_value);
+        #endif
     }
-    #if DEBUG_SERIAL
-        Serial.printf("AC Command: %d\n", action);
-    #endif
 }
 
 // Handle Blinds Command
@@ -182,29 +184,29 @@ void onEspNowReceived(uint8_t *mac_addr, uint8_t *data, uint8_t len) {
     lastActivityTime = millis();
     nodeActive = true;
     
-    // Handle based on device type
-    switch(packet.device_type) {
-        case DEVICE_AC:
-            handleAcCommand(packet.action_value);
-            break;
-        case DEVICE_BLINDS:
-            handleBlindsCommand(packet.action_value);
-            break;
-        case DEVICE_LIGHT:
-            handleLightCommand(packet.action_value);
-            break;
-        case DEVICE_LED:
-            handleLedCommand(packet.action_value);
-            break;
-        case DEVICE_SCENE:
-            handleServiceRequest(packet.action_value);
-            break;
-        default:
-            #if DEBUG_SERIAL
-                Serial.printf("Unknown device type: %d\n", packet.device_type);
-            #endif
-            break;
-    }
+     // Handle based on device type
+     switch(packet.device_type) {
+         case DEVICE_AC:
+             handleAcCommand(packet);
+             break;
+         case DEVICE_BLINDS:
+             handleBlindsCommand(packet.action_value);
+             break;
+         case DEVICE_LIGHT:
+             handleLightCommand(packet.action_value);
+             break;
+         case DEVICE_LED:
+             handleLedCommand(packet.action_value);
+             break;
+         case DEVICE_SCENE:
+             handleServiceRequest(packet.action_value);
+             break;
+         default:
+             #if DEBUG_SERIAL
+                 Serial.printf("Unknown device type: %d\n", packet.device_type);
+             #endif
+             break;
+     }
 }
 
 // Watchdog callback

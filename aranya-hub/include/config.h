@@ -48,3 +48,9 @@
 #define MAX_TEMP 30
 #define MIN_ROOM_ID 1
 #define MAX_ROOM_ID 255
+
+// OTA Configuration
+#define OTA_SERVER_URL "{{OTA_SERVER_URL}}"
+#define OTA_VERSION_ENDPOINT "{{OTA_SERVER_URL}}/otaVersion.json"
+#define OTA_FIRMWARE_ENDPOINT "{{OTA_SERVER_URL}}/firmware.bin"
+#define OTA_SECURE_UPDATE_ENDPOINT "{{OTA_SERVER_URL}}/secureUpdate?key={{CANONICAL_OTA_KEY}}"

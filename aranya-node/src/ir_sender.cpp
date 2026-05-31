@@ -80,27 +80,34 @@ void sendAcMode(int mode) {
 
 // Send Complete AC Configuration
 void sendAcConfig(uint8_t power, int temp, int fan, int mode) {
-    if (power) {
-        sendAcPower(true);
-        delay(100);
-    }
+    // Power control
+    sendAcPower(power > 0);
+    delay(100);
 
-    // Adjust temperature based on mode
-    if (mode == 0) { // Cool
-        for (int i = 0; i < (temp - 16); i++) {
-            sendAcTemp(true);
-            delay(150);
-        }
-    } else if (mode == 1) { // Heat
-        for (int i = 0; i < (30 - temp); i++) {
-            sendAcTemp(false);
-            delay(150);
+    // Temperature adjustment
+    if (mode == AC_MODE_COOL || mode == AC_MODE_HEAT) {
+        int current_temp = mode == AC_MODE_COOL ? 16 : 30;
+        
+        // Normalize temperature range
+        temp = constrain(temp, 16, 30);
+        
+        int delta = (mode == AC_MODE_COOL) ? (temp - current_temp) : (current_temp - temp);
+        
+        // Send temperature adjustments
+        if (delta > 0) {
+            bool increase = (mode == AC_MODE_COOL);
+            for (int i = 0; i < delta; i++) {
+                sendAcTemp(increase);
+                delay(150);
+            }
         }
     } else {
+        // For non-temperature modes, set fan speed
         sendAcFanSpeed(fan);
         delay(100);
     }
 
+    // Set mode
     sendAcMode(mode);
     delay(100);
 }

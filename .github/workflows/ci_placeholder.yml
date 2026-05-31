@@ -1,0 +1,83 @@
+name: CI Placeholder for Aranya IoT
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PlatformIO
+        uses: platformio/setup-platformio@v1
+        with:
+          version: latest
+
+      - name: Build firmware
+        run: pio run
+
+      - name: List build artifacts
+        run: |
+          find .pio/build -name "*.bin" -o -name "*.elf" -o -name "*.hex" | sort
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-binaries
+          path: |
+            .pio/build/**/*.bin
+            .pio/build/**/*.elf
+            .pio/build/**/*.hex
+          retention-days: 30
+
+      # <!-- placeholder --> 
+      # The following sections are commented out as they require sensitive credentials.
+      # Uncomment and configure as needed for your deployment strategy.
+
+      # # Option 1: Upload to S3-compatible storage (e.g., AWS S3, MinIO, Ceph)
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: {{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: {{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      #
+      # - name: Upload to S3
+      #   run: |
+      #     aws s3 sync .pio/build/ s3://your-bucket/firmware/ --exclude "*" --include "*.bin" --include "*.elf" --include "*.hex"
+
+      # # Option 2: Upload to GitHub Releases
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is automatically provided, but requires repo scope
+      #   with:
+      #     tag_name: v${{ github.run_number }}
+      #     release_name: Release v${{ github.run_number }}
+      #     draft: false
+      #     prerelease: false
+      #
+      # - name: Upload Release Assets
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: .pio/build/esp32/firmware.bin
+      #     asset_name: firmware-esp32.bin
+      #     asset_content_type: application/octet-stream
+
+      # # Option 3: Upload to Backblaze B2
+      # - name: Authorize Backblaze B2
+      #   run: |
+      #     b2 authorize-account ${{ secrets.B2_KEY_ID }} ${{ secrets.B2_APPLICATION_KEY }}
+      #
+      # - name: Upload to B2
+      #   run: |
+      #     b2 sync .pio/build/ b2://your-bucket/firmware/ --excludeRegex ".*" --includeRegex ".*\.(bin|elf|hex)$"
