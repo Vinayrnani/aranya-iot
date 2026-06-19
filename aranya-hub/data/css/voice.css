@@ -1,0 +1,50 @@
+/* ===== VOICE ASSISTANT FAB ===== */
+.voice-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow:
+    6px 6px 12px var(--shadow),
+    -6px -6px 12px var(--highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  z-index: 1000;
+  color: var(--primary);
+}
+
+.voice-fab:active {
+  box-shadow:
+    inset 3px 3px 6px var(--shadow),
+    inset -3px -3px 6px var(--highlight);
+  transform: scale(0.95);
+}
+
+/* States */
+.voice-idle {
+  border: 2px solid transparent;
+}
+
+.voice-listening {
+  border: 2px solid var(--accent);
+  animation: pulseGlow 1.5s infinite;
+}
+
+.voice-processing {
+  border: 2px solid var(--primary);
+  animation: spin 1s linear infinite;
+}
+
+.voice-speaking {
+  border: 2px solid var(--primary-light);
+  box-shadow:
+    0 0 15px var(--primary-light),
+    inset 0 0 5px var(--highlight);
+}

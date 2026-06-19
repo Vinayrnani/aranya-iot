@@ -106,8 +106,8 @@
     var el = document.createElement('div');
     el.className = 'toast toast-' + type;
 
-    var icons = { success: '\2713', error: '\2717', info: '\24D8' };
-    var icon = icons[type] || '\24D8';
+    var icons = { success: '\u2713', error: '\u2717', info: '\u24D8' };
+    var icon = icons[type] || '\u24D8';
 
     el.innerHTML =
       '<span class="toast-icon">' + icon + '</span>' +
@@ -297,7 +297,7 @@
       var active = scene.id === activeSceneId ? ' active' : '';
       html +=
         '<div class="scene-card' + active + '" data-scene-id="' + scene.id + '">' +
-          '<div class="scene-icon">' + (scene.icon || '\127750') + '</div>' +
+          '<div class="scene-icon">' + (scene.icon || '\u{1F306}') + '</div>' +
           '<div class="scene-name">' + escapeHtml(scene.name) + '</div>' +
           '<div class="scene-desc">' + escapeHtml(scene.description || '') + '</div>' +
         '</div>';
@@ -616,9 +616,9 @@
   // ================================================================
 
   var lightingPresets = [
-    { id: 'sunrise', icon: '\127749', label: 'Sunrise', desc: 'Warm glow' },
-    { id: 'reading', icon: '\128218', label: 'Reading', desc: 'Bright focus' },
-    { id: 'dusk', icon: '\127769', label: 'Dusk', desc: 'Soft amber' }
+    { id: 'sunrise', icon: '\u{1F305}', label: 'Sunrise', desc: 'Warm glow' },
+    { id: 'reading', icon: '\u{1F4DA}', label: 'Reading', desc: 'Bright focus' },
+    { id: 'dusk', icon: '\u{1F319}', label: 'Dusk', desc: 'Soft amber' }
   ];
 
   function renderLighting () {
@@ -667,8 +667,8 @@
   // ================================================================
 
   var services = [
-    { id: 'silent', icon: '\128263', label: 'Silent Service', desc: 'No housekeeping' },
-    { id: 'dnd', icon: '\128683', label: 'Do Not Disturb', desc: 'Privacy please' }
+    { id: 'silent', icon: '\u{1F507}', label: 'Silent Service', desc: 'No housekeeping' },
+    { id: 'dnd', icon: '\u{1F6AB}', label: 'Do Not Disturb', desc: 'Privacy please' }
   ];
 
   function renderServiceBar () {
@@ -710,7 +710,7 @@
 
     if (newState) {
       var labels = { silent: 'Silent Service', dnd: 'Do Not Disturb' };
-      var icons = { silent: '\128263', dnd: '\128683' };
+      var icons = { silent: '\u{1F507}', dnd: '\u{1F6AB}' };
       dom.serviceStatus.textContent = labels[newState] + ' active';
 
       // Show modal
@@ -735,6 +735,14 @@
 
   function init () {
     cacheDom();
+
+    // Integration check — VoiceAssistant should be provided by voice.js
+    if (typeof window.VoiceAssistant !== 'object') {
+      console.warn('[Voice] VoiceAssistant not found — voice.js may be missing');
+    } else {
+      console.log('[Voice] VoiceAssistant detected, version:', Object.keys(window.VoiceAssistant).join(', '));
+    }
+
     startClock();
 
     // Load data
