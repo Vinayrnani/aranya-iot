@@ -1,0 +1,24 @@
+{
+  "name": "voice-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WebSocket-based voice server for Aranya IoT using Groq STT/LLM/TTS",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha test/**/*.test.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "groq-sdk": "^0.18.0",
+    "openai": "^6.44.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "mocha": "^11.7.6",
+    "sinon": "^22.0.0"
+  }
+}
