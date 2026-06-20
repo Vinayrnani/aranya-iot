@@ -19,3 +19,19 @@ Thumbs.db
 *.elf
 *.hex
 *.bin
+
+# Node.js
+node_modules/
+
+# Environment / secrets
+.env
+
+# Voice models (large binary files, ~63MB each)
+*.onnx
+!*.onnx.json
+
+# Temp / generated
+server.log
+server.pid
+*.log.tmp
+/tmp/
