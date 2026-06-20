@@ -21,7 +21,7 @@
       "mac": "AA:BB:CC:DD:EE:04"
     }
   ],
-  "ws_url": "ws://farmhouse.local/ws",
+  "ws_url": "ws://localhost:8080/ws",
   "reconnect_interval": 3000,
   "device_types": {
     "1": "Light",

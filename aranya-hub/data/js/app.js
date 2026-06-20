@@ -120,6 +120,7 @@
       setTimeout(function () { if (el.parentNode) el.remove(); }, 300);
     }, TOAST_DURATION);
   }
+  window.toast = toast; // Expose for other modules
 
   // ================================================================
   // CLOCK
@@ -741,6 +742,7 @@
       console.warn('[Voice] VoiceAssistant not found — voice.js may be missing');
     } else {
       console.log('[Voice] VoiceAssistant detected, version:', Object.keys(window.VoiceAssistant).join(', '));
+      window.VoiceAssistant.init(); // Initialize the voice module
     }
 
     startClock();
