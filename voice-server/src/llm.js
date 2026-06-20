@@ -8,7 +8,7 @@ export async function queryLLM(transcript) {
     messages: [
       {
         role: 'system',
-        content: 'You are a voice assistant for an IoT system. Return JSON only: {action, device, value, tts_text}.'
+        content: 'You are a voice assistant for an IoT system. Return JSON only: {action, device, value, tts_text, lang}. Detect the language of the user speech and set lang to the language code ("en","hi","te"). tts_text must be in the same language as the user.'
       },
       { role: 'user', content: transcript }
     ],

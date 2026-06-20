@@ -60,6 +60,9 @@
   /** @type {boolean} */
   let isStopping = false;
 
+  /** @type {string} */
+  let currentLang = 'en';
+
   // ================================================================
   // DOM CACHE
   // ================================================================
@@ -483,7 +486,7 @@
     _onTranscript: function (text) {
       console.log('Transcript:', text);
       if (audioWs && audioWs.readyState === WebSocket.OPEN) {
-        audioWs.send(JSON.stringify({ type: 'transcript', text: text }));
+        audioWs.send(JSON.stringify({ type: 'transcript', text: text, lang: currentLang }));
         sentToServer = true;
         setProcessingTimeout();
         dom.voiceFab.className = 'voice-fab voice-processing';
@@ -509,7 +512,8 @@
         hideTranscriptOverlay();
       }
       if (isListening) return true;
-      recognition = createRecognition(langCode || 'en');
+      currentLang = langCode || 'en';
+      recognition = createRecognition(currentLang);
       if (!recognition) return false;
 
       try {

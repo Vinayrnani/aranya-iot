@@ -15,7 +15,8 @@ export function handleConnection(ws) {
 
       if (transcript) {
         const response = await queryLLM(transcript);
-        const ttsAudio = await synthesize(response.tts_text, message.lang || 'en');
+        const ttsLang = response.lang || message.lang || 'en';
+        const ttsAudio = await synthesize(response.tts_text, ttsLang);
         ws.send(JSON.stringify({ 
           type: 'response', 
           ...response, 
