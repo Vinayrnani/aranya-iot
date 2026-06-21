@@ -4,7 +4,7 @@ import http from 'http';
 import fs from 'fs';
 import { execSync } from 'child_process';
 import { WebSocketServer } from 'ws';
-import { handleConnection } from './ws-handler.js';
+import { handleConnection, getConversationHistory } from './ws-handler.js';
 import { config } from './config.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -36,6 +36,11 @@ const server = http.createServer(app);
 
 // Serve static files from aranya-hub/data
 app.use(express.static(join(__dirname, '../../aranya-hub/data')));
+
+// API: conversation history (last 10)
+app.get('/api/voice-history', (req, res) => {
+  res.json(getConversationHistory());
+});
 
 const wss = new WebSocketServer({ server, path: '/ws' });
 

@@ -2,6 +2,32 @@ import { transcribeAudio } from './stt.js';
 import { queryLLM } from './llm.js';
 import { synthesize } from './tts.js';
 
+// ================================================================
+// Conversation History (last 10)
+// ================================================================
+
+const MAX_HISTORY = 10;
+const conversationHistory = [];
+
+function addToHistory(entry) {
+  conversationHistory.push(entry);
+  if (conversationHistory.length > MAX_HISTORY) {
+    conversationHistory.shift();
+  }
+}
+
+/**
+ * Get the conversation history array (read-only snapshot).
+ * @returns {Array<{timestamp: string, input: string, llm: Object, ttsLang: string, ttsText: string, audioSize: number}>}
+ */
+export function getConversationHistory() {
+  return conversationHistory.slice();
+}
+
+// ================================================================
+// WebSocket Handler
+// ================================================================
+
 export function handleConnection(ws) {
   ws.on('message', async (data) => {
     try {
@@ -23,7 +49,17 @@ export function handleConnection(ws) {
         console.log(`[PIPELINE] TTS  → lang=${ttsLang} text="${response.tts_text}"`);
 
         const ttsAudio = await synthesize(response.tts_text, ttsLang);
-        console.log(`[PIPELINE] DONE → ${(ttsAudio.length / 1024).toFixed(0)}KB audio`);
+        const audioSizeKB = (ttsAudio.length / 1024).toFixed(0);
+        console.log(`[PIPELINE] DONE → ${audioSizeKB}KB audio`);
+
+        addToHistory({
+          timestamp: new Date().toISOString(),
+          input: transcript,
+          llm: response,
+          ttsLang,
+          ttsText: response.tts_text,
+          audioSizeKB: Number(audioSizeKB)
+        });
 
         ws.send(JSON.stringify({ 
           type: 'response', 
