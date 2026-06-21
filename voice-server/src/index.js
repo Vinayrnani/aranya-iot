@@ -4,7 +4,7 @@ import http from 'http';
 import fs from 'fs';
 import { execSync } from 'child_process';
 import { WebSocketServer } from 'ws';
-import { handleConnection, getConversationHistory } from './ws-handler.js';
+import { handleConnection, getConversationHistory, getConversationAudio } from './ws-handler.js';
 import { config } from './config.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -40,6 +40,18 @@ app.use(express.static(join(__dirname, '../../aranya-hub/data')));
 // API: conversation history (last 10)
 app.get('/api/voice-history', (req, res) => {
   res.json(getConversationHistory());
+});
+
+// API: serve output/input audio for a history entry
+app.get('/api/voice-history/:index/audio', (req, res) => {
+  const index = parseInt(req.params.index, 10);
+  const type = req.query.type === 'input' ? 'inputAudio' : 'outputAudio';
+  const audio = getConversationAudio(index);
+  if (!audio || !audio[type]) {
+    return res.status(404).send('Audio not found');
+  }
+  res.set('Content-Type', 'audio/wav');
+  res.send(audio[type]);
 });
 
 const wss = new WebSocketServer({ server, path: '/ws' });

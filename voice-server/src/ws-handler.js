@@ -17,11 +17,29 @@ function addToHistory(entry) {
 }
 
 /**
- * Get the conversation history array (read-only snapshot).
- * @returns {Array<{timestamp: string, input: string, llm: Object, ttsLang: string, ttsText: string, audioSize: number}>}
+ * Get the conversation history array (read-only snapshot, no audio buffers).
+ * @returns {Array<{timestamp, input, llm, ttsLang, ttsText, audioSizeKB}>}
  */
 export function getConversationHistory() {
-  return conversationHistory.slice();
+  return conversationHistory.map(({ outputAudio, inputAudio, ...rest }) => ({
+    ...rest,
+    hasOutputAudio: !!outputAudio,
+    hasInputAudio: !!inputAudio
+  }));
+}
+
+/**
+ * Get the output audio buffer for a history entry.
+ * @param {number} index
+ * @returns {{ outputAudio: Buffer|null, inputAudio: Buffer|null }|null}
+ */
+export function getConversationAudio(index) {
+  const entry = conversationHistory[index];
+  if (!entry) return null;
+  return {
+    outputAudio: entry.outputAudio || null,
+    inputAudio: entry.inputAudio || null
+  };
 }
 
 // ================================================================
@@ -33,8 +51,10 @@ export function handleConnection(ws) {
     try {
       const message = JSON.parse(data);
       let transcript;
+      let inputAudioBuffer = null;
       if (message.type === 'audio') {
-        transcript = await transcribeAudio(Buffer.from(message.data, 'base64'));
+        inputAudioBuffer = Buffer.from(message.data, 'base64');
+        transcript = await transcribeAudio(inputAudioBuffer);
         console.log(`[PIPELINE] STT → "${transcript}"`);
       } else if (message.type === 'transcript') {
         transcript = message.text;
@@ -58,7 +78,9 @@ export function handleConnection(ws) {
           llm: response,
           ttsLang,
           ttsText: response.tts_text,
-          audioSizeKB: Number(audioSizeKB)
+          audioSizeKB: Number(audioSizeKB),
+          outputAudio: ttsAudio,
+          inputAudio: inputAudioBuffer
         });
 
         ws.send(JSON.stringify({ 
