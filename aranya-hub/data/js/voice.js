@@ -87,6 +87,10 @@
      */
     function cacheDom () {
       dom.voiceFab = $('#voiceFab');
+      dom.voiceLangBar = $('#voiceLang');
+      dom.voiceLangBtns = dom.voiceLangBar
+        ? Array.from(dom.voiceLangBar.querySelectorAll('.voice-lang-btn'))
+        : [];
       createTranscriptOverlay();
     }
 
@@ -101,24 +105,22 @@
         return;
       }
 
-      var start = function (e) {
-        e.preventDefault();
-        VoiceAssistant.startListening('en');
-        dom.voiceFab.className = 'voice-fab voice-listening';
-      };
+      // Language selector
+      dom.voiceLangBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          dom.voiceLangBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentLang = btn.getAttribute('data-lang');
+        });
+      });
 
-      var stop = function (e) {
-        e.preventDefault();
-        VoiceAssistant.stopListening();
-        dom.voiceFab.className = 'voice-fab voice-processing';
-      };
-
-      // Mouse
+      // Voice FAB toggle
       dom.voiceFab.addEventListener('click', function(e) {
         console.log('Voice FAB clicked');
         if (isListening) stopListening();
         else {
-          VoiceAssistant.startListening('en');
+          VoiceAssistant.startListening(currentLang);
           dom.voiceFab.className = 'voice-fab voice-listening';
         }
       });
