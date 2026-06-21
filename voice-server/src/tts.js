@@ -73,10 +73,10 @@ function rawPcmToWav(pcmBuffer, sampleRate) {
   return Buffer.concat([header, pcmBuffer]);
 }
 
-const VOICE_SAMPLE_RATES = {
-  en: 22050,
-  hi: 22050,
-  te: 22050,
+const VOICE_CONFIG = {
+  en: { sampleRate: 22050, lengthScale: 1.0 },
+  hi: { sampleRate: 22050, lengthScale: 1.2 },
+  te: { sampleRate: 22050, lengthScale: 1.2 },
 };
 
 async function synthesizePiper(text, lang, spawnFn, execSyncFn) {
@@ -88,8 +88,14 @@ async function synthesizePiper(text, lang, spawnFn, execSyncFn) {
     throw new Error('Piper binary not found');
   }
 
+  const cfg = VOICE_CONFIG[lang] || VOICE_CONFIG.en;
+
   return new Promise((resolve, reject) => {
-    const piper = spawnFn('piper', ['--model', `models/${lang}.onnx`, '--output-raw']);
+    const piper = spawnFn('piper', [
+      '--model', `models/${lang}.onnx`,
+      '--output-raw',
+      '--length-scale', String(cfg.lengthScale),
+    ]);
     const chunks = [];
     piper.stdout.on('data', (chunk) => chunks.push(chunk));
 
@@ -102,8 +108,7 @@ async function synthesizePiper(text, lang, spawnFn, execSyncFn) {
       if (rejected) return;
       if (code === 0) {
         const rawPcm = Buffer.concat(chunks);
-        const sampleRate = VOICE_SAMPLE_RATES[lang] || 22050;
-        resolve(rawPcmToWav(rawPcm, sampleRate));
+        resolve(rawPcmToWav(rawPcm, cfg.sampleRate));
       } else {
         rejectOnce(new Error(`Piper exited with code ${code}`));
       }
