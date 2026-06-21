@@ -52,10 +52,13 @@ export function handleConnection(ws) {
       const message = JSON.parse(data);
       let transcript;
       let inputAudioBuffer = null;
+      let sttLang = null;
       if (message.type === 'audio') {
         inputAudioBuffer = Buffer.from(message.data, 'base64');
-        transcript = await transcribeAudio(inputAudioBuffer);
-        console.log(`[PIPELINE] STT → "${transcript}"`);
+        const sttResult = await transcribeAudio(inputAudioBuffer);
+        transcript = sttResult.text;
+        sttLang = sttResult.language;
+        console.log(`[PIPELINE] STT → "${transcript}" (detected=${sttLang})`);
       } else if (message.type === 'transcript') {
         transcript = message.text;
         console.log(`[PIPELINE] INPUT → "${transcript}" (lang=${message.lang || 'none'})`);
@@ -65,7 +68,7 @@ export function handleConnection(ws) {
         const response = await queryLLM(transcript);
         console.log(`[PIPELINE] LLM →`, JSON.stringify(response));
 
-        const ttsLang = response.lang || message.lang || 'en';
+        const ttsLang = sttLang || response.lang || message.lang || 'en';
         console.log(`[PIPELINE] TTS  → lang=${ttsLang} text="${response.tts_text}"`);
 
         const ttsAudio = await synthesize(response.tts_text, ttsLang);

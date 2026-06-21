@@ -10,6 +10,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "@gladiaio/sdk": "^1.0.5",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
     "groq-sdk": "^0.18.0",

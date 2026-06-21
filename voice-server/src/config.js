@@ -12,4 +12,11 @@ export const config = {
     llmModel: process.env.GROQ_LLM_MODEL || "llama-3.3-70b-versatile",
     ttsModel: process.env.GROQ_TTS_MODEL || "playai-tts",
   },
+
+  // Gladia API configuration (live streaming STT)
+  gladia: {
+    apiKey: process.env.GLADIA_API_KEY || "",
+    model: "solaria-1",
+    languages: ["en", "hi", "te"],
+  },
 };
