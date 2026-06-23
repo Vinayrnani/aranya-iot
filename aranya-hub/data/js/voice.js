@@ -1,6 +1,6 @@
 /* ================================================================
    Aranya Resort — Voice Assistant Module
-   MediaRecorder audio capture + WebSocket pipeline + speech playback
+   AudioContext PCM capture + Gladia streaming STT via WebSocket
    ================================================================ */
 
 (function () {
@@ -12,24 +12,38 @@
 
   var WS_RECONNECT_DELAY = 2000;
   var MAX_RECORDING_TIME = 30000;
+  var PCM_SAMPLE_RATE = 16000;
+  var CHUNK_FRAMES = 4096;
 
   // ================================================================
   // STATE
   // ================================================================
 
-  var mediaRecorder = null;
-  var mediaStream = null;
+  var audioContext = null;
+  var scriptProcessor = null;
+  var sourceNode = null;
+  var capturedStream = null;
   var isListening = false;
-  var audioChunks = [];
+  var isStopping = false;
+  var recordingActive = false;
   var audioWs = null;
   var wsReconnectTimer = null;
   var processingTimer = null;
   var transcriptOverlayTimer = null;
   var lastTranscriptText = '';
-  var sentToServer = false;
-  var isStopping = false;
   var recordingTimer = null;
-  var cancelPendingCapture = false;
+
+  // Timing instrumentation
+  var timing = {
+    fabPressed: null,
+    getUserMediaStart: null,
+    getUserMediaEnd: null,
+    audioContextCreated: null,
+    firstChunkSent: null,
+    audioEndSent: null,
+    responseReceived: null,
+    chunkCount: 0
+  };
 
   // ================================================================
   // DOM CACHE
@@ -57,10 +71,11 @@
       return;
     }
 
-    // Hold-to-talk: press to record, release to send.
     dom.voiceFab.addEventListener('pointerdown', function (e) {
       e.preventDefault();
-      console.log('Voice FAB pressed');
+      timing.fabPressed = Date.now();
+      timing.chunkCount = 0;
+      console.log('[TIMING] FAB pressed @', timing.fabPressed);
       if (isListening) return;
       VoiceAssistant.startListening();
       dom.voiceFab.className = 'voice-fab voice-listening';
@@ -134,6 +149,13 @@
         dom.vtResponseText.textContent = '\uD83C\uDFA4 Listening...';
         break;
 
+      case 'partial':
+        lastTranscriptText = text || lastTranscriptText;
+        dom.vtUserText.textContent = lastTranscriptText;
+        dom.vtResponseText.textContent = '...';
+        dom.vtDots.style.display = '';
+        break;
+
       case 'processing':
         lastTranscriptText = text || lastTranscriptText;
         dom.vtUserText.textContent = lastTranscriptText;
@@ -158,91 +180,74 @@
   }
 
   // ================================================================
-  // MEDIA RECORDER HELPERS
+  // PCM CAPTURE via AudioContext (16 kHz mono Int16)
   // ================================================================
 
-  function getBestMimeType () {
-    var types = [
-      'audio/webm;codecs=opus',
-      'audio/webm',
-      'audio/ogg;codecs=opus',
-      'audio/mp4;codecs=mp4a.40.2'
-    ];
-    for (var i = 0; i < types.length; i++) {
-      if (MediaRecorder.isTypeSupported(types[i])) return types[i];
+  function float32ToBase64Pcm (samples) {
+    var len = samples.length;
+    var buffer = new ArrayBuffer(len * 2);
+    var view = new DataView(buffer);
+    for (var i = 0; i < len; i++) {
+      var s = Math.max(-1, Math.min(1, samples[i]));
+      view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
     }
-    return '';
+    var bytes = new Uint8Array(buffer);
+    var binary = '';
+    for (var i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
   }
 
-  function startCapture (onCaptured) {
-    if (mediaRecorder) return false;
+  function startPCMCapture () {
+    if (audioContext) return false;
 
     try {
-      cancelPendingCapture = false;
-      var constraints = { audio: true };
-      navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        if (cancelPendingCapture) {
+      timing.getUserMediaStart = Date.now();
+      console.log('[TIMING] getUserMedia start @', timing.getUserMediaStart);
+
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        timing.getUserMediaEnd = Date.now();
+        var getUserMediaDelay = timing.getUserMediaEnd - timing.getUserMediaStart;
+        console.log('[TIMING] getUserMedia complete [' + getUserMediaDelay + 'ms]');
+
+        if (!dom.voiceFab || dom.voiceFab.className.indexOf('voice-listening') === -1) {
           stream.getTracks().forEach(function (t) { t.stop(); });
           return;
         }
 
-        mediaStream = stream;
-        audioChunks = [];
+        capturedStream = stream;
 
-        var mimeType = getBestMimeType();
-        var options = {};
-        if (mimeType) options.mimeType = mimeType;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)({
+          sampleRate: PCM_SAMPLE_RATE
+        });
+        timing.audioContextCreated = Date.now();
+        console.log('[TIMING] AudioContext created [' + (timing.audioContextCreated - timing.getUserMediaEnd) + 'ms]');
 
-        mediaRecorder = new MediaRecorder(stream, options);
-        console.log('MediaRecorder: ' + (mediaRecorder.mimeType || 'default'));
+        sourceNode = audioContext.createMediaStreamSource(stream);
+        scriptProcessor = audioContext.createScriptProcessor(CHUNK_FRAMES, 1, 1);
 
-        mediaRecorder.ondataavailable = function (e) {
-          if (e.data && e.data.size > 0) {
-            audioChunks.push(e.data);
+        scriptProcessor.onaudioprocess = function (e) {
+          if (!recordingActive) return;
+          var input = e.inputBuffer.getChannelData(0);
+          var base64 = float32ToBase64Pcm(input);
+          timing.chunkCount++;
+          if (timing.chunkCount === 1) {
+            timing.firstChunkSent = Date.now();
+            console.log('[TIMING] First audio chunk sent [' + (timing.firstChunkSent - timing.fabPressed) + 'ms from FAB press]');
           }
+          sendChunk(base64);
         };
 
-        mediaRecorder.onstop = function () {
-          if (mediaStream) {
-            mediaStream.getTracks().forEach(function (t) { t.stop(); });
-            mediaStream = null;
-          }
+        sourceNode.connect(scriptProcessor);
+        scriptProcessor.connect(audioContext.destination);
 
-          if (audioChunks.length > 0) {
-            var blob = new Blob(audioChunks, { type: mediaRecorder ? mediaRecorder.mimeType : 'audio/webm' });
-            audioChunks = [];
-
-            var reader = new FileReader();
-            reader.onloadend = function () {
-              var base64 = reader.result.split(',')[1];
-              if (onCaptured) onCaptured(base64);
-            };
-            reader.onerror = function () {
-              console.error('FileReader error');
-              resetFabToIdle();
-            };
-            reader.readAsDataURL(blob);
-          } else {
-            console.warn('No audio captured');
-            resetFabToIdle();
-          }
-
-          mediaRecorder = null;
-        };
-
-        mediaRecorder.onerror = function () {
-          console.error('MediaRecorder error');
-          cleanupRecording();
-          resetFabToIdle();
-        };
-
-        mediaRecorder.start();
+        recordingActive = true;
         isListening = true;
         lastTranscriptText = '';
-        sentToServer = false;
         showTranscriptOverlay();
         setTranscriptState('listening');
-        console.log('Recording started');
+        console.log('PCM capture started @ ' + PCM_SAMPLE_RATE + ' Hz');
 
         recordingTimer = setTimeout(function () {
           if (isListening) stopListening();
@@ -255,13 +260,38 @@
 
       return true;
     } catch (e) {
-      console.error('Failed to start capture:', e);
+      console.error('Failed to start PCM capture:', e);
       return false;
     }
   }
 
+  function stopPCMCapture () {
+    recordingActive = false;
+
+    if (scriptProcessor) {
+      try { scriptProcessor.disconnect(); } catch (_) { /* ignore */ }
+      scriptProcessor = null;
+    }
+    if (sourceNode) {
+      try { sourceNode.disconnect(); } catch (_) { /* ignore */ }
+      sourceNode = null;
+    }
+    if (audioContext) {
+      audioContext.close().catch(function () {});
+      audioContext = null;
+    }
+    if (capturedStream) {
+      capturedStream.getTracks().forEach(function (t) { t.stop(); });
+      capturedStream = null;
+    }
+    if (recordingTimer) {
+      clearTimeout(recordingTimer);
+      recordingTimer = null;
+    }
+  }
+
   // ================================================================
-  // INTERNAL — Recorded Audio Handling
+  // WebSocket Communications
   // ================================================================
 
   function resetFabToIdle () {
@@ -270,22 +300,25 @@
     isListening = false;
   }
 
-  function sendAudioToServer (base64Audio) {
-    if (isStopping) return;
-
+  function sendChunk (base64Pcm) {
     if (audioWs && audioWs.readyState === WebSocket.OPEN) {
-      console.log('Sending audio (' + base64Audio.length + 'B base64)');
-      audioWs.send(JSON.stringify({ type: 'audio', data: base64Audio }));
-      sentToServer = true;
+      audioWs.send(JSON.stringify({ type: 'audio_chunk', data: base64Pcm }));
+    }
+  }
+
+  function sendAudioEnd () {
+    if (audioWs && audioWs.readyState === WebSocket.OPEN) {
+      timing.audioEndSent = Date.now();
+      var recordingDuration = timing.audioEndSent - timing.fabPressed;
+      console.log('[TIMING] audio_end sent [' + recordingDuration + 'ms recording, ' + timing.chunkCount + ' chunks]');
+      audioWs.send(JSON.stringify({ type: 'audio_end' }));
       setProcessingTimeout();
       dom.voiceFab.className = 'voice-fab voice-processing';
       setTranscriptState('processing');
     } else {
-      console.error('Audio WS not connected');
+      console.error('WS not connected on audio_end');
       window.toast('Voice server disconnected', 'error');
-      dom.voiceFab.className = 'voice-fab voice-idle';
-      sentToServer = false;
-      setTranscriptState('response', 'Voice server disconnected');
+      resetFabToIdle();
     }
   }
 
@@ -306,26 +339,9 @@
     }, 30000);
   }
 
-  function cleanupRecording () {
-    if (mediaStream) {
-      mediaStream.getTracks().forEach(function (t) { t.stop(); });
-      mediaStream = null;
-    }
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      try { mediaRecorder.stop(); } catch (_) { /* ignore */ }
-    }
-    mediaRecorder = null;
-    audioChunks = [];
-    if (recordingTimer) {
-      clearTimeout(recordingTimer);
-      recordingTimer = null;
-    }
-  }
-
   function stopListening () {
     if (isStopping) return;
     isStopping = true;
-    cancelPendingCapture = true;
 
     clearProcessingTimer();
     isListening = false;
@@ -335,17 +351,10 @@
       recordingTimer = null;
     }
 
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      try { mediaRecorder.stop(); } catch (_) { /* ignore */ }
-    } else {
-      cleanupRecording();
-      if (dom.voiceTranscript) hideTranscriptOverlay();
-      dom.voiceFab.className = 'voice-fab voice-idle';
-    }
+    stopPCMCapture();
 
-    if (sentToServer && dom.voiceTranscript) {
-      dom.voiceFab.className = 'voice-fab voice-processing';
-      setProcessingTimeout();
+    if (dom.voiceTranscript) {
+      sendAudioEnd();
     }
 
     isStopping = false;
@@ -376,8 +385,16 @@
     if (!msg || !msg.type) return;
 
     switch (msg.type) {
+      case 'partial':
+        setTranscriptState('partial', msg.text);
+        break;
+
       case 'response':
-        console.log('Voice response:', msg);
+        timing.responseReceived = Date.now();
+        var totalPipeline = timing.responseReceived - timing.audioEndSent;
+        var totalFromFAB = timing.responseReceived - timing.fabPressed;
+        console.log('[TIMING] Response received [' + totalPipeline + 'ms from audio_end, ' + totalFromFAB + 'ms total from FAB press]');
+        console.log('[TIMING] Breakdown: getUserMedia=' + (timing.getUserMediaEnd - timing.getUserMediaStart) + 'ms, firstChunk=' + (timing.firstChunkSent - timing.fabPressed) + 'ms, recording=' + (timing.audioEndSent - timing.fabPressed) + 'ms');
         clearProcessingTimer();
         if (msg.tts_audio) {
           if (isSilentAudio(msg.tts_audio)) {
@@ -392,6 +409,7 @@
         dom.voiceFab.className = 'voice-fab voice-idle';
         setTranscriptState('response', msg);
         break;
+
       case 'error':
         console.error('Voice server error:', msg.message);
         clearProcessingTimer();
@@ -413,9 +431,7 @@
       return;
     }
 
-    audioWs.onopen = function () {
-      sentToServer = false;
-    };
+    audioWs.onopen = function () {};
 
     audioWs.onmessage = function (e) {
       try {
@@ -464,10 +480,7 @@
       }
       if (isListening) return true;
 
-      return startCapture(function (base64Audio) {
-        lastTranscriptText = '';
-        sendAudioToServer(base64Audio);
-      });
+      return startPCMCapture();
     },
 
     stopListening: stopListening,
@@ -478,7 +491,7 @@
 
     playAudio: function (input) {
       if (typeof input === 'string') {
-        if (input.startsWith('data:audio/wav;base64,') || input.length > 1000) {
+        if (input.indexOf('base64,') !== -1 || input.length > 1000) {
           var base64 = input.indexOf(',') !== -1 ? input.split(',')[1] : input;
           this._playBase64Wav(base64);
         } else {
@@ -501,27 +514,27 @@
     },
 
     _playArrayBuffer: function (buffer) {
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
       }
 
-      audioCtx.decodeAudioData(buffer, function (audioBuffer) {
-        var source = audioCtx.createBufferSource();
-        var gainNode = audioCtx.createGain();
+      ctx.decodeAudioData(buffer, function (audioBuffer) {
+        var source = ctx.createBufferSource();
+        var gainNode = ctx.createGain();
 
         source.buffer = audioBuffer;
         gainNode.gain.value = 0.8;
 
-        var now = audioCtx.currentTime;
+        var now = ctx.currentTime;
         gainNode.gain.setValueAtTime(0, now);
         gainNode.gain.linearRampToValueAtTime(0.8, now + 0.1);
         gainNode.gain.setValueAtTime(0.8, now + audioBuffer.duration - 0.1);
         gainNode.gain.linearRampToValueAtTime(0, now + audioBuffer.duration);
 
         source.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+        gainNode.connect(ctx.destination);
         source.start(0);
       }, function (e) {
         console.error('Error decoding audio', e);
