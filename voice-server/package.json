@@ -2,19 +2,18 @@
   "name": "voice-server",
   "version": "0.1.0",
   "private": true,
-  "description": "WebSocket-based voice server for Aranya IoT using Groq STT/LLM/TTS",
+  "description": "WebSocket-based voice server for Aranya IoT using Gemini 2.5 Flash STT/LLM + Edge TTS",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha test/**/*.test.js",
+    "test": "node --import dotenv/config node_modules/.bin/mocha test/gemini.test.js test/edge-tts.test.js test/ws-handler.test.js test/replay.test.js",
+    "test:e2e": "node --import dotenv/config node_modules/.bin/mocha test/language-detection.test.js",
     "start": "node src/index.js"
   },
   "dependencies": {
-    "@gladiaio/sdk": "^1.0.5",
+    "@google/genai": "^2.9.0",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
-    "groq-sdk": "^0.18.0",
-    "openai": "^6.44.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {

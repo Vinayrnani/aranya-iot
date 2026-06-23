@@ -35,3 +35,21 @@ server.log
 server.pid
 *.log.tmp
 /tmp/
+
+# Voice server temp/test artifacts
+voice-server/models/
+voice-server/test-llm.js
+voice-server/test_timing.js
+voice-server/voice-history-data.json
+
+# Agent/automation artifacts
+.omo/
+.playwright-mcp/
+.relentless/
+QA_RECORD.md
+e2e_results.txt
+server_log.txt
+
+# Hub test artifacts
+aranya-hub/data/test-console-errors.log
+aranya-hub/data/test-snapshot.yml
