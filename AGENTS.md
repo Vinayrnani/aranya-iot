@@ -6,7 +6,7 @@ Aranya IoT resort management system with three sub-projects in one repo:
 
 - `aranya-hub/` — Master hub firmware (ESP32, PlatformIO, Arduino framework)
 - `aranya-node/` — Node firmware (ESP8266 NodeMCUv2, PlatformIO, Arduino framework)
-- `voice-server/` — Voice assistant server (Node.js, ESM, Groq STT/LLM/TTS)
+- `voice-server/` — Voice assistant server (Node.js, ESM, Gemini + Edge TTS)
 
 **Key architecture**: Hub is the central coordinator. Nodes are lightweight receivers. Voice server doubles as the HTTP server for the hub's web UI (serves static files from `aranya-hub/data/`).
 
@@ -33,12 +33,11 @@ Both subprojects have their own `platformio.ini`. **CI bug**: the workflow runs 
 
 ```bash
 cd voice-server
-npm install              # deps: express, ws, groq-sdk, openai, dotenv
+npm install              # deps: @google/genai, dotenv, express, ws
 npm start                # entry: src/index.js, listens on port 8080
-npm test                 # Mocha + Chai + Sinon (3 test files)
-```
+npm test                 # Mocha + Chai + Sinon (5 test files)
 
-`voice-server/src/index.js` auto-creates `.env` from `.env.example` if missing and serves static files from `../../aranya-hub/data`. Requires `GROQ_API_KEY` in `.env`.
+`voice-server/src/index.js` auto-creates `.env` from `.env.example` if missing and serves static files from `../../aranya-hub/data`. Requires `GEMINI_API_KEY` in `.env`.
 
 **Casing bug**: `src/config.js` exports `config.wsPort` but `src/index.js` reads `config.WS_PORT` — both default to 8080, so it works, but agents should not rely on this behavior.
 
@@ -48,11 +47,10 @@ npm test                 # Mocha + Chai + Sinon (3 test files)
 # Run all
 npm test
 
-# Test files: llm.test.js (stubbed), tts.test.js (piper/OpenAI/fallback), ws-handler.test.js
-# Also: test_e2e.js (manual E2E, requires running server)
+# Test files: gemini.test.js, edge-tts.test.js, ws-handler.test.js, language-detection.test.js
 ```
 
-Tests are stub-heavy (sinon). Real E2E requires `GROQ_API_KEY` and a running server. `test_e2e.js` opens real WebSocket connections against `localhost:8080`.
+Tests use sinon stubs for Gemini + Edge TTS unit tests. Language-detection tests are E2E and require `GEMINI_API_KEY` in `.env` and a running server. Edge TTS also requires `pip install edge-tts` for the Python CLI.
 
 ### Pre-commit / Lint / Format
 
@@ -93,13 +91,13 @@ Served by the voice server. Access at `http://localhost:8080`.
 
 ## Voice Pipeline
 
-audio → `Groq STT (whisper-large-v3-turbo)` → `Groq LLM (llama-3.3-70b-versatile)` → `TTS (Piper→OpenAI→silent fallback)`
+audio PCM → `Gemini 2.5 Flash` (STT + LLM in one call) → `Edge TTS` → audio WAV
 
-**Piper**: requires `models/{lang}.onnx` files and `piper` binary on PATH. Supports en, hi, te. If unavailable, falls to OpenAI TTS (`OPENAI_API_KEY`). If that fails, returns 44-byte empty WAV.
+**Gemini 2.5 Flash**: Handles both STT and intent understanding in a single API call via `@google/genai` SDK. Accepts 16kHz mono PCM audio natively, returns JSON with `responseMimeType: application/json`. System prompt instructs it to extract `{action, device, value, tts_text, lang}` with language codes `en`/`hi`/`te`.
 
-**STT**: writes audio to `/tmp/audio.wav`, sends to Groq, deletes nothing (pileup possible).
+**Edge TTS**: Uses Python `edge-tts` CLI via child_process (`pip install edge-tts`). Voices: `en-US-JennyNeural`, `hi-IN-SwaraNeural`, `te-IN-ShrutiNeural`. Free, no API key needed. Falls back to 44-byte empty WAV on error.
 
-**LLM**: instructed to return JSON: `{action, device, value, tts_text}`. Uses `response_format: json_object`.
+**Conversation history**: Last 15 entries stored in-memory with per-sub-step recording (entry created at `audio_end` before any API call, each sub-step appended: audio→gemini_response→tts_output→error). Accessed via `GET /api/voice-history` (metadata) and `GET /api/voice-history/:index/audio` (audio blobs). Replay via `POST /api/voice-history/:index/replay`.
 
 ## Hub & Node Details
 
@@ -138,7 +136,6 @@ audio → `Groq STT (whisper-large-v3-turbo)` → `Groq LLM (llama-3.3-70b-versa
 ## Important Gotchas
 
 - `voice-server/src/index.js:38` serves `../../aranya-hub/data` — this path must resolve correctly relative to `src/`, not the package root.
-- `voice-server/src/index.js:44` reads `config.WS_PORT` but `src/config.js:6` exports `wsPort` (lowercase 'p'). Both default to 8080 — the mismatch has no runtime effect but is technically wrong.
 - Hub `include/config.h` has `{{OTA_SERVER_URL}}` and `{{CANONICAL_OTA_KEY}}` placeholders that were never populated — the firmware boots fine but OTA update will try to HTTP GET from a literal URL containing `{{...}}`.
 - Node `include/config.h` has `NODE_ID 1` uncommented by default. **Change this before every flash.**
 - The CI workflow will fail on `pio run` from repo root — it needs `cd aranya-hub && pio run` (or per-env CI split).
