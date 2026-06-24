@@ -6,7 +6,6 @@ import { WebSocketServer } from 'ws';
 import { handleConnection, getConversationHistory, getConversationAudio } from './ws-handler.js';
 import { config } from './config.js';
 import GeminiService from './gemini.js';
-import EdgeTTSService from './edge-tts.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -90,11 +89,10 @@ app.post('/api/voice-history/:index/replay', async (req, res) => {
     }
 
     const response = await GeminiService.processAudioWithGemini(audio.inputAudio);
-    const ttsAudio = await EdgeTTSService.synthesizeEdgeTTS(response.tts_text, response.lang);
 
     res.json({
       ...response,
-      tts_audio: ttsAudio.toString('base64')
+      tts_audio: ''
     });
   } catch (err) {
     console.error('[REPLAY] Error:', err.message);

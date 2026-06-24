@@ -2,11 +2,11 @@
   "name": "voice-server",
   "version": "0.1.0",
   "private": true,
-  "description": "WebSocket-based voice server for Aranya IoT using Gemini 2.5 Flash STT/LLM + Edge TTS",
+  "description": "WebSocket-based voice server for Aranya IoT using Gemini Live API for unified audio I/O",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "node --import dotenv/config node_modules/.bin/mocha test/gemini.test.js test/edge-tts.test.js test/ws-handler.test.js test/replay.test.js",
+    "test": "node --import dotenv/config node_modules/.bin/mocha test/gemini.test.js test/gemini-live.test.js test/ws-handler.test.js test/replay.test.js",
     "test:e2e": "node --import dotenv/config node_modules/.bin/mocha test/language-detection.test.js",
     "start": "node src/index.js"
   },

@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import GeminiService from './gemini.js';
-import EdgeTTSService from './edge-tts.js';
+import GeminiService, { GeminiLiveService } from './gemini.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HISTORY_FILE = path.join(__dirname, '..', 'voice-history-data.json');
@@ -152,25 +151,15 @@ async function processTextInput(text, lang, sendFn) {
     const sanitized = sanitizeResponse(response);
     entry.geminiResponse = sanitized;
     entry.transcript = sanitized.tts_text;
-    entry.status = 'gemini_ok';
+    entry.status = 'complete';
     entry.latencyMs = Date.now() - startTime;
     scheduleSave();
     console.log(`[PIPELINE] Gemini → [${entry.latencyMs}ms] ${JSON.stringify(sanitized)}`);
 
-    const ttsLang = sanitized.lang || lang;
-    const ttsAudio = await EdgeTTSService.synthesizeEdgeTTS(sanitized.tts_text, ttsLang);
-    entry.outputAudio = ttsAudio;
-    entry.ttsText = sanitized.tts_text;
-    entry.ttsLang = ttsLang;
-    entry.status = 'complete';
-    scheduleSave();
-    const audioSizeKB = (ttsAudio.length / 1024).toFixed(0);
-    console.log(`[PIPELINE] TTS → ${audioSizeKB}KB audio`);
-
     sendFn({
       type: 'response',
       ...sanitized,
-      tts_audio: ttsAudio.toString('base64')
+      tts_audio: ''
     });
   } catch (err) {
     entry.error = err.message;
@@ -186,6 +175,7 @@ export function handleConnection(ws) {
   let connectionAlive = true;
   let isRecording = false;
   let sttBusy = false;
+  let liveService = null;
 
   function sendToClient(msg) {
     if (connectionAlive) {
@@ -236,7 +226,6 @@ export function handleConnection(ws) {
 
         try {
           const allPcm = Buffer.concat(allChunks);
-          const startTime = Date.now();
 
           // Create history entry immediately with input audio
           const entry = {
@@ -248,58 +237,75 @@ export function handleConnection(ws) {
           if (conversationHistory.length > MAX_HISTORY) conversationHistory.shift();
           scheduleSave();
 
-          // Step 1: Process audio through Gemini
-          let rawResponse;
+          // Split PCM into chunks for streaming (8192 bytes each)
+          const CHUNK_SIZE = 8192;
+          const pcmChunks = [];
+          for (let i = 0; i < allPcm.length; i += CHUNK_SIZE) {
+            pcmChunks.push(allPcm.slice(i, i + CHUNK_SIZE));
+          }
+
+          // Stream audio via Gemini Live API
+          const audioChunks = [];
           let sanitized;
           try {
-            rawResponse = await GeminiService.processAudioWithGemini(allPcm);
-            sanitized = sanitizeResponse(rawResponse);
+            const live = new GeminiLiveService();
+            liveService = live;
+            const response = await new Promise((resolve, reject) => {
+              let resolved = false;
+
+              live.connect(
+                (base64Pcm) => {
+                  audioChunks.push(Buffer.from(base64Pcm, 'base64'));
+                  sendToClient({ type: 'audio_chunk', data: base64Pcm });
+                },
+                (json) => {
+                  if (!resolved) { resolved = true; resolve(json); }
+                },
+                (errMsg) => {
+                  if (!resolved) { resolved = true; reject(new Error(errMsg)); }
+                }
+              ).then(() => {
+                // Connected — send chunks with 50ms spacing
+                (async () => {
+                  for (const chunk of pcmChunks) {
+                    live.sendAudio(chunk.toString('base64'));
+                    await new Promise(r => setTimeout(r, 50));
+                  }
+                })();
+              }).catch((err) => {
+                if (!resolved) { resolved = true; reject(err); }
+              });
+
+              // Safety timeout: 15s
+              setTimeout(() => {
+                if (!resolved) { resolved = true; reject(new Error('Gemini Live timeout')); }
+              }, 15000);
+            });
+
+            sanitized = sanitizeResponse(response);
             entry.geminiResponse = sanitized;
             entry.transcript = sanitized.tts_text;
-            entry.status = 'gemini_ok';
-            entry.latencyMs = Date.now() - startTime;
-            scheduleSave();
-            console.log(`[PIPELINE] Gemini done [${Date.now() - startTime}ms]`);
-          } catch (geminiErr) {
-            entry.error = 'Gemini: ' + geminiErr.message;
-            entry.status = 'gemini_failed';
-            scheduleSave();
-            console.error('[PIPELINE] Gemini error:', geminiErr.message);
-            sendToClient({ type: 'error', message: geminiErr.message });
-            return;
-          }
-
-          // Step 2: Synthesize speech with Edge TTS
-          try {
-            const ttsLang = sanitized.lang || 'en';
-            const ttsAudio = await EdgeTTSService.synthesizeEdgeTTS(sanitized.tts_text, ttsLang);
-            entry.outputAudio = ttsAudio;
-            entry.ttsText = sanitized.tts_text;
-            entry.ttsLang = ttsLang;
             entry.status = 'complete';
+            entry.outputAudio = Buffer.concat(audioChunks);
+            entry.latencyMs = Date.now() - audioEndTime;
             scheduleSave();
-            const audioSizeKB = (ttsAudio.length / 1024).toFixed(0);
-            console.log(`[PIPELINE] TTS done [${audioSizeKB}KB]`);
-
-            console.log(`[PIPELINE] ROUNDTRIP [${Date.now() - audioEndTime}ms]`);
-
-            sendToClient({
-              type: 'response',
-              ...sanitized,
-              tts_audio: ttsAudio.toString('base64')
-            });
-          } catch (ttsErr) {
-            entry.error = 'TTS: ' + ttsErr.message;
-            entry.status = 'tts_failed';
+            console.log(`[PIPELINE] Gemini Live done [${entry.latencyMs}ms]`);
+          } catch (liveErr) {
+            entry.error = 'Gemini Live: ' + liveErr.message;
+            entry.status = 'failed';
             scheduleSave();
-            console.error('[PIPELINE] TTS error:', ttsErr.message);
-
-            sendToClient({
-              type: 'response',
-              ...sanitized,
-              tts_audio: ''
-            });
+            console.error('[PIPELINE] Gemini Live error:', liveErr.message);
+            sendToClient({ type: 'error', message: liveErr.message });
+            return;
+          } finally {
+            if (liveService) { liveService.close(); liveService = null; }
           }
+
+          sendToClient({
+            type: 'response',
+            ...sanitized,
+            tts_audio: ''
+          });
         } catch (err) {
           console.error('[PIPELINE] Error:', err.message);
           sendToClient({ type: 'error', message: err.message });
@@ -327,11 +333,13 @@ export function handleConnection(ws) {
     connectionAlive = false;
     isRecording = false;
     sttBusy = false;
+    if (liveService) { liveService.close(); liveService = null; }
   });
 
   ws.on('error', () => {
     connectionAlive = false;
     isRecording = false;
     sttBusy = false;
+    if (liveService) { liveService.close(); liveService = null; }
   });
 }
