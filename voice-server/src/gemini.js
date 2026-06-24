@@ -42,6 +42,87 @@ function rawPcmToWav(pcmBuffer, sampleRate = 16000) {
   return buffer;
 }
 
+export class GeminiLiveService {
+  constructor() {
+    this.session = null;
+    this.client = null;
+  }
+
+  /**
+   * Establishes a Live API session with Gemini.
+   * @param {function(base64PcmString): void} onAudioChunk - Called when audio data arrives
+   * @param {function(object): void} onTextResponse - Called when parsed JSON text arrives
+   * @param {function(string): void} onError - Called on errors with error message
+   */
+  async connect(onAudioChunk, onTextResponse, onError) {
+    this.client = new GoogleGenAI({ apiKey: config.gemini.apiKey });
+
+    const live = this.client.live;
+
+    this.session = await live.connect({
+      model: config.gemini.liveModel,
+      config: {
+        responseModalities: ['AUDIO', 'TEXT'],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: { temperature: 0.8 },
+      },
+      callbacks: {
+        onopen: () => {
+          console.log('GeminiLive: session connected');
+        },
+        onmessage: (msg) => {
+          if (msg.data) {
+            onAudioChunk(msg.data);
+          }
+          if (msg.text) {
+            try {
+              const parsed = JSON.parse(msg.text);
+              onTextResponse(parsed);
+            } catch (e) {
+              console.log('GeminiLive: failed to parse text response', e.message);
+            }
+          }
+        },
+        onerror: (e) => {
+          onError(e.message || String(e));
+        },
+        onclose: () => {
+          console.log('GeminiLive: session closed');
+          this.session = null;
+        },
+      },
+    });
+
+    console.log('GeminiLive: connected');
+  }
+
+  /**
+   * Sends a PCM audio chunk to the Live API.
+   * @param {string} pcmBase64 - Base64-encoded 16kHz mono PCM audio
+   */
+  async sendAudio(pcmBase64) {
+    if (!this.session) {
+      console.warn('GeminiLive: cannot send audio — no active session');
+      return;
+    }
+    await this.session.sendRealtimeInput({
+      audio: { data: pcmBase64, mimeType: 'audio/pcm;rate=16000' },
+    });
+  }
+
+  /**
+   * Closes the Live API session.
+   */
+  close() {
+    if (!this.session) {
+      console.warn('GeminiLive: no session to close');
+      return;
+    }
+    this.session.close();
+    this.session = null;
+  }
+}
+
 const api = {
   async processAudioWithGemini(pcmBuffer) {
     try {

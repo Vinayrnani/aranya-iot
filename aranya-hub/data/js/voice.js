@@ -32,6 +32,7 @@
   var transcriptOverlayTimer = null;
   var lastTranscriptText = '';
   var recordingTimer = null;
+  var audioChunkBuffer = [];
 
   // Timing instrumentation
   var timing = {
@@ -389,7 +390,17 @@
         setTranscriptState('partial', msg.text);
         break;
 
+      case 'audio_chunk':
+        audioChunkBuffer.push(msg.data);
+        break;
+
       case 'response':
+        // Play accumulated audio chunks from Live API streaming
+        if (audioChunkBuffer.length > 0) {
+          var accumulatedPcm = audioChunkBuffer.join('');
+          audioChunkBuffer = [];
+          VoiceAssistant._playBase64Pcm(accumulatedPcm);
+        }
         timing.responseReceived = Date.now();
         var totalPipeline = timing.responseReceived - timing.audioEndSent;
         var totalFromFAB = timing.responseReceived - timing.fabPressed;
@@ -478,6 +489,7 @@
       if (dom.voiceTranscript) {
         hideTranscriptOverlay();
       }
+      audioChunkBuffer = [];
       if (isListening) return true;
 
       return startPCMCapture();
@@ -511,6 +523,35 @@
         bytes[i] = binaryString.charCodeAt(i);
       }
       this._playArrayBuffer(bytes.buffer);
+    },
+
+    _playBase64Pcm: function (base64Pcm) {
+      var binaryString = window.atob(base64Pcm);
+      var len = binaryString.length;
+      var buffer = new ArrayBuffer(44 + len);
+      var view = new DataView(buffer);
+      var writeStr = function (offset, str) {
+        for (var i = 0; i < str.length; i++) {
+          view.setUint8(offset + i, str.charCodeAt(i));
+        }
+      };
+      writeStr(0, 'RIFF');
+      view.setUint32(4, 36 + len, true);
+      writeStr(8, 'WAVE');
+      writeStr(12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true);
+      view.setUint16(22, 1, true);
+      view.setUint32(24, 16000, true);
+      view.setUint32(28, 32000, true);
+      view.setUint16(32, 2, true);
+      view.setUint16(34, 16, true);
+      writeStr(36, 'data');
+      view.setUint32(40, len, true);
+      for (var i = 0; i < len; i++) {
+        view.setUint8(44 + i, binaryString.charCodeAt(i));
+      }
+      this._playArrayBuffer(buffer);
     },
 
     _playArrayBuffer: function (buffer) {
