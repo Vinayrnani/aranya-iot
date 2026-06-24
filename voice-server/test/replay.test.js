@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import GeminiService from '../src/gemini.js';
-import EdgeTTSService from '../src/edge-tts.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const FIXTURES_DIR = join(__dirname, 'fixtures');
@@ -35,11 +34,6 @@ describe('replay', function () {
       if (response.lang !== expectedLang) {
         console.warn(`[REPLAY] ${name}: expected lang=${expectedLang}, got lang=${response.lang} — Gemini detected different language from synthetic fixture`);
       }
-
-      // Step 2: Edge TTS synthesizes
-      const ttsAudio = await EdgeTTSService.synthesizeEdgeTTS(response.tts_text, response.lang);
-      expect(Buffer.isBuffer(ttsAudio)).to.be.true;
-      expect(ttsAudio.length).to.be.greaterThan(100);
 
       // Verify response shape matches what ws-handler sends
       expect(response).to.have.all.keys('action', 'device', 'value', 'tts_text', 'lang');

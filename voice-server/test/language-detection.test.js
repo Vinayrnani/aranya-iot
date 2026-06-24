@@ -110,7 +110,8 @@ describe('Gemini Voice Pipeline Language Detection', function () {
   it('should include tts_audio in response', async () => {
     const msg = await sendAudioStream('test_en.wav');
     expect(msg).to.have.property('tts_audio');
-    expect(msg.tts_audio.length).to.be.greaterThan(100);
+    // With Gemini Live API, TTS audio is streamed as audio_chunk messages, not in the response
+    expect(msg.tts_audio).to.equal('');
   });
 
   it('should include tts_text in response', async () => {

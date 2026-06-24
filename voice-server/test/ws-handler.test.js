@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { handleConnection, getConversationHistory, sanitizeResponse } from '../src/ws-handler.js';
-import GeminiService from '../src/gemini.js';
-import EdgeTTSService from '../src/edge-tts.js';
+import GeminiService, { GeminiLiveService } from '../src/gemini.js';
 
 const mockGeminiResponse = {
   action: 'turn_on',
@@ -16,7 +15,12 @@ describe('ws-handler', () => {
   beforeEach(() => {
     sinon.stub(GeminiService, 'processAudioWithGemini').resolves(mockGeminiResponse);
     sinon.stub(GeminiService, 'processTextWithGemini').resolves(mockGeminiResponse);
-    sinon.stub(EdgeTTSService, 'synthesizeEdgeTTS').resolves(Buffer.from('wav-data'));
+    // Stub GeminiLiveService to avoid real API calls in unit tests
+    sinon.stub(GeminiLiveService.prototype, 'connect').callsFake(function(onAudioChunk, onTextResponse) {
+      return Promise.resolve().then(() => onTextResponse(mockGeminiResponse));
+    });
+    sinon.stub(GeminiLiveService.prototype, 'sendAudio').resolves();
+    sinon.stub(GeminiLiveService.prototype, 'close');
   });
 
   afterEach(() => {
@@ -34,7 +38,7 @@ describe('ws-handler', () => {
         const response = JSON.parse(msg);
         expect(response.type).to.equal('response');
         expect(response.action).to.equal('turn_on');
-        expect(response.tts_audio).to.be.a('string');
+        expect(response.tts_audio).to.equal('');
         done();
       }
     };
@@ -73,13 +77,14 @@ describe('ws-handler', () => {
           }, 10);
         }
       },
-      send: () => {
-        setTimeout(() => {
+      send: (msg) => {
+        const parsed = JSON.parse(msg);
+        if (parsed.type === 'response') {
           const history = getConversationHistory();
           expect(history.length).to.be.greaterThan(0);
           expect(history[history.length - 1]).to.have.property('status');
           done();
-        }, 50);
+        }
       }
     };
     handleConnection(mockWs);
