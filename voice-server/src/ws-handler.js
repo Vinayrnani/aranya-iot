@@ -244,49 +244,109 @@ export function handleConnection(ws) {
             pcmChunks.push(allPcm.slice(i, i + CHUNK_SIZE));
           }
 
-          // Stream audio via Gemini Live API
+          // Stream audio via Gemini Live API with function calling
           const audioChunks = [];
           let sanitized;
           try {
             const live = new GeminiLiveService();
             liveService = live;
+            const modelTextParts = [];
             const response = await new Promise((resolve, reject) => {
               let resolved = false;
+              let commandResult = null;
 
-              live.connect(
-                (base64Pcm) => {
+              live.connect({
+                onAudioChunk: (base64Pcm) => {
                   audioChunks.push(Buffer.from(base64Pcm, 'base64'));
                   sendToClient({ type: 'audio_chunk', data: base64Pcm });
                 },
-                (json) => {
-                  if (!resolved) { resolved = true; resolve(json); }
-                },
-                (errMsg) => {
-                  if (!resolved) { resolved = true; reject(new Error(errMsg)); }
-                }
-              ).then(() => {
-                // Connected — send chunks with 50ms spacing
-                (async () => {
-                  for (const chunk of pcmChunks) {
-                    live.sendAudio(chunk.toString('base64'));
-                    await new Promise(r => setTimeout(r, 50));
+                onToolCall: (functionCalls) => {
+                  for (const call of functionCalls) {
+                    if (call.name === 'control_device') {
+                      const args = call.args || {};
+                      console.log('[PIPELINE] Device command:', JSON.stringify(args));
+
+                      // Send tool response back so model continues generating audio
+                      live.sendToolResponse([{
+                        id: call.id,
+                        name: call.name,
+                        response: { result: 'success' },
+                      }]);
+
+                      // Build command result for frontend
+                      commandResult = {
+                        action: String(args.action || 'none'),
+                        device: String(args.device || ''),
+                        value: args.value !== undefined && args.value !== null ? String(args.value) : '',
+                        tts_text: '',
+                        lang: 'en',
+                      };
+
+                      // Send command to frontend immediately
+                      sendToClient({ type: 'command', data: commandResult });
+                    }
                   }
-                })();
-              }).catch((err) => {
+                },
+                onModelText: (text) => {
+                  modelTextParts.push(text);
+                },
+                onTurnComplete: () => {
+                  if (!resolved) {
+                    resolved = true;
+                    const modelText = modelTextParts.join(' ');
+                    if (commandResult) {
+                      // Preserve model's spoken text even when tool was called
+                      commandResult.tts_text = modelText || commandResult.tts_text;
+                      resolve(commandResult);
+                    } else {
+                      resolve({
+                        action: 'none',
+                        device: '',
+                        value: '',
+                        tts_text: modelText || '',
+                        lang: 'en',
+                      });
+                    }
+                  }
+                },
+                onError: (errMsg) => {
+                  if (!resolved) { resolved = true; reject(new Error(errMsg)); }
+                },
+                }).then(() => {
+                  // Connected — send chunks.
+                  (async () => {
+                    for (let i = 0; i < pcmChunks.length; i++) {
+                      const chunk = pcmChunks[i];
+                      live.sendAudio(chunk.toString('base64'));
+                      await new Promise(r => setTimeout(r, 100)); // Increased interval
+                    }
+                    console.log('[PIPELINE] All audio sent, signaling endOfTurn');
+                    await live.sendEndOfTurn();
+                  })();
+                }).catch((err) => {
                 if (!resolved) { resolved = true; reject(err); }
               });
 
-              // Safety timeout: 15s
+              // Safety timeout: 30s
               setTimeout(() => {
-                if (!resolved) { resolved = true; reject(new Error('Gemini Live timeout')); }
-              }, 15000);
+                if (!resolved) {
+                  resolved = true;
+                  resolve(commandResult || {
+                    action: 'none',
+                    device: '',
+                    value: '',
+                    tts_text: '',
+                    lang: 'en',
+                  });
+                }
+              }, 30000);
             });
 
             sanitized = sanitizeResponse(response);
             entry.geminiResponse = sanitized;
-            entry.transcript = sanitized.tts_text;
+            entry.transcript = sanitized.tts_text || '(voice response)';
             entry.status = 'complete';
-            entry.outputAudio = Buffer.concat(audioChunks);
+            entry.outputAudio = audioChunks.length > 0 ? Buffer.concat(audioChunks) : null;
             entry.latencyMs = Date.now() - audioEndTime;
             scheduleSave();
             console.log(`[PIPELINE] Gemini Live done [${entry.latencyMs}ms]`);

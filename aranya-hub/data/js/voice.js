@@ -390,36 +390,62 @@
         setTranscriptState('partial', msg.text);
         break;
 
-      case 'audio_chunk':
-        audioChunkBuffer.push(msg.data);
+	      case 'audio_chunk':
+	        // Decode base64 PCM to raw bytes immediately — joining base64 strings
+	        // with '=' padding breaks browser atob() and silently kills the response handler.
+	        try {
+	          var bin = window.atob(msg.data);
+	          var len = bin.length;
+	          var bytes = new Uint8Array(len);
+	          for (var i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+	          audioChunkBuffer.push(bytes);
+	        } catch (_) {
+	          console.warn('[Voice] Dropping unparseable audio chunk');
+	        }
+	        break;
+
+      case 'command':
+        // Device triggered via tool call
+        console.log('[Voice] Executing hardware command:', msg.data);
         break;
 
-      case 'response':
-        // Play accumulated audio chunks from Live API streaming
-        if (audioChunkBuffer.length > 0) {
-          var accumulatedPcm = audioChunkBuffer.join('');
-          audioChunkBuffer = [];
-          VoiceAssistant._playBase64Pcm(accumulatedPcm);
-        }
-        timing.responseReceived = Date.now();
-        var totalPipeline = timing.responseReceived - timing.audioEndSent;
-        var totalFromFAB = timing.responseReceived - timing.fabPressed;
-        console.log('[TIMING] Response received [' + totalPipeline + 'ms from audio_end, ' + totalFromFAB + 'ms total from FAB press]');
-        console.log('[TIMING] Breakdown: getUserMedia=' + (timing.getUserMediaEnd - timing.getUserMediaStart) + 'ms, firstChunk=' + (timing.firstChunkSent - timing.fabPressed) + 'ms, recording=' + (timing.audioEndSent - timing.fabPressed) + 'ms');
-        clearProcessingTimer();
-        if (msg.tts_audio) {
-          if (isSilentAudio(msg.tts_audio)) {
-            speakViaBrowser(msg.tts_text, msg.lang || 'en');
-          } else {
-            VoiceAssistant.playAudio(msg.tts_audio);
-          }
-        }
-        if (msg.action) {
-           // Logic to trigger device command via ESP32 WS
-        }
-        dom.voiceFab.className = 'voice-fab voice-idle';
-        setTranscriptState('response', msg);
-        break;
+	      case 'response':
+	        try {
+	          if (audioChunkBuffer.length > 0) {
+	            // Concatenate decoded PCM Uint8Array chunks
+	            var totalLen = 0;
+	            for (var i = 0; i < audioChunkBuffer.length; i++) totalLen += audioChunkBuffer[i].length;
+	            var allPcm = new Uint8Array(totalLen);
+	            var outOffset = 0;
+	            for (var i = 0; i < audioChunkBuffer.length; i++) {
+	              allPcm.set(audioChunkBuffer[i], outOffset);
+	              outOffset += audioChunkBuffer[i].length;
+	            }
+	            audioChunkBuffer = [];
+	            VoiceAssistant._playArrayBuffer(buildWavHeader(allPcm.buffer, allPcm.length));
+	          }
+	        } catch (e) {
+	          console.error('[Voice] Audio playback error:', e);
+	        }
+	        timing.responseReceived = Date.now();
+	        var totalPipeline = timing.responseReceived - timing.audioEndSent;
+	        var totalFromFAB = timing.responseReceived - timing.fabPressed;
+	        console.log('[TIMING] Response received [' + totalPipeline + 'ms from audio_end, ' + totalFromFAB + 'ms total from FAB press]');
+	        console.log('[TIMING] Breakdown: getUserMedia=' + (timing.getUserMediaEnd - timing.getUserMediaStart) + 'ms, firstChunk=' + (timing.firstChunkSent - timing.fabPressed) + 'ms, recording=' + (timing.audioEndSent - timing.fabPressed) + 'ms');
+	        clearProcessingTimer();
+	        if (msg.tts_audio) {
+	          if (isSilentAudio(msg.tts_audio)) {
+	            speakViaBrowser(msg.tts_text, msg.lang || 'en');
+	          } else {
+	            VoiceAssistant.playAudio(msg.tts_audio);
+	          }
+	        }
+	        if (msg.action) {
+	           // Logic to trigger device command via ESP32 WS
+	        }
+	        dom.voiceFab.className = 'voice-fab voice-idle';
+	        setTranscriptState('response', msg);
+	        break;
 
       case 'error':
         console.error('Voice server error:', msg.message);
@@ -469,6 +495,38 @@
       wsReconnectTimer = null;
       connectAudioWs();
     }, WS_RECONNECT_DELAY);
+  }
+
+  // ================================================================
+  // WAV Header Builder — wraps 16-bit mono PCM at 16kHz into RIFF/WAV
+  // ================================================================
+
+  function buildWavHeader(pcmBuf, pcmLen) {
+    var buffer = new ArrayBuffer(44 + pcmLen);
+    var view = new DataView(buffer);
+    function writeStr(offset, str) {
+      for (var i = 0; i < str.length; i++) {
+        view.setUint8(offset + i, str.charCodeAt(i));
+      }
+    }
+    writeStr(0, 'RIFF');
+    view.setUint32(4, 36 + pcmLen, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, 24000, true);
+    view.setUint32(28, 48000, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeStr(36, 'data');
+    view.setUint32(40, pcmLen, true);
+    if (pcmBuf instanceof ArrayBuffer) {
+      var src = new Uint8Array(pcmBuf, 0, pcmLen);
+      for (var i = 0; i < pcmLen; i++) view.setUint8(44 + i, src[i]);
+    }
+    return buffer;
   }
 
   // ================================================================
@@ -555,28 +613,37 @@
     },
 
     _playArrayBuffer: function (buffer) {
-      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var ctx = VoiceAssistant._audioCtx;
+      if (!ctx) {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        VoiceAssistant._audioCtx = ctx;
+      }
 
       if (ctx.state === 'suspended') {
-        ctx.resume();
+        ctx.resume().catch(function () {});
       }
 
       ctx.decodeAudioData(buffer, function (audioBuffer) {
-        var source = ctx.createBufferSource();
-        var gainNode = ctx.createGain();
+        try {
+          var source = ctx.createBufferSource();
+          var gainNode = ctx.createGain();
 
-        source.buffer = audioBuffer;
-        gainNode.gain.value = 0.8;
+          source.buffer = audioBuffer;
+          gainNode.gain.value = 0.8;
 
-        var now = ctx.currentTime;
-        gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(0.8, now + 0.1);
-        gainNode.gain.setValueAtTime(0.8, now + audioBuffer.duration - 0.1);
-        gainNode.gain.linearRampToValueAtTime(0, now + audioBuffer.duration);
+          var now = ctx.currentTime;
+          gainNode.gain.setValueAtTime(0, now);
+          gainNode.gain.linearRampToValueAtTime(0.8, now + 0.1);
+          gainNode.gain.setValueAtTime(0.8, now + audioBuffer.duration - 0.1);
+          gainNode.gain.linearRampToValueAtTime(0, now + audioBuffer.duration);
 
-        source.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        source.start(0);
+          source.connect(gainNode);
+          gainNode.connect(ctx.destination);
+          source.start(0);
+          console.log('[Audio] Playback started: ' + audioBuffer.duration.toFixed(1) + 's');
+        } catch (playErr) {
+          console.error('[Audio] Playback error:', playErr);
+        }
       }, function (e) {
         console.error('Error decoding audio', e);
       });

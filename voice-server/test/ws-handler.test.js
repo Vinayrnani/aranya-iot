@@ -16,10 +16,20 @@ describe('ws-handler', () => {
     sinon.stub(GeminiService, 'processAudioWithGemini').resolves(mockGeminiResponse);
     sinon.stub(GeminiService, 'processTextWithGemini').resolves(mockGeminiResponse);
     // Stub GeminiLiveService to avoid real API calls in unit tests
-    sinon.stub(GeminiLiveService.prototype, 'connect').callsFake(function(onAudioChunk, onTextResponse) {
-      return Promise.resolve().then(() => onTextResponse(mockGeminiResponse));
+    sinon.stub(GeminiLiveService.prototype, 'connect').callsFake(function({ onToolCall, onTurnComplete }) {
+      // Simulate device command via tool call, then turn completion
+      setTimeout(() => {
+        if (onToolCall) {
+          onToolCall([{ id: 'mock-c1', name: 'control_device', args: { device: 'light', action: 'turn_on' } }]);
+        }
+      }, 5);
+      setTimeout(() => {
+        if (onTurnComplete) onTurnComplete();
+      }, 10);
+      return Promise.resolve();
     });
     sinon.stub(GeminiLiveService.prototype, 'sendAudio').resolves();
+    sinon.stub(GeminiLiveService.prototype, 'sendToolResponse');
     sinon.stub(GeminiLiveService.prototype, 'close');
   });
 

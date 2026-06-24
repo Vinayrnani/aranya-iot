@@ -4,7 +4,8 @@ import { config } from './config.js';
 const VALID_DEVICES = ['ac', 'blinds', 'light', 'led', 'scene'];
 const VALID_ACTIONS = ['turn_on', 'turn_off', 'set', 'open', 'close', 'toggle'];
 
-const systemPrompt = `You are an IoT voice assistant for the Aranya resort. You ONLY handle device commands.
+// System prompt for the Legacy (non-Live) pipeline that uses generateContent with JSON output
+const legacySystemPrompt = `You are an IoT voice assistant for the Aranya resort. You ONLY handle device commands.
 
 RULES:
 1. Device MUST be one of: ${VALID_DEVICES.join(', ')}. Never invent devices.
@@ -15,6 +16,20 @@ RULES:
 6. "tts_text" must be your spoken response in the detected language.
 
 Return ONLY valid JSON: {"action": string, "device": string, "value": string, "tts_text": string, "lang": "en"|"hi"|"te"}`;
+
+// System prompt for the Live API pipeline that uses function calling (control_device tool)
+const liveSystemPrompt = `You are an IoT voice assistant for the Aranya resort. Support English, Hindi, and Telugu.
+
+LANGUAGE: Detect the user's language and respond in the same language (te, hi, or en).
+
+DEVICE CONTROL — Call 'control_device' tool for these:
+- ac: set temperature 16-30°C, turn on/off
+- blinds: open, close, toggle
+- light: turn on, turn off
+- led: scene 0=campfire, 1=poolside, 2=movie
+- scene: set to normal, silent, or dnd
+
+For greetings, questions, or anything not a device command: respond helpfully in user's language. Do NOT call tools. Do NOT say "Sorry, I did not understand."`;
 
 function rawPcmToWav(pcmBuffer, sampleRate = 16000) {
   const numChannels = 1;
@@ -49,45 +64,90 @@ export class GeminiLiveService {
   }
 
   /**
-   * Establishes a Live API session with Gemini.
-   * @param {function(base64PcmString): void} onAudioChunk - Called when audio data arrives
-   * @param {function(object): void} onTextResponse - Called when parsed JSON text arrives
-   * @param {function(string): void} onError - Called on errors with error message
+   * Establishes a Live API session with Gemini using function calling.
+   *
+   * @param {object} options
+   * @param {function(string): void} options.onAudioChunk - Called with base64 PCM audio
+   * @param {function(object[]): void} options.onToolCall - Called with FunctionCall[] from model
+   * @param {function(): void} options.onTurnComplete - Called when model turn finishes
+   * @param {function(string): void} options.onModelText - Called with model's spoken text from serverContent
+   * @param {function(string): void} options.onError - Called with error message
    */
-  async connect(onAudioChunk, onTextResponse, onError) {
+  async connect({ onAudioChunk, onToolCall, onTurnComplete, onModelText, onError }) {
     this.client = new GoogleGenAI({ apiKey: config.gemini.apiKey });
 
-    const live = this.client.live;
+    const modelToUse = config.gemini.liveModel;
 
-    this.session = await live.connect({
-      model: config.gemini.liveModel,
-      config: {
-        responseModalities: ['AUDIO', 'TEXT'],
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        generationConfig: { temperature: 0.8 },
-      },
+    const configData = {
+      responseModalities: ['AUDIO'],
+      systemInstruction: { parts: [{ text: liveSystemPrompt }] },
+      temperature: 0.8,
+      outputAudioTranscription: {},
+      inputAudioTranscription: {},
+      tools: [{
+        functionDeclarations: [{
+          name: 'control_device',
+          description: 'Controls physical smart home devices based on voice commands',
+          parametersJsonSchema: {
+            type: 'object',
+            properties: {
+              device: {
+                type: 'string',
+                description: 'Device to control: ac, blinds, light, led, or scene',
+              },
+              action: {
+                type: 'string',
+                description: 'Action: turn_on, turn_off, set, open, close, or toggle',
+              },
+              value: {
+                type: 'string',
+                description: 'Additional action value',
+              },
+            },
+            required: ['device', 'action'],
+          },
+        }],
+      }],
+    };
+
+    console.log('[GeminiLive] Connection config:', JSON.stringify(configData, null, 2));
+
+    this.session = await this.client.live.connect({
+      model: modelToUse,
+      config: configData,
       callbacks: {
         onopen: () => {
           console.log('GeminiLive: session connected');
         },
         onmessage: (msg) => {
+          if (msg.setupComplete) {
+            console.log('[GeminiLive] SETUP COMPLETED. Message body:', JSON.stringify(msg, (k, v) => v instanceof Buffer ? '<Buffer>' : v, 2));
+          }
+          if (msg.toolCall) {
+            console.log('[GeminiLive] TOOL CALL RECEIVED:', JSON.stringify(msg.toolCall, null, 2));
+            onToolCall(msg.toolCall.functionCalls);
+          }
+          if (msg.serverContent?.modelTurn?.parts) {
+            for (const part of msg.serverContent.modelTurn.parts) {
+              if (part.text && typeof onModelText === 'function') {
+                onModelText(part.text);
+              }
+            }
+          }
           if (msg.data) {
             onAudioChunk(msg.data);
           }
-          if (msg.text) {
-            try {
-              const parsed = JSON.parse(msg.text);
-              onTextResponse(parsed);
-            } catch (e) {
-              console.log('GeminiLive: failed to parse text response', e.message);
-            }
+          if (msg.serverContent?.turnComplete) {
+            onTurnComplete();
           }
         },
         onerror: (e) => {
           onError(e.message || String(e));
         },
-        onclose: () => {
-          console.log('GeminiLive: session closed');
+        onclose: (closeEvent) => {
+          const reason = closeEvent?.reason || 'none';
+          const code = closeEvent?.code || 'none';
+          console.log(`GeminiLive: session closed (code=${code}, reason=${reason})`);
           this.session = null;
         },
       },
@@ -108,6 +168,35 @@ export class GeminiLiveService {
     await this.session.sendRealtimeInput({
       audio: { data: pcmBase64, mimeType: 'audio/pcm;rate=16000' },
     });
+  }
+
+  /**
+   * Sends a tool response (function result) back to the Live API.
+   * Required after receiving a toolCall to unblock the model's audio generation.
+   *
+   * @param {Array<{id: string, name: string, response: object}>} functionResponses
+   */
+  sendToolResponse(functionResponses) {
+    if (!this.session) {
+      console.warn('GeminiLive: cannot send tool response — no active session');
+      return;
+    }
+    this.session.sendToolResponse({ functionResponses });
+  }
+
+  /**
+   * Signals the end of the user's turn, prompting the model to generate a response.
+   * Uses sendClientContent({ turnComplete: true }) which is the correct SDK API
+   * for turn completion — NOT sendRealtimeInput with empty mediaChunks.
+   */
+  async sendEndOfTurn() {
+    if (!this.session) return;
+    try {
+      console.log('[GeminiLive] Sending endOfTurn via sendClientContent');
+      await this.session.sendClientContent({ turnComplete: true });
+    } catch (e) {
+      console.error('[GeminiLive] Failed endOfTurn:', e.message);
+    }
   }
 
   /**
@@ -138,7 +227,7 @@ const api = {
             role: 'user',
             parts: [
               { inlineData: { mimeType: 'audio/wav', data: base64EncodedWav } },
-              { text: systemPrompt },
+              { text: legacySystemPrompt },
             ],
           },
         ],
@@ -162,7 +251,7 @@ const api = {
           {
             role: 'user',
             parts: [
-              { text: `${systemPrompt}\n\nUser said: "${text}"` },
+              { text: `${legacySystemPrompt}\n\nUser said: "${text}"` },
             ],
           },
         ],

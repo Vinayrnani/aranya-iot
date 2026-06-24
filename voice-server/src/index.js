@@ -36,9 +36,9 @@ app.get('/api/voice-history', (req, res) => {
   res.json(getConversationHistory());
 });
 
-// Wrap raw PCM (16-bit, 16kHz, mono) in a WAV header for the browser
+// Wrap raw PCM (16-bit, 24kHz, mono) in a WAV header for the browser
 function pcmToWav(pcmBuffer) {
-  const sampleRate = 16000;
+  const sampleRate = 24000;
   const numChannels = 1;
   const bitsPerSample = 16;
   const byteRate = sampleRate * numChannels * bitsPerSample / 8;
@@ -71,10 +71,8 @@ app.get('/api/voice-history/:index/audio', (req, res) => {
     return res.status(404).send('Audio not found');
   }
   let data = audio[type];
-  // Input audio is raw PCM (16-bit, 16kHz, mono) — wrap in WAV header
-  if (type === 'inputAudio') {
-    data = pcmToWav(data);
-  }
+  // Both input and output audio are raw PCM (16-bit, 16kHz, mono) — wrap in WAV header
+  data = pcmToWav(data);
   res.set('Content-Type', 'audio/wav');
   res.send(data);
 });
@@ -106,5 +104,6 @@ wss.on('connection', handleConnection);
 
 server.listen(config.wsPort || 8080, () => {
     console.log(`Voice server and Dashboard listening on port ${config.wsPort || 8080}`);
-    console.log(`Gemini model: ${config.gemini.model}`);
+    console.log(`Gemini model (Live): ${config.gemini.liveModel}`);
+    console.log(`Gemini model (non-Live): ${config.gemini.model}`);
 });

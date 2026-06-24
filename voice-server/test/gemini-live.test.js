@@ -14,6 +14,7 @@ describe('GeminiLiveService', () => {
 
     mockSession = {
       sendRealtimeInput: sinon.stub().resolves(),
+      sendToolResponse: sinon.stub(),
       close: sinon.stub(),
     };
 
@@ -46,28 +47,48 @@ describe('GeminiLiveService', () => {
   });
 
   it('connect() establishes session via live.connect and stores it', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     expect(mockLive.connect.calledOnce).to.be.true;
     expect(service.client).to.be.instanceOf(GoogleGenAI);
     expect(service.session).to.equal(mockSession);
   });
 
-  it('connect() passes model, config, and callbacks to live.connect', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+  it('connect() passes model, config with tools, and callbacks to live.connect', async () => {
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     const args = mockLive.connect.firstCall.args[0];
     expect(args).to.have.property('model');
     expect(args).to.have.property('config');
     expect(args.config).to.have.property('systemInstruction');
     expect(args.config).to.have.property('responseModalities');
-    expect(args.config.responseModalities).to.deep.equal(['AUDIO', 'TEXT']);
+    expect(args.config.responseModalities).to.deep.equal(['AUDIO']);
+    // Verify function calling tools are configured
+    expect(args.config).to.have.property('tools');
+    expect(args.config.tools).to.be.an('array').with.lengthOf(1);
+    expect(args.config.tools[0]).to.have.property('functionDeclarations');
+    expect(args.config.tools[0].functionDeclarations[0].name).to.equal('control_device');
     expect(args).to.have.property('callbacks');
     expect(args.callbacks).to.have.all.keys('onopen', 'onmessage', 'onerror', 'onclose');
   });
 
   it('sendAudio() invokes session.sendRealtimeInput with correct payload', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     const pcmBase64 = 'dGVzdCBhdWRpbw==';
     await service.sendAudio(pcmBase64);
@@ -78,8 +99,34 @@ describe('GeminiLiveService', () => {
     });
   });
 
+  it('sendToolResponse() invokes session.sendToolResponse with function responses', async () => {
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
+
+    const responses = [{ id: 'call1', name: 'control_device', response: { result: 'success' } }];
+    service.sendToolResponse(responses);
+
+    expect(mockSession.sendToolResponse.calledOnce).to.be.true;
+    expect(mockSession.sendToolResponse.firstCall.args[0]).to.deep.equal({
+      functionResponses: responses,
+    });
+  });
+
+  it('sendToolResponse() does not throw when no session exists', () => {
+    expect(() => service.sendToolResponse([{ id: '1', name: 'test', response: {} }])).to.not.throw();
+  });
+
   it('close() invokes session.close() and nullifies session', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     service.close();
 
@@ -98,7 +145,12 @@ describe('GeminiLiveService', () => {
 
   it('onAudioChunk is invoked with the message data when msg.data exists', async () => {
     const onAudioChunk = sinon.stub();
-    await service.connect(onAudioChunk, () => {}, () => {});
+    await service.connect({
+      onAudioChunk,
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
     const audioData = Buffer.from([0, 1, 2, 3]);
@@ -108,31 +160,101 @@ describe('GeminiLiveService', () => {
     expect(onAudioChunk.firstCall.args[0]).to.equal(audioData);
   });
 
-  it('onTextResponse is invoked with parsed JSON when msg.text is valid JSON', async () => {
-    const onTextResponse = sinon.stub();
-    await service.connect(() => {}, onTextResponse, () => {});
+  it('onToolCall is invoked with functionCalls when msg.toolCall exists', async () => {
+    const onToolCall = sinon.stub();
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall,
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
-    const validJson = { action: 'turn_on', device: 'light', value: 'on', tts_text: 'ok', lang: 'en' };
-    callbacks.onmessage({ text: JSON.stringify(validJson) });
+    const functionCalls = [
+      { id: 'call1', name: 'control_device', args: { device: 'light', action: 'turn_on' } },
+    ];
+    callbacks.onmessage({ toolCall: { functionCalls } });
 
-    expect(onTextResponse.calledOnce).to.be.true;
-    expect(onTextResponse.firstCall.args[0]).to.deep.equal(validJson);
+    expect(onToolCall.calledOnce).to.be.true;
+    expect(onToolCall.firstCall.args[0]).to.deep.equal(functionCalls);
   });
 
-  it('onTextResponse is not called for non-JSON text', async () => {
-    const onTextResponse = sinon.stub();
-    await service.connect(() => {}, onTextResponse, () => {});
+  it('onTurnComplete is invoked when msg.serverContent.turnComplete is true', async () => {
+    const onTurnComplete = sinon.stub();
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete,
+      onError: () => {},
+    });
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
-    callbacks.onmessage({ text: 'Hello, how can I help you?' });
+    callbacks.onmessage({ serverContent: { turnComplete: true } });
 
-    expect(onTextResponse.called).to.be.false;
+    expect(onTurnComplete.calledOnce).to.be.true;
+  });
+
+  it('both onAudioChunk and onToolCall can fire from the same message', async () => {
+    const onAudioChunk = sinon.stub();
+    const onToolCall = sinon.stub();
+    await service.connect({
+      onAudioChunk,
+      onToolCall,
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
+
+    const callbacks = mockLive.connect.firstCall.args[0].callbacks;
+    const audioData = Buffer.from([10, 20, 30]);
+    const functionCalls = [
+      { id: 'call2', name: 'control_device', args: { device: 'ac', action: 'set', value: 22 } },
+    ];
+    callbacks.onmessage({ data: audioData, toolCall: { functionCalls } });
+
+    expect(onAudioChunk.calledOnce).to.be.true;
+    expect(onAudioChunk.firstCall.args[0]).to.equal(audioData);
+    expect(onToolCall.calledOnce).to.be.true;
+    expect(onToolCall.firstCall.args[0]).to.deep.equal(functionCalls);
+  });
+
+  it('onAudioChunk, onToolCall, and onTurnComplete can all fire in sequence', async () => {
+    const onAudioChunk = sinon.stub();
+    const onToolCall = sinon.stub();
+    const onTurnComplete = sinon.stub();
+    await service.connect({
+      onAudioChunk,
+      onToolCall,
+      onTurnComplete,
+      onError: () => {},
+    });
+
+    const callbacks = mockLive.connect.firstCall.args[0].callbacks;
+
+    // Audio arrives
+    callbacks.onmessage({ data: 'audio1' });
+    expect(onAudioChunk.calledOnce).to.be.true;
+
+    // Tool call arrives
+    callbacks.onmessage({ toolCall: { functionCalls: [{ id: 'c1', name: 'control_device', args: {} }] } });
+    expect(onToolCall.calledOnce).to.be.true;
+
+    // More audio
+    callbacks.onmessage({ data: 'audio2' });
+    expect(onAudioChunk.calledTwice).to.be.true;
+
+    // Turn completes
+    callbacks.onmessage({ serverContent: { turnComplete: true } });
+    expect(onTurnComplete.calledOnce).to.be.true;
   });
 
   it('onError is invoked with the error message string when stream error occurs', async () => {
     const onError = sinon.stub();
-    await service.connect(() => {}, () => {}, onError);
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError,
+    });
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
     const testError = new Error('Stream error');
@@ -147,7 +269,12 @@ describe('GeminiLiveService', () => {
     mockLive.connect.rejects(connectError);
 
     try {
-      await service.connect(() => {}, () => {}, () => {});
+      await service.connect({
+        onAudioChunk: () => {},
+        onToolCall: () => {},
+        onTurnComplete: () => {},
+        onError: () => {},
+      });
       expect.fail('Should have thrown');
     } catch (err) {
       expect(err).to.equal(connectError);
@@ -155,7 +282,12 @@ describe('GeminiLiveService', () => {
   });
 
   it('onclose callback nullifies service.session', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
     expect(service.session).to.equal(mockSession);
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
@@ -165,65 +297,70 @@ describe('GeminiLiveService', () => {
   });
 
   it('uses config.gemini.liveModel when calling live.connect', async () => {
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     expect(mockLive.connect.calledOnce).to.be.true;
     const connectArg = mockLive.connect.firstCall.args[0];
     expect(connectArg).to.have.property('model');
   });
 
-  it('both onAudioChunk and onTextResponse can fire from the same message', async () => {
-    const onAudioChunk = sinon.stub();
-    const onTextResponse = sinon.stub();
-    await service.connect(onAudioChunk, onTextResponse, () => {});
-
-    const callbacks = mockLive.connect.firstCall.args[0].callbacks;
-    const audioData = Buffer.from([10, 20, 30]);
-    const validJson = { action: 'set', device: 'ac', value: '22', tts_text: 'ok', lang: 'en' };
-    callbacks.onmessage({ data: audioData, text: JSON.stringify(validJson) });
-
-    expect(onAudioChunk.calledOnce).to.be.true;
-    expect(onAudioChunk.firstCall.args[0]).to.equal(audioData);
-    expect(onTextResponse.calledOnce).to.be.true;
-    expect(onTextResponse.firstCall.args[0]).to.deep.equal(validJson);
-  });
-
-  it('session.sendRealtimeInput rejection propagates from sendAudio', async () => {
-    await service.connect(() => {}, () => {}, () => {});
-
-    const sendError = new Error('Send failed');
-    mockSession.sendRealtimeInput.rejects(sendError);
-
-    try {
-      await service.sendAudio('dGVzdA==');
-      expect.fail('Should have thrown');
-    } catch (err) {
-      expect(err).to.equal(sendError);
-    }
-  });
-
   it('onAudioChunk is not called when msg has no data', async () => {
     const onAudioChunk = sinon.stub();
-    await service.connect(onAudioChunk, () => {}, () => {});
+    await service.connect({
+      onAudioChunk,
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    });
 
     const callbacks = mockLive.connect.firstCall.args[0].callbacks;
-    callbacks.onmessage({ text: JSON.stringify({ action: 'none' }) });
+    callbacks.onmessage({ toolCall: { functionCalls: [{ id: 'c1', name: 'test', args: {} }] } });
 
     expect(onAudioChunk.called).to.be.false;
+  });
+
+  it('onTurnComplete is not called when no turnComplete in message', async () => {
+    const onTurnComplete = sinon.stub();
+    await service.connect({
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete,
+      onError: () => {},
+    });
+
+    const callbacks = mockLive.connect.firstCall.args[0].callbacks;
+    callbacks.onmessage({ data: 'audio' });
+    callbacks.onmessage({ toolCall: { functionCalls: [] } });
+    callbacks.onmessage({ serverContent: { modelTurn: { parts: [] } } });
+
+    expect(onTurnComplete.called).to.be.false;
   });
 
   it('multiple connect calls create new sessions each time', async () => {
     const secondSession = {
       sendRealtimeInput: sinon.stub().resolves(),
+      sendToolResponse: sinon.stub(),
       close: sinon.stub(),
     };
     mockLive.connect.onSecondCall().resolves(secondSession);
 
-    await service.connect(() => {}, () => {}, () => {});
+    const opts = {
+      onAudioChunk: () => {},
+      onToolCall: () => {},
+      onTurnComplete: () => {},
+      onError: () => {},
+    };
+
+    await service.connect(opts);
     const firstSession = service.session;
     expect(mockLive.connect.calledOnce).to.be.true;
 
-    await service.connect(() => {}, () => {}, () => {});
+    await service.connect(opts);
     expect(mockLive.connect.calledTwice).to.be.true;
     expect(service.session).to.equal(secondSession);
     expect(service.session).to.not.equal(firstSession);
