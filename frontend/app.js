@@ -48,6 +48,7 @@ app.init = async function () {
     errorToast: document.getElementById('error-toast'),
     errorMessage: document.getElementById('error-message'),
     pwaInstall: document.getElementById('pwa-install'),
+    siriOrb: document.getElementById('siri-orb'),
   };
 
   // Create core instances
@@ -237,6 +238,9 @@ app._connect = async function () {
     // Add welcome message
     this._showCaptionNotification('Connected. Press the mic button or Space to start speaking.');
 
+    // Show orb in idle state
+    this.els.siriOrb.className = 'siri-orb idle';
+
   } catch (err) {
     console.error('Connection failed:', err);
     this._setStatus('error', 'Connection failed');
@@ -263,6 +267,7 @@ app._handleDisconnect = function () {
   this.els.connectBtn.textContent = 'Connect';
   this.els.connectBtn.classList.remove('connected');
   this.els.micBtn.classList.remove('active');
+  this.els.siriOrb.className = 'siri-orb';
   this.isMicOn = false;
   this.sessionToken = null;
 };
@@ -314,6 +319,7 @@ app._startMic = async function () {
 
     this.isMicOn = true;
     this.els.micBtn.classList.add('active');
+    this.els.siriOrb.className = 'siri-orb active';
     this._setStatus('listening', 'Listening...');
 
   } catch (err) {
@@ -332,6 +338,7 @@ app._stopMic = async function () {
   this.player.clearQueue();
   this.isMicOn = false;
   this.els.micBtn.classList.remove('active');
+  this.els.siriOrb.className = 'siri-orb idle';
   this._setStatus('connected', 'Connected');
 
   // Save the conversation to server (fire-and-forget)

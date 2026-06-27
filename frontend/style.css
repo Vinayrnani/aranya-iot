@@ -404,6 +404,93 @@ body::after {
 }
 
 /* ============================================================
+   Siri Orb — Animated glowing orb behind mic button
+   ============================================================ */
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.siri-orb {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-out);
+  overflow: hidden;
+}
+
+/* Main orb: layered conic gradients that rotate */
+.siri-orb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    conic-gradient(from calc(var(--angle) * 2) at 25% 70%, var(--blue), transparent 20% 80%, var(--blue)),
+    conic-gradient(from calc(var(--angle) * 2) at 45% 75%, var(--accent-light), transparent 30% 60%, var(--accent-light)),
+    conic-gradient(from calc(var(--angle) * -3) at 80% 20%, var(--accent), transparent 40% 60%, var(--accent)),
+    conic-gradient(from calc(var(--angle) * 2) at 15% 5%, var(--accent-light), transparent 10% 90%, var(--accent-light)),
+    conic-gradient(from calc(var(--angle) * 1) at 20% 80%, var(--accent), transparent 10% 90%, var(--accent)),
+    conic-gradient(from calc(var(--angle) * -2) at 85% 10%, var(--blue), transparent 20% 80%, var(--blue));
+  filter: blur(15px) contrast(1.2);
+  opacity: 0.7;
+  animation: siri-rotate 8s linear infinite;
+  animation-play-state: paused;
+}
+
+/* Dot-pattern overlay for texture */
+.siri-orb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle 1.5px at 50% 50%, rgba(255,255,255,0.25) 50%, transparent 50%) 0 0 / 6px 6px;
+  backdrop-filter: blur(8px) contrast(1.1);
+  -webkit-backdrop-filter: blur(8px) contrast(1.1);
+  mix-blend-mode: overlay;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+}
+
+@keyframes siri-rotate {
+  to { --angle: 360deg; }
+}
+
+/* Active state: full-speed visible animation */
+.siri-orb.active {
+  opacity: 1;
+}
+
+.siri-orb.active::before {
+  animation-play-state: running;
+  animation-duration: 4s;
+}
+
+/* Idle state: slow breathing pulse, rotation paused */
+.siri-orb.idle {
+  opacity: 1;
+}
+
+.siri-orb.idle::before {
+  animation-play-state: running;
+  animation-duration: 12s;
+}
+
+/* Hidden state (default) */
+.siri-orb:not(.active):not(.idle) {
+  opacity: 0;
+}
+
+/* ============================================================
    Mic Group (centered dominant element)
    ============================================================ */
 .mic-group {
