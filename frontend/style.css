@@ -417,20 +417,6 @@ body::after {
   opacity: 0.35;
 }
 
-.caption-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent-light);
-  flex-shrink: 0;
-  user-select: none;
-}
-
-.caption-line--dim .caption-label {
-  color: var(--text-dim);
-}
-
 .caption-text {
   font-size: 0.88rem;
   line-height: 1.45;

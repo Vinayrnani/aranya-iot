@@ -467,7 +467,6 @@ app._renderCaptions = function () {
 
   // Phase 1: Sync finalized (dimmed) lines.
   // The first N children should match captionLines[].
-  const labelMap = { user: 'You', ai: 'Gemini', system: '' };
   let i = 0;
 
   for (; i < this.captionLines.length; i++) {
@@ -483,8 +482,6 @@ app._renderCaptions = function () {
         child.classList.remove('caption-line--system');
         const textEl = child.querySelector('.caption-text');
         if (textEl) textEl.textContent = line.text;
-        const labelEl = child.querySelector('.caption-label');
-        if (labelEl) labelEl.textContent = labelMap[line.role] || line.role;
       } else {
         // Mismatch — full rebuild (rare: only on structural edge cases)
         this._rebuildCaptionDom(bar);
@@ -507,7 +504,6 @@ app._renderCaptions = function () {
   // Phase 2: Sync the active (streaming) caption line
   if (this.activeCaption && this.activeCaption.text) {
     const isSystem = this.activeCaption.role === 'system';
-    const roleLabel = labelMap[this.activeCaption.role] || this.activeCaption.role;
     let activeEl = i < bar.children.length ? bar.children[i] : null;
 
     if (activeEl && activeEl.dataset.cr === 'a') {
@@ -521,7 +517,7 @@ app._renderCaptions = function () {
         bar.removeChild(bar.children[i]);
       }
       activeEl = this._createCaptionLineEl(
-        roleLabel, this.activeCaption.text, isSystem
+        this.activeCaption.text, isSystem
       );
       bar.appendChild(activeEl);
     }
@@ -538,47 +534,32 @@ app._renderCaptions = function () {
  * the incremental sync can't reconcile children).
  */
 app._rebuildCaptionDom = function (bar) {
-  const labelMap = { user: 'You', ai: 'Gemini', system: '' };
   bar.textContent = '';
   for (const line of this.captionLines) {
     bar.appendChild(
-      this._createCaptionLineEl(
-        labelMap[line.role] || line.role,
-        line.text,
-        false,
-        true  /* dimmed */
-      )
+      this._createCaptionLineEl(line.text, false, true)
     );
   }
   if (this.activeCaption && this.activeCaption.text) {
     const isSystem = this.activeCaption.role === 'system';
-    const roleLabel = labelMap[this.activeCaption.role] || this.activeCaption.role;
     bar.appendChild(
-      this._createCaptionLineEl(roleLabel, this.activeCaption.text, isSystem)
+      this._createCaptionLineEl(this.activeCaption.text, isSystem)
     );
   }
 };
 
 /**
  * Create a caption line DOM element (avoids innerHTML).
- * @param {string} label  - Display label ("You", "Gemini", or "")
  * @param {string} text   - Caption text
  * @param {boolean} isSystem - System notification styling
  * @param {boolean} dimmed  - Dimmed (finalized) styling
  */
-app._createCaptionLineEl = function (label, text, isSystem, dimmed) {
+app._createCaptionLineEl = function (text, isSystem, dimmed) {
   const el = document.createElement('div');
   el.dataset.cr = dimmed ? 'f' : 'a';
   el.className = 'caption-line' +
     (dimmed ? ' caption-line--dim' : '') +
     (isSystem ? ' caption-line--system' : '');
-
-  if (label) {
-    const labelEl = document.createElement('span');
-    labelEl.className = 'caption-label';
-    labelEl.textContent = label;
-    el.appendChild(labelEl);
-  }
 
   const textEl = document.createElement('span');
   textEl.className = 'caption-text';
