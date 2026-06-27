@@ -131,6 +131,44 @@ class ConversationRecorder {
    * End and save the current conversation to IndexedDB.
    * Returns the saved conversation id.
    */
+  /**
+   * Save the conversation snapshot to IndexedDB with one retry.
+   * @param {object} conversation - The conversation object to persist
+   * @param {number} attempt - Current attempt number (0 or 1)
+   * @returns {Promise<string>} Saved conversation id
+   */
+  async _doSave(conversation, attempt = 0) {
+    await this._ensureDB();
+    return new Promise((resolve, reject) => {
+      const tx = this._db.transaction(ConversationRecorder.STORE_NAME, 'readwrite');
+      const store = tx.objectStore(ConversationRecorder.STORE_NAME);
+      const request = store.put(conversation);
+      request.onsuccess = () => {
+        this._prune();
+        resolve(conversation.id);
+      };
+      request.onerror = async (event) => {
+        const err = event.target.error;
+        console.error(`ConversationRecorder: Save failed (attempt ${attempt})`, err);
+        if (attempt === 0) {
+          // One retry for transient errors (storage busy, quota recovery)
+          try {
+            const id = await this._doSave(conversation, 1);
+            resolve(id);
+          } catch (e) {
+            reject(e);
+          }
+        } else {
+          reject(err);
+        }
+      };
+    });
+  }
+
+  /**
+   * End and save the current conversation to IndexedDB.
+   * Returns the saved conversation id.
+   */
   async endConversation() {
     if (!this._currentId) return null;
 
@@ -159,22 +197,8 @@ class ConversationRecorder {
       outputAudio: outputBlob,
     };
 
-    await this._ensureDB();
-
-    return new Promise((resolve, reject) => {
-      const tx = this._db.transaction(ConversationRecorder.STORE_NAME, 'readwrite');
-      const store = tx.objectStore(ConversationRecorder.STORE_NAME);
-
-      const request = store.put(conversation);
-      request.onsuccess = () => {
-        this._prune(); // Fire-and-forget
-        resolve(id);
-      };
-      request.onerror = (event) => {
-        console.error('ConversationRecorder: Save failed', event.target.error);
-        reject(event.target.error);
-      };
-    });
+    // Data snapshot is captured — now persist with retry
+    return this._doSave(conversation);
   }
 
   /**

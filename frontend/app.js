@@ -205,24 +205,34 @@ app._connect = async function () {
     };
 
     this.client.onTurnComplete = () => {
-      // Save whatever was accumulated for this turn and start
-      // a fresh recording for the next one.  This survives mid-
-      // conversation crashes, interruptions, and mic drop-outs.
+      // Persist the completed turn, then always start fresh for the
+      // next one — even if the write failed (the app recovers instead
+      // of stalling).  The save itself is retried once internally.
       if (this.isMicOn && this.recorder._currentId) {
+        const prevId = this.recorder._currentId;
         this.recorder.endConversation().then((id) => {
           if (id) console.log('Turn saved:', id);
+        }).catch((err) => {
+          console.warn('Turn save failed (turn data lost):', prevId, err);
+        }).finally(() => {
+          // Recovery: always start fresh regardless of save outcome
           this.recorder.startConversation(
             this.language,
             this.els.voiceSelect?.value || 'Kore'
           );
-        }).catch((err) => {
-          console.warn('Failed to save turn:', err);
         });
       }
     };
 
     this.client.onDisconnected = (code, reason) => {
       console.log('Disconnected:', code, reason);
+      // Save any in-progress turn — the WS dropped before
+      // onTurnComplete could fire.
+      if (this.recorder._currentId) {
+        this.recorder.endConversation().then((id) => {
+          if (id) console.log('Disconnect-saved turn:', id);
+        }).catch(() => {});
+      }
       this._handleDisconnect();
     };
 
