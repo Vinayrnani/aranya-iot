@@ -443,7 +443,12 @@ app._clearCaptions = function () {
 };
 
 /**
- * Render the caption bar from current state.
+ * Render the caption bar using incremental DOM updates.
+ *
+ * Key optimization: during streaming (the common case ~10 updates/sec),
+ * we only update textContent on the existing active element — no DOM
+ * creation, no destruction, no flash.  Structural changes (role switch,
+ * turn complete) use targeted DOM manipulation instead of innerHTML.
  */
 app._renderCaptions = function () {
   const bar = this.els.captionBar;
@@ -453,44 +458,134 @@ app._renderCaptions = function () {
     (this.activeCaption && this.activeCaption.text);
 
   if (!hasContent) {
-    bar.innerHTML = '';
+    bar.textContent = '';
     bar.classList.remove('caption-bar--visible');
     return;
   }
 
-  let html = '';
+  bar.classList.add('caption-bar--visible');
 
-  // Finalized lines (dimmed)
-  for (const line of this.captionLines) {
-    html += this._renderCaptionLine(line, true);
+  // Phase 1: Sync finalized (dimmed) lines.
+  // The first N children should match captionLines[].
+  const labelMap = { user: 'You', ai: 'Gemini', system: '' };
+  let i = 0;
+
+  for (; i < this.captionLines.length; i++) {
+    const line = this.captionLines[i];
+    const child = bar.children[i];
+
+    if (!child || child.dataset.cr !== 'f') {
+      // This slot needs a finalized element but doesn't have one.
+      // If the existing child is the active caption, convert it.
+      if (child && child.dataset.cr === 'a') {
+        child.dataset.cr = 'f';
+        child.classList.add('caption-line--dim');
+        child.classList.remove('caption-line--system');
+        const textEl = child.querySelector('.caption-text');
+        if (textEl) textEl.textContent = line.text;
+        const labelEl = child.querySelector('.caption-label');
+        if (labelEl) labelEl.textContent = labelMap[line.role] || line.role;
+      } else {
+        // Mismatch — full rebuild (rare: only on structural edge cases)
+        this._rebuildCaptionDom(bar);
+        return;
+      }
+    } else {
+      // Existing finalized element — update text only
+      const textEl = child.querySelector('.caption-text');
+      if (textEl) textEl.textContent = line.text;
+    }
   }
 
-  // Active streaming line
+  // Remove any extra finalized children (past captionLines.length)
+  while (i < bar.children.length) {
+    const child = bar.children[i];
+    if (child.dataset.cr === 'a') break; // active comes after finalized
+    bar.removeChild(child);
+  }
+
+  // Phase 2: Sync the active (streaming) caption line
   if (this.activeCaption && this.activeCaption.text) {
     const isSystem = this.activeCaption.role === 'system';
-    html += this._renderCaptionLine(this.activeCaption, false, isSystem);
-  }
+    const roleLabel = labelMap[this.activeCaption.role] || this.activeCaption.role;
+    let activeEl = i < bar.children.length ? bar.children[i] : null;
 
-  bar.innerHTML = html;
-  bar.classList.add('caption-bar--visible');
+    if (activeEl && activeEl.dataset.cr === 'a') {
+      // Update existing active element — textContent only, no flash
+      const textEl = activeEl.querySelector('.caption-text');
+      if (textEl) textEl.textContent = this.activeCaption.text;
+      activeEl.classList.toggle('caption-line--system', isSystem);
+    } else {
+      // Create a fresh active element
+      while (i < bar.children.length) {
+        bar.removeChild(bar.children[i]);
+      }
+      activeEl = this._createCaptionLineEl(
+        roleLabel, this.activeCaption.text, isSystem
+      );
+      bar.appendChild(activeEl);
+    }
+  } else {
+    // No active caption — remove dangling active element if present
+    if (i < bar.children.length && bar.children[i].dataset.cr === 'a') {
+      bar.removeChild(bar.children[i]);
+    }
+  }
 };
 
 /**
- * Render a single caption line HTML string.
+ * Full DOM rebuild (rare — only on structural edge cases where
+ * the incremental sync can't reconcile children).
  */
-app._renderCaptionLine = function (line, dimmed, isSystem) {
+app._rebuildCaptionDom = function (bar) {
   const labelMap = { user: 'You', ai: 'Gemini', system: '' };
-  const label = labelMap[line.role] || line.role;
-  const dimClass = dimmed ? ' caption-line--dim' : '';
-  const sysClass = isSystem ? ' caption-line--system' : '';
-  const labelHtml = label
-    ? `<span class="caption-label">${label}</span>`
-    : '';
+  bar.textContent = '';
+  for (const line of this.captionLines) {
+    bar.appendChild(
+      this._createCaptionLineEl(
+        labelMap[line.role] || line.role,
+        line.text,
+        false,
+        true  /* dimmed */
+      )
+    );
+  }
+  if (this.activeCaption && this.activeCaption.text) {
+    const isSystem = this.activeCaption.role === 'system';
+    const roleLabel = labelMap[this.activeCaption.role] || this.activeCaption.role;
+    bar.appendChild(
+      this._createCaptionLineEl(roleLabel, this.activeCaption.text, isSystem)
+    );
+  }
+};
 
-  return `<div class="caption-line${dimClass}${sysClass}">` +
-    `${labelHtml}` +
-    `<span class="caption-text">${this._escapeHtml(line.text)}</span>` +
-    `</div>`;
+/**
+ * Create a caption line DOM element (avoids innerHTML).
+ * @param {string} label  - Display label ("You", "Gemini", or "")
+ * @param {string} text   - Caption text
+ * @param {boolean} isSystem - System notification styling
+ * @param {boolean} dimmed  - Dimmed (finalized) styling
+ */
+app._createCaptionLineEl = function (label, text, isSystem, dimmed) {
+  const el = document.createElement('div');
+  el.dataset.cr = dimmed ? 'f' : 'a';
+  el.className = 'caption-line' +
+    (dimmed ? ' caption-line--dim' : '') +
+    (isSystem ? ' caption-line--system' : '');
+
+  if (label) {
+    const labelEl = document.createElement('span');
+    labelEl.className = 'caption-label';
+    labelEl.textContent = label;
+    el.appendChild(labelEl);
+  }
+
+  const textEl = document.createElement('span');
+  textEl.className = 'caption-text';
+  textEl.textContent = text;
+  el.appendChild(textEl);
+
+  return el;
 };
 
 /**
@@ -566,16 +661,6 @@ app._setupPWAInstall = function () {
       this.els.pwaInstall.style.display = 'none';
     }
   });
-};
-
-/**
- * Escape HTML to prevent XSS.
- */
-app._escapeHtml = function (text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
 };
 
 // Initialize on DOM ready
