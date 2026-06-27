@@ -10,6 +10,7 @@ const app = {
   client: null,
   capture: null,
   player: null,
+  recorder: null,
 
   // State
   state: 'idle', // idle | connecting | connected | speaking | listening | error
@@ -51,6 +52,10 @@ app.init = async function () {
   this.client = new GeminiLiveClient();
   this.capture = new AudioCapture();
   this.player = new AudioPlayer();
+  this.recorder = new ConversationRecorder();
+
+  // Expose for E2E export: app.recorder.exportAllToServer()
+  window.__recorder = this.recorder;
 
   // Bind events
   this._bindEvents();
@@ -181,22 +186,27 @@ app._connect = async function () {
 
     this.client.onAudioReceived = (base64PCM) => {
       this.player.play(base64PCM);
+      this.recorder.addOutputAudio(base64PCM);
     };
 
     this.client.onInputTranscription = (text) => {
       this._addMessage('user', text);
+      this.recorder.setInputTranscript(text);
     };
 
     this.client.onOutputTranscription = (text) => {
       this._addMessage('ai', text);
+      this.recorder.setOutputTranscript(text);
     };
 
     this.client.onInterrupted = () => {
       this.player.clearQueue();
+      this.recorder.cancelConversation();
     };
 
     this.client.onTurnComplete = () => {
       // Turn completed, nothing extra needed
+      // Conversation saved in _stopMic when user releases mic
     };
 
     this.client.onDisconnected = (code, reason) => {
@@ -279,9 +289,13 @@ app._startMic = async function () {
     // Initialize audio player context (needs user gesture)
     await this.player.init();
 
+    // Start recording this conversation
+    this.recorder.startConversation(this.language, this.els.voiceSelect?.value || 'Kore');
+
     // Set up audio capture
     this.capture.onChunk = (base64PCM) => {
       this.client.sendAudio(base64PCM);
+      this.recorder.addInputAudio(base64PCM);
     };
 
     this.capture.onError = (err) => {
@@ -297,6 +311,7 @@ app._startMic = async function () {
 
   } catch (err) {
     console.error('Failed to start mic:', err);
+    this.recorder.cancelConversation();
     this._showError('Microphone access denied or unavailable');
   }
 };
@@ -310,6 +325,13 @@ app._stopMic = async function () {
   this.isMicOn = false;
   this.els.micBtn.classList.remove('active');
   this._setStatus('connected', 'Connected');
+
+  // Save the recorded conversation to IndexedDB (fire-and-forget)
+  this.recorder.endConversation().then((id) => {
+    if (id) console.log('Conversation saved:', id);
+  }).catch((err) => {
+    console.warn('Failed to save conversation:', err);
+  });
 };
 
 /**
