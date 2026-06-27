@@ -421,7 +421,7 @@ body::after {
   pointer-events: auto;
 }
 
-/* Empty visual — radiating rings container */
+/* Empty visual — decorative ring */
 .empty-visual {
   position: relative;
   width: 100px;
@@ -432,39 +432,13 @@ body::after {
   margin-bottom: -12px;
 }
 
-.empty-rings {
-  position: absolute;
-  inset: 0;
-}
-
-.ring {
-  position: absolute;
+.empty-icon-ring {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  border: 1px solid var(--accent);
-  opacity: 0;
-  animation: ring-expand 3s ease-out infinite;
-}
-.ring-1 { animation-delay: 0s; }
-.ring-2 { animation-delay: 1s; }
-.ring-3 { animation-delay: 2s; }
-
-@keyframes ring-expand {
-  0% {
-    width: 64px;
-    height: 64px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.4;
-  }
-  100% {
-    width: 120px;
-    height: 120px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-  }
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(109, 40, 217, 0.15));
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
 }
 
 /* ============================================================
