@@ -5,7 +5,7 @@
  * Caches the app shell on first load.
  */
 
-const CACHE_NAME = 'viva-voice-v1';
+const CACHE_NAME = 'viva-voice-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -43,29 +43,38 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network-first for HTML, cache-first for assets
 self.addEventListener('fetch', (event) => {
-  // Only cache same-origin GET requests
+  // Only handle same-origin GET requests
   if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then((response) => {
-        // Cache successful responses for future
+  // Navigation (HTML) requests: network-first so cache-busting works
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then((response) => {
         if (response && response.status === 200) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match('/'))
+    );
+    return;
+  }
+
+  // Static assets: cache-first, network fallback
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
         return response;
       }).catch(() => {
-        // If network fails and we have no cache, show offline page
         if (event.request.mode === 'navigate') {
           return caches.match('/');
         }
