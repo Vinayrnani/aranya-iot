@@ -368,9 +368,9 @@ app._stopMic = async function () {
 /**
  * Update the caption bar with incoming transcription text.
  *
- * The Gemini Live API sends accumulated (full-so-far) text per event,
- * so we replace rather than append.  When the role switches (user→ai
- * or ai→user), the previous line is finalized and dimmed.
+ * The Gemini Live API sends incremental text fragments, so we append
+ * to the active caption rather than replace.  When the role switches
+ * (user→ai or ai→user), the previous line is finalized and dimmed.
  */
 app._updateCaption = function (role, text) {
   if (!text) return;
@@ -388,11 +388,11 @@ app._updateCaption = function (role, text) {
     this.activeCaption = null;
   }
 
-  // Set or replace the active caption (API sends accumulated text)
+  // Append incremental text fragment to the active caption
   if (!this.activeCaption) {
     this.activeCaption = { role, text };
   } else {
-    this.activeCaption.text = text;
+    this.activeCaption.text += ' ' + text;
   }
 
   this._renderCaptions();
