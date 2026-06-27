@@ -31,9 +31,46 @@ class GeminiLiveClient {
   }
 
   /**
+   * Pre-fetch an ephemeral token in the background (during page load).
+   * The cached token will be used by fetchToken() to skip the API call
+   * when the user connects.
+   */
+  async prefetchToken(modelOverride) {
+    try {
+      const model = modelOverride || this.model;
+      const resp = await fetch('/api/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model }),
+      });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      this._cachedTokenData = data;
+    } catch (e) {
+      // Prefetch failure is non-fatal — fetchToken will retry on demand
+    }
+  }
+
+  /**
    * Fetch an ephemeral token from the backend.
+   * Uses a pre-fetched cached token if one is available and still valid.
    */
   async fetchToken(modelOverride) {
+    // Use cached token if still valid (within 1 min of expiry)
+    if (this._cachedTokenData) {
+      const cached = this._cachedTokenData;
+      if (cached.expire_time) {
+        const expiresAt = new Date(cached.expire_time).getTime();
+        if (Date.now() < expiresAt - 60000) {
+          this._cachedTokenData = null;
+          this.token = cached.token;
+          this.model = cached.model;
+          return cached;
+        }
+      }
+      this._cachedTokenData = null;
+    }
+
     const model = modelOverride || this.model;
     const resp = await fetch('/api/token', {
       method: 'POST',

@@ -60,6 +60,10 @@ app.init = async function () {
   // Expose for E2E export: app.recorder.exportAllToServer()
   window.__recorder = this.recorder;
 
+  // Pre-fetch an ephemeral token in the background so the first
+  // connect skips the token API round-trip.
+  this.client.prefetchToken();
+
   // Bind events
   this._bindEvents();
 
