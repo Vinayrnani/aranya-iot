@@ -359,7 +359,7 @@ body::after {
 }
 
 /* ============================================================
-   Stage (Transcript + Centered Mic)
+   Stage (Centered Mic + Caption Bar at bottom)
    ============================================================ */
 .stage {
   flex: 1;
@@ -372,41 +372,108 @@ body::after {
 }
 
 /* ============================================================
-   Transcript Area (scrolls behind the mic)
+   Caption / Subtitle Bar (pinned to bottom of stage)
    ============================================================ */
-.transcript {
+.caption-bar {
   position: absolute;
-  inset: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: var(--space-sm) var(--space-md) 200px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  z-index: 1;
-}
-
-/* Custom scrollbar */
-.transcript::-webkit-scrollbar {
-  width: 3px;
-}
-.transcript::-webkit-scrollbar-track {
-  background: transparent;
-}
-.transcript::-webkit-scrollbar-thumb {
-  background: var(--text-dim);
-  border-radius: 3px;
-}
-
-#transcript-list {
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 6px;
+  z-index: 4;
+  padding: var(--space-md) var(--space-md) calc(var(--space-lg) + var(--safe-bottom));
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--dur-med) var(--ease-out),
+              transform var(--dur-med) var(--ease-out);
+  pointer-events: none;
+  max-height: 40%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-/* Empty state (kept for app.js — minimal, behind mic-group) */
-.transcript-empty {
-  display: none;
+.caption-bar--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.caption-line {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  animation: caption-enter var(--dur-med) var(--ease-spring) both;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.caption-line--dim {
+  opacity: 0.35;
+}
+
+.caption-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-light);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.caption-line--dim .caption-label {
+  color: var(--text-dim);
+}
+
+.caption-text {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.caption-line--dim .caption-text {
+  color: var(--text-muted);
+}
+
+/* System/notification caption (no label, centered) */
+.caption-line--system {
+  justify-content: center;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.caption-line--system .caption-text {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.82rem;
+}
+
+@keyframes caption-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide empty-state text when captions are active */
+.stage:has(.caption-bar--visible) .empty-title,
+.stage:has(.caption-bar--visible) .empty-hint {
+  opacity: 0;
+  transition: opacity var(--dur-med) var(--ease-out);
 }
 
 /* ============================================================
@@ -632,87 +699,6 @@ body::after {
   letter-spacing: 0.02em;
   text-align: center;
   margin-top: -4px;
-}
-
-/* ============================================================
-   Messages
-   ============================================================ */
-.message {
-  display: flex;
-  gap: var(--space-sm);
-  animation: msg-enter var(--dur-slow) var(--ease-spring) both;
-}
-
-@keyframes msg-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.user-msg {
-  flex-direction: row-reverse;
-}
-
-.user-msg .msg-content {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(124, 58, 237, 0.08));
-  border: 1px solid rgba(124, 58, 237, 0.15);
-  border-radius: var(--radius-lg) var(--radius-sm) var(--radius-lg) var(--radius-lg);
-}
-
-.ai-msg .msg-content {
-  background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-sm) var(--radius-lg) var(--radius-lg) var(--radius-lg);
-}
-
-.system-msg {
-  justify-content: center;
-}
-
-.system-msg .msg-content {
-  background: transparent;
-  padding: var(--space-xs) var(--space-md);
-}
-
-.msg-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--bg-surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.msg-content {
-  max-width: 80%;
-  padding: var(--space-sm) var(--space-md);
-}
-
-.msg-role {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 2px;
-}
-
-.msg-text {
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--text-primary);
-  word-break: break-word;
 }
 
 /* ============================================================
@@ -948,12 +934,4 @@ body:has(.settings-panel.open) .settings-backdrop {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* ============================================================
-   Scrollbar (Firefox)
-   ============================================================ */
-.transcript {
-  scrollbar-width: thin;
-  scrollbar-color: var(--text-dim) transparent;
 }

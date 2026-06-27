@@ -19,6 +19,11 @@ const app = {
   conversation: [],
   sessionToken: null,
 
+  // Caption bar state
+  captionLines: [],         // Finalized lines: [{ role, text, dimmed }]
+  activeCaption: null,      // Current streaming: { role, text } | null
+  _captionTimer: null,      // Auto-clear timer for system messages
+
   // DOM element references (set in init)
   els: {},
 };
@@ -31,9 +36,7 @@ app.init = async function () {
   this.els = {
     statusDot: document.getElementById('status-dot'),
     statusText: document.getElementById('status-text'),
-    transcript: document.getElementById('transcript'),
-    transcriptList: document.getElementById('transcript-list'),
-    transcriptEmpty: document.getElementById('transcript-empty'),
+    captionBar: document.getElementById('caption-bar'),
     micBtn: document.getElementById('mic-btn'),
     micIcon: document.getElementById('mic-icon'),
     connectBtn: document.getElementById('connect-btn'),
@@ -190,12 +193,12 @@ app._connect = async function () {
     };
 
     this.client.onInputTranscription = (text) => {
-      this._addMessage('user', text);
+      this._updateCaption('user', text);
       this.recorder.setInputTranscript(text);
     };
 
     this.client.onOutputTranscription = (text) => {
-      this._addMessage('ai', text);
+      this._updateCaption('ai', text);
       this.recorder.setOutputTranscript(text);
     };
 
@@ -205,6 +208,9 @@ app._connect = async function () {
     };
 
     this.client.onTurnComplete = () => {
+      // Dim the caption bar
+      this._dimCaptions();
+
       // Persist the completed turn, then always start fresh for the
       // next one — even if the write failed (the app recovers instead
       // of stalling).  The save itself is retried once internally.
@@ -253,7 +259,7 @@ app._connect = async function () {
     this.els.micBtn.disabled = false;
 
     // Add welcome message
-    this._addSystemMessage('Connected. Press the mic button or Space to start speaking.');
+    this._showCaptionNotification('Connected. Press the mic button or Space to start speaking.');
 
   } catch (err) {
     console.error('Connection failed:', err);
@@ -314,6 +320,9 @@ app._startMic = async function () {
     // Start recording this conversation
     this.recorder.startConversation(this.language, this.els.voiceSelect?.value || 'Kore');
 
+    // Clear caption bar for a fresh turn
+    this._clearCaptions();
+
     // Set up audio capture
     this.capture.onChunk = (base64PCM) => {
       this.client.sendAudio(base64PCM);
@@ -357,47 +366,131 @@ app._stopMic = async function () {
 };
 
 /**
- * Add a message to the transcript display.
+ * Update the caption bar with incoming transcription text.
+ *
+ * The Gemini Live API sends accumulated (full-so-far) text per event,
+ * so we replace rather than append.  When the role switches (user→ai
+ * or ai→user), the previous line is finalized and dimmed.
  */
-app._addMessage = function (role, text) {
-  // Hide empty state
-  if (this.els.transcriptEmpty) {
-    this.els.transcriptEmpty.style.display = 'none';
+app._updateCaption = function (role, text) {
+  if (!text) return;
+
+  // Role switched — finalize the previous active caption
+  if (this.activeCaption && this.activeCaption.role !== role) {
+    this.captionLines.push({
+      role: this.activeCaption.role,
+      text: this.activeCaption.text,
+    });
+    // Keep only the most recent finalized line to avoid overflow
+    if (this.captionLines.length > 1) {
+      this.captionLines = this.captionLines.slice(-1);
+    }
+    this.activeCaption = null;
   }
 
-  const isUser = role === 'user';
-  const roleLabel = isUser ? 'You' : 'Gemini';
+  // Set or replace the active caption (API sends accumulated text)
+  if (!this.activeCaption) {
+    this.activeCaption = { role, text };
+  } else {
+    this.activeCaption.text = text;
+  }
 
-  // Create message element
-  const msgEl = document.createElement('div');
-  msgEl.className = `message ${role}-msg`;
-
-  let avatar = '🧑';
-  if (role === 'ai') avatar = '🤖';
-  if (role === 'system') avatar = 'ℹ️';
-
-  msgEl.innerHTML = `
-    <div class="msg-avatar">${avatar}</div>
-    <div class="msg-content">
-      <div class="msg-role">${roleLabel}</div>
-      <div class="msg-text">${this._escapeHtml(text)}</div>
-    </div>
-  `;
-
-  this.els.transcriptList.appendChild(msgEl);
-  this.els.transcript.scrollTop = this.els.transcript.scrollHeight;
+  this._renderCaptions();
 };
 
-app._addSystemMessage = function (text) {
-  const msgEl = document.createElement('div');
-  msgEl.className = 'message system-msg';
-  msgEl.innerHTML = `
-    <div class="msg-content">
-      <div class="msg-text" style="color: var(--text-muted); font-style: italic; font-size: 0.85em;">${this._escapeHtml(text)}</div>
-    </div>
-  `;
-  this.els.transcriptList.appendChild(msgEl);
-  this.els.transcript.scrollTop = this.els.transcript.scrollHeight;
+/**
+ * Show a temporary system/notification caption.
+ * Auto-dims after a few seconds.
+ */
+app._showCaptionNotification = function (text) {
+  clearTimeout(this._captionTimer);
+  this._clearCaptions();
+  this.activeCaption = { role: 'system', text };
+  this._renderCaptions();
+
+  // Auto-dim after 4 seconds
+  this._captionTimer = setTimeout(() => {
+    this._dimCaptions();
+  }, 4000);
+};
+
+/**
+ * Finalize the active caption and dim all lines.
+ * Called on turn complete.
+ */
+app._dimCaptions = function () {
+  if (this.activeCaption) {
+    this.captionLines.push({
+      role: this.activeCaption.role,
+      text: this.activeCaption.text,
+    });
+    if (this.captionLines.length > 1) {
+      this.captionLines = this.captionLines.slice(-1);
+    }
+    this.activeCaption = null;
+  }
+  this._renderCaptions();
+};
+
+/**
+ * Clear all captions (fresh turn).
+ */
+app._clearCaptions = function () {
+  clearTimeout(this._captionTimer);
+  this.captionLines = [];
+  this.activeCaption = null;
+  this._renderCaptions();
+};
+
+/**
+ * Render the caption bar from current state.
+ */
+app._renderCaptions = function () {
+  const bar = this.els.captionBar;
+  if (!bar) return;
+
+  const hasContent = this.captionLines.length > 0 ||
+    (this.activeCaption && this.activeCaption.text);
+
+  if (!hasContent) {
+    bar.innerHTML = '';
+    bar.classList.remove('caption-bar--visible');
+    return;
+  }
+
+  let html = '';
+
+  // Finalized lines (dimmed)
+  for (const line of this.captionLines) {
+    html += this._renderCaptionLine(line, true);
+  }
+
+  // Active streaming line
+  if (this.activeCaption && this.activeCaption.text) {
+    const isSystem = this.activeCaption.role === 'system';
+    html += this._renderCaptionLine(this.activeCaption, false, isSystem);
+  }
+
+  bar.innerHTML = html;
+  bar.classList.add('caption-bar--visible');
+};
+
+/**
+ * Render a single caption line HTML string.
+ */
+app._renderCaptionLine = function (line, dimmed, isSystem) {
+  const labelMap = { user: 'You', ai: 'Gemini', system: '' };
+  const label = labelMap[line.role] || line.role;
+  const dimClass = dimmed ? ' caption-line--dim' : '';
+  const sysClass = isSystem ? ' caption-line--system' : '';
+  const labelHtml = label
+    ? `<span class="caption-label">${label}</span>`
+    : '';
+
+  return `<div class="caption-line${dimClass}${sysClass}">` +
+    `${labelHtml}` +
+    `<span class="caption-text">${this._escapeHtml(line.text)}</span>` +
+    `</div>`;
 };
 
 /**
