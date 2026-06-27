@@ -326,7 +326,8 @@ def create_app() -> web.Application:
 
     # Static frontend files (individual routes to avoid catch-all conflicts)
     FRONTEND_FILES = [
-        "app.js", "audio-handler.js", "conversations.js", "geminilive.js",
+        "app.js", "audio-handler.js", "audio-worklet-processor.js",
+        "conversations.js", "geminilive.js",
         "index.html", "manifest.json", "style.css", "sw.js",
         "favicon.ico", "robots.txt",
     ]
