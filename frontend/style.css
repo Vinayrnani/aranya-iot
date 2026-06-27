@@ -421,7 +421,7 @@ body::after {
   pointer-events: auto;
 }
 
-/* Empty visual — waveform icon + radiating rings */
+/* Empty visual — radiating rings container */
 .empty-visual {
   position: relative;
   width: 100px;
@@ -430,27 +430,6 @@ body::after {
   align-items: center;
   justify-content: center;
   margin-bottom: -12px;
-}
-
-.empty-icon-ring {
-  position: relative;
-  z-index: 2;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(109, 40, 217, 0.15));
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
-}
-
-.empty-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-light);
 }
 
 .empty-rings {

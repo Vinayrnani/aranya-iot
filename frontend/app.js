@@ -124,7 +124,9 @@ app._bindEvents = function () {
  * Toggle WebSocket connection to Gemini Live API.
  */
 app._toggleConnection = async function () {
-  if (this.state === 'connected') {
+  if (this.state === 'connected' ||
+      this.state === 'listening' ||
+      this.state === 'speaking') {
     await this._disconnect();
     return;
   }
@@ -138,13 +140,16 @@ app._toggleConnection = async function () {
  * Connect to Gemini Live API.
  */
 app._connect = async function () {
-  this._setStatus('connecting', 'Connecting...');
+  this.state = 'connecting';
   this.els.connectBtn.disabled = true;
   this.els.connectBtn.textContent = 'Connecting...';
 
   try {
     // Fetch ephemeral token from our backend
+    this._setStatus('connecting', 'Fetching token...');
     const tokenData = await this.client.fetchToken();
+
+    this._setStatus('connecting', 'Connecting to Gemini...');
 
     // Apply voice setting
     this.client.setVoice(this.els.voiceSelect?.value || 'Kore');
@@ -184,20 +189,11 @@ app._connect = async function () {
 
       // Persist the completed turn, then always start fresh for the
       // next one — even if the write failed (the app recovers instead
-      // of stalling).  The save itself is retried once internally.
+      // of stalling).
       if (this.isMicOn && this.recorder._currentId) {
         const prevId = this.recorder._currentId;
-        this.recorder.endConversation().then(async (id) => {
-          if (id) {
-            console.log('Turn saved:', id);
-            // Auto-export to server for replay tests
-            try {
-              await this.recorder.exportToServer(id);
-              console.log('Turn exported to server:', id);
-            } catch (e) {
-              // Server may not be running; that's OK
-            }
-          }
+        this.recorder.endConversation().then((id) => {
+          if (id) console.log('Turn saved:', id);
         }).catch((err) => {
           console.warn('Turn save failed (turn data lost):', prevId, err);
         }).finally(() => {
@@ -215,16 +211,8 @@ app._connect = async function () {
       // Save any in-progress turn — the WS dropped before
       // onTurnComplete could fire.
       if (this.recorder._currentId) {
-        const prevId = this.recorder._currentId;
-        this.recorder.endConversation().then(async (id) => {
-          if (id) {
-            console.log('Disconnect-saved turn:', id);
-            try {
-              await this.recorder.exportToServer(id);
-            } catch (e) {
-              // Server may not be running
-            }
-          }
+        this.recorder.endConversation().then((id) => {
+          if (id) console.log('Disconnect-saved turn:', id);
         }).catch(() => {});
       }
       this._handleDisconnect();
@@ -341,11 +329,12 @@ app._startMic = async function () {
 app._stopMic = async function () {
   this.capture.stop();
   this.client.sendAudioStreamEnd();
+  this.player.clearQueue();
   this.isMicOn = false;
   this.els.micBtn.classList.remove('active');
   this._setStatus('connected', 'Connected');
 
-  // Save the recorded conversation to IndexedDB (fire-and-forget)
+  // Save the conversation to server (fire-and-forget)
   this.recorder.endConversation().then((id) => {
     if (id) console.log('Conversation saved:', id);
   }).catch((err) => {
