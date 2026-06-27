@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Viva Voice - Converse with Gemini AI in Telugu, Hindi, and English using voice">
+  <title>Viva Voice</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><text x='50' y='72' font-size='55' text-anchor='middle' fill='white'>🗣</text></svg>">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- Header: Language selector + Status bar + Controls -->
+    <div class="header-section">
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en">English</button>
+        <button class="lang-btn" data-lang="hi">हिन्दी</button>
+        <button class="lang-btn" data-lang="te">తెలుగు</button>
+      </div>
+      <div class="top-bar">
+        <div class="status-indicator">
+          <span id="status-dot" class="status-dot idle"></span>
+          <span id="status-text">Ready</span>
+        </div>
+        <div class="top-bar-actions">
+          <button id="connect-btn" class="connect-btn">Connect</button>
+          <button id="settings-toggle" class="settings-toggle" aria-label="Settings">⚙️</button>
+        </div>
+        <span id="lang-indicator" class="lang-indicator">EN</span>
+      </div>
+    </div>
+
+    <!-- Stage: scrollable transcript + centered mic -->
+    <div class="stage">
+
+      <!-- Transcript area (scrolls behind the mic) -->
+      <div id="transcript" class="transcript">
+        <div id="transcript-list"></div>
+        <div id="transcript-empty" class="transcript-empty">
+          <!-- Empty state text lives in mic-group; this div kept for app.js -->
+        </div>
+      </div>
+
+      <!-- Centered mic + empty state visuals -->
+      <div class="mic-group">
+        <div class="empty-visual">
+          <div class="empty-icon-ring">
+            <span class="empty-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-9 9"/>
+                <path d="M3 12a9 9 0 0 1 9-9"/>
+                <path d="M7 12a5 5 0 0 0 5 5"/>
+                <path d="M7 12a5 5 0 0 1 5-5"/>
+                <path d="M12 7v10"/>
+              </svg>
+            </span>
+          </div>
+          <div class="empty-rings">
+            <span class="ring ring-1"></span>
+            <span class="ring ring-2"></span>
+            <span class="ring ring-3"></span>
+          </div>
+        </div>
+        <button id="mic-btn" class="mic-btn">
+          <span id="mic-icon" class="mic-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v1a7 7 0 0 1-7 7"/>
+              <path d="M5 10v1a7 7 0 0 0 7 7"/>
+              <path d="M12 18v3"/>
+            </svg>
+          </span>
+          <span class="mic-ring"></span>
+          <span class="mic-ring mic-ring-2"></span>
+        </button>
+        <p class="empty-title">Press the mic button to start</p>
+        <p class="empty-hint">Supports English, हिन्दी, తెలుగు</p>
+      </div>
+
+    </div>
+
+    <!-- Settings panel (bottom sheet) -->
+    <div id="settings-panel" class="settings-panel">
+      <div class="settings-handle">
+        <span class="handle-bar"></span>
+      </div>
+      <div class="settings-body">
+        <h3 class="settings-title">Settings</h3>
+        <div class="settings-field">
+          <label for="voice-select" class="settings-label">Voice</label>
+          <select id="voice-select" class="settings-select">
+            <option value="Puck">Puck</option>
+            <option value="Charon">Charon</option>
+            <option value="Kore" selected>Kore</option>
+            <option value="Fenrir">Fenrir</option>
+            <option value="Aoede">Aoede</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backdrop for settings panel -->
+    <div class="settings-backdrop" id="settings-backdrop"></div>
+
+    <!-- PWA install button (hidden until event) -->
+    <button id="pwa-install" class="pwa-install" style="display:none">Install App</button>
+
+    <!-- Error toast -->
+    <div id="error-toast" class="error-toast">
+      <span class="error-icon">⚠️</span>
+      <span id="error-message"></span>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="/geminilive.js?v=4"></script>
+  <script src="/audio-handler.js?v=3"></script>
+  <script src="/app.js?v=4"></script>
+
+</body>
+</html>
