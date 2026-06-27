@@ -205,8 +205,20 @@ app._connect = async function () {
     };
 
     this.client.onTurnComplete = () => {
-      // Turn completed, nothing extra needed
-      // Conversation saved in _stopMic when user releases mic
+      // Save whatever was accumulated for this turn and start
+      // a fresh recording for the next one.  This survives mid-
+      // conversation crashes, interruptions, and mic drop-outs.
+      if (this.isMicOn && this.recorder._currentId) {
+        this.recorder.endConversation().then((id) => {
+          if (id) console.log('Turn saved:', id);
+          this.recorder.startConversation(
+            this.language,
+            this.els.voiceSelect?.value || 'Kore'
+          );
+        }).catch((err) => {
+          console.warn('Failed to save turn:', err);
+        });
+      }
     };
 
     this.client.onDisconnected = (code, reason) => {

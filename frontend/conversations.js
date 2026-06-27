@@ -135,6 +135,10 @@ class ConversationRecorder {
     if (!this._currentId) return null;
 
     const id = this._currentId;
+    // Null immediately so callbacks between here and startConversation()
+    // don't leak data into a conversation that's being closed.
+    this._currentId = null;
+
     const duration = Date.now() - this._startTime;
 
     // Build Blobs from accumulated chunks
@@ -163,7 +167,6 @@ class ConversationRecorder {
 
       const request = store.put(conversation);
       request.onsuccess = () => {
-        this._currentId = null;
         this._prune(); // Fire-and-forget
         resolve(id);
       };
