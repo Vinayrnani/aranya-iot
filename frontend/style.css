@@ -421,26 +421,6 @@ body::after {
   pointer-events: auto;
 }
 
-/* Empty visual — decorative ring */
-.empty-visual {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: -12px;
-}
-
-.empty-icon-ring {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25), rgba(109, 40, 217, 0.15));
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
-}
-
 /* ============================================================
    Mic Button — dominant, large, centered
    ============================================================ */
