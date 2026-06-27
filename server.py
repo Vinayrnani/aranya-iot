@@ -110,7 +110,6 @@ async def handle_token(request: web.Request) -> web.Response:
         body = {}
 
     model = body.get("model", DEFAULT_MODEL)
-    temperature = body.get("temperature", 0.7)
 
     if not API_KEY:
         return web.json_response(
@@ -121,16 +120,13 @@ async def handle_token(request: web.Request) -> web.Response:
     # Build the REST request to the Gemini API
     # The bidiGenerateContentSetup field mirrors the BidiGenerateContentSetup
     # proto fields directly (the SDK strips the 'setup' wrapper internally).
+    # Note: No bidiGenerateContentSetup constraints — the client sends the full
+    # BidiGenerateContentSetup in its WebSocket setup message. Locking config
+    # here would cause Gemini to reject client fields not in the constraints
+    # (like systemInstruction). See Google's official example which uses the
+    # same open-token approach.
     payload = {
         "uses": 1,
-        "bidiGenerateContentSetup": {
-            "model": f"models/{model}",
-            "generationConfig": {
-                "responseModalities": ["AUDIO"],
-                "temperature": temperature,
-            },
-            "sessionResumption": {},
-        },
     }
 
     url = f"{TOKEN_ENDPOINT}?key={API_KEY}"

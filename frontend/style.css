@@ -142,54 +142,6 @@ body::after {
 }
 
 /* ============================================================
-   Language Selector
-   ============================================================ */
-.lang-selector {
-  display: flex;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md) var(--space-xs);
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.lang-btn {
-  position: relative;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: color var(--dur-med) var(--ease-out),
-              background var(--dur-med) var(--ease-out);
-  letter-spacing: 0.02em;
-}
-
-.lang-btn:hover {
-  color: var(--text-secondary);
-  background: var(--accent-subtle);
-}
-
-.lang-btn.active {
-  color: var(--accent-light);
-  background: var(--accent-subtle);
-}
-
-.lang-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* ============================================================
    Top Bar (Status + Controls row)
    ============================================================ */
 .top-bar {
@@ -340,17 +292,6 @@ body::after {
   background: var(--accent-subtle);
   border-color: rgba(124, 58, 237, 0.3);
   transform: rotate(180deg);
-}
-
-.lang-indicator {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--accent-light);
-  background: var(--accent-subtle);
-  padding: 2px 7px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.08em;
-  flex-shrink: 0;
 }
 
 @keyframes pulse-dot {

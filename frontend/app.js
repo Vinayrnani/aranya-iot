@@ -14,7 +14,7 @@ const app = {
 
   // State
   state: 'idle', // idle | connecting | connected | speaking | listening | error
-  language: 'en',
+  language: 'te',
   isMicOn: false,
   conversation: [],
   sessionToken: null,
@@ -40,8 +40,7 @@ app.init = async function () {
     micBtn: document.getElementById('mic-btn'),
     micIcon: document.getElementById('mic-icon'),
     connectBtn: document.getElementById('connect-btn'),
-    langBtns: document.querySelectorAll('.lang-btn'),
-    langIndicator: document.getElementById('lang-indicator'),
+
     settingsPanel: document.getElementById('settings-panel'),
     settingsToggle: document.getElementById('settings-toggle'),
     voiceSelect: document.getElementById('voice-select'),
@@ -79,11 +78,6 @@ app._bindEvents = function () {
 
   // Mic button
   this.els.micBtn.addEventListener('click', () => this._toggleMic());
-
-  // Language buttons
-  this.els.langBtns.forEach((btn) => {
-    btn.addEventListener('click', () => this._setLanguage(btn.dataset.lang));
-  });
 
   // Settings toggle
   this.els.settingsToggle.addEventListener('click', () => {
@@ -124,30 +118,7 @@ app._bindEvents = function () {
   });
 };
 
-/**
- * Set the active language.
- */
-app._setLanguage = function (langCode) {
-  this.language = langCode;
 
-  const langNames = { en: 'English', hi: 'हिन्दी', te: 'తెలుగు' };
-  const shortNames = { en: 'EN', hi: 'HI', te: 'TE' };
-
-  // Update button styles
-  this.els.langBtns.forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.lang === langCode);
-  });
-
-  // Update indicator
-  if (this.els.langIndicator) {
-    this.els.langIndicator.textContent = shortNames[langCode] || langCode;
-  }
-
-  // Update document lang
-  document.documentElement.lang = langCode;
-
-  console.log(`Language set to ${langNames[langCode] || langCode}`);
-};
 
 /**
  * Toggle WebSocket connection to Gemini Live API.
@@ -216,8 +187,17 @@ app._connect = async function () {
       // of stalling).  The save itself is retried once internally.
       if (this.isMicOn && this.recorder._currentId) {
         const prevId = this.recorder._currentId;
-        this.recorder.endConversation().then((id) => {
-          if (id) console.log('Turn saved:', id);
+        this.recorder.endConversation().then(async (id) => {
+          if (id) {
+            console.log('Turn saved:', id);
+            // Auto-export to server for replay tests
+            try {
+              await this.recorder.exportToServer(id);
+              console.log('Turn exported to server:', id);
+            } catch (e) {
+              // Server may not be running; that's OK
+            }
+          }
         }).catch((err) => {
           console.warn('Turn save failed (turn data lost):', prevId, err);
         }).finally(() => {
@@ -235,8 +215,16 @@ app._connect = async function () {
       // Save any in-progress turn — the WS dropped before
       // onTurnComplete could fire.
       if (this.recorder._currentId) {
-        this.recorder.endConversation().then((id) => {
-          if (id) console.log('Disconnect-saved turn:', id);
+        const prevId = this.recorder._currentId;
+        this.recorder.endConversation().then(async (id) => {
+          if (id) {
+            console.log('Disconnect-saved turn:', id);
+            try {
+              await this.recorder.exportToServer(id);
+            } catch (e) {
+              // Server may not be running
+            }
+          }
         }).catch(() => {});
       }
       this._handleDisconnect();

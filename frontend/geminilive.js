@@ -99,9 +99,13 @@ RESPONSE RULES:
 
       this.ws.binaryType = 'arraybuffer';
 
-      this.ws.onopen = () => {
+        this.ws.onopen = () => {
         this.connected = true;
         if (this.onConnected) this.onConnected();
+
+        // Determine which system prompt to use
+        const promptText = systemPrompt || this._buildSystemInstruction();
+        console.log('[SYSTEM PROMPT]', promptText.substring(0, 120) + '...');
 
         // Send the setup message
         const setup = {
@@ -118,7 +122,7 @@ RESPONSE RULES:
               },
             },
             systemInstruction: {
-              parts: [{ text: systemPrompt || this._buildSystemInstruction() }],
+              parts: [{ text: promptText }],
             },
             inputAudioTranscription: {},
             outputAudioTranscription: {},
