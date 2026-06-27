@@ -72,8 +72,9 @@ RESPONSE RULES:
    * @param {string} token - Ephemeral access token
    * @param {string} languageCode - BCP-47 language code (default 'en')
    * @param {object} config - Additional config overrides
+   * @param {string|null} systemPrompt - Override the hardcoded system instruction (from server)
    */
-  async connect(token, languageCode = 'en', config = {}) {
+  async connect(token, languageCode = 'en', config = {}, systemPrompt = null) {
     if (this.ws) {
       await this.disconnect();
     }
@@ -117,7 +118,7 @@ RESPONSE RULES:
               },
             },
             systemInstruction: {
-              parts: [{ text: this._buildSystemInstruction() }],
+              parts: [{ text: systemPrompt || this._buildSystemInstruction() }],
             },
             inputAudioTranscription: {},
             outputAudioTranscription: {},

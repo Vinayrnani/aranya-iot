@@ -24,6 +24,12 @@ logger = logging.getLogger(__name__)
 
 FRONTEND_DIR = Path(__file__).parent / "frontend"
 CONVERSATIONS_DIR = Path(__file__).parent / "conversations"
+SYSTEM_PROMPT_PATH = Path(__file__).parent / "system-prompt.txt"
+_DEFAULT_SYSTEM_PROMPT = (
+    "You are a helpful multilingual voice assistant. "
+    "Understand English, Hindi, and Telugu. "
+    "Always respond in the language the user speaks."
+)
 CONVERSATIONS_DIR.mkdir(exist_ok=True)
 API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
@@ -39,6 +45,18 @@ TOKEN_ENDPOINT = f"{GEMINI_BASE}/v1alpha/auth_tokens"
 
 # Default model
 DEFAULT_MODEL = "gemini-3.1-flash-live-preview"
+
+
+def load_system_prompt() -> str:
+    """Read the system prompt from system-prompt.txt, with live-reload on every read."""
+    try:
+        if SYSTEM_PROMPT_PATH.exists():
+            text = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
+            if text:
+                return text
+    except Exception as exc:
+        logger.warning(f"Failed to read system-prompt.txt: {exc}")
+    return _DEFAULT_SYSTEM_PROMPT
 
 
 async def handle_index(request: web.Request) -> web.Response:
@@ -145,6 +163,7 @@ async def handle_token(request: web.Request) -> web.Response:
             "token": token_name,
             "model": model,
             "expire_time": expire_time,
+            "systemPrompt": load_system_prompt(),
         })
 
     except Exception as e:

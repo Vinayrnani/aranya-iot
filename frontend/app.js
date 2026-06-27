@@ -247,8 +247,8 @@ app._connect = async function () {
       this._showError(err);
     };
 
-    // Connect to the Live API
-    await this.client.connect(tokenData.token, this.language);
+    // Connect to the Live API (pass server-managed system prompt if provided)
+    await this.client.connect(tokenData.token, this.language, {}, tokenData.systemPrompt);
 
     // Success
     this.sessionToken = tokenData.token;
