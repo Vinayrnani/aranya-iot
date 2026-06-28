@@ -59,14 +59,18 @@ class GeminiLiveClient {
     // Use cached token if still valid (within 1 min of expiry)
     if (this._cachedTokenData) {
       const cached = this._cachedTokenData;
+      let expired = false;
       if (cached.expire_time) {
         const expiresAt = new Date(cached.expire_time).getTime();
-        if (Date.now() < expiresAt - 60000) {
-          this._cachedTokenData = null;
-          this.token = cached.token;
-          this.model = cached.model;
-          return cached;
+        if (Date.now() >= expiresAt - 60000) {
+          expired = true;
         }
+      }
+      if (!expired) {
+        this._cachedTokenData = null;
+        this.token = cached.token;
+        this.model = cached.model;
+        return cached;
       }
       this._cachedTokenData = null;
     }
