@@ -39,7 +39,6 @@ app.init = async function () {
     captionBar: document.getElementById('caption-bar'),
     micBtn: document.getElementById('mic-btn'),
     micIcon: document.getElementById('mic-icon'),
-    connectBtn: document.getElementById('connect-btn'),
 
     settingsPanel: document.getElementById('settings-panel'),
     settingsToggle: document.getElementById('settings-toggle'),
@@ -72,15 +71,16 @@ app.init = async function () {
 
   // Update status
   this._setStatus('idle', 'Ready');
+
+  // Auto-connect in background so the WebSocket is ready when
+  // the user taps the mic.
+  this._autoConnect();
 };
 
 /**
  * Bind all UI event handlers.
  */
 app._bindEvents = function () {
-  // Connect button
-  this.els.connectBtn.addEventListener('click', () => this._toggleConnection());
-
   // Mic button
   this.els.micBtn.addEventListener('click', () => this._toggleMic());
 
@@ -126,19 +126,12 @@ app._bindEvents = function () {
 
 
 /**
- * Toggle WebSocket connection to Gemini Live API.
+ * Auto-connect on page load (background).
  */
-app._toggleConnection = async function () {
-  if (this.state === 'connected' ||
-      this.state === 'listening' ||
-      this.state === 'speaking') {
-    await this._disconnect();
-    return;
-  }
-
-  if (this.state === 'connecting') return;
-
-  await this._connect();
+app._autoConnect = async function () {
+  this._connectPromise = this._connect();
+  await this._connectPromise;
+  this._connectPromise = null;
 };
 
 /**
@@ -146,8 +139,8 @@ app._toggleConnection = async function () {
  */
 app._connect = async function () {
   this.state = 'connecting';
-  this.els.connectBtn.disabled = true;
-  this.els.connectBtn.textContent = 'Connecting...';
+  this._setStatus('connecting', 'Connecting...');
+  this.els.micBtn.disabled = true;
 
   try {
     // Fetch ephemeral token from our backend
@@ -234,13 +227,10 @@ app._connect = async function () {
     // Success
     this.sessionToken = tokenData.token;
     this._setStatus('connected', 'Connected');
-    this.els.connectBtn.textContent = 'Disconnect';
-    this.els.connectBtn.disabled = false;
-    this.els.connectBtn.classList.add('connected');
     this.els.micBtn.disabled = false;
 
     // Add welcome message
-    this._showCaptionNotification('Connected. Press the mic button or Space to start speaking.');
+    this._showCaptionNotification('Connected. Tap the mic button or press Space to start.');
 
     // Show orb in idle state
     this.els.siriOrb.className = 'siri-orb idle';
@@ -248,32 +238,18 @@ app._connect = async function () {
   } catch (err) {
     console.error('Connection failed:', err);
     this._setStatus('error', 'Connection failed');
-    this.els.connectBtn.textContent = 'Connect';
-    this.els.connectBtn.disabled = false;
+    this.els.micBtn.disabled = false;
     this._showError(err.message || 'Failed to connect');
   }
 };
 
-/**
- * Disconnect from Gemini Live API.
- */
-app._disconnect = async function () {
-  if (this.isMicOn) {
-    await this._stopMic();
-  }
-
-  await this.client.disconnect();
-  this._handleDisconnect();
-};
-
 app._handleDisconnect = function () {
   this._setStatus('idle', 'Disconnected');
-  this.els.connectBtn.textContent = 'Connect';
-  this.els.connectBtn.classList.remove('connected');
   this.els.micBtn.classList.remove('active');
   this.els.siriOrb.className = 'siri-orb';
   this.isMicOn = false;
   this.sessionToken = null;
+  this._connectPromise = null;
 };
 
 /**
@@ -292,10 +268,20 @@ app._toggleMic = async function () {
  */
 app._startMic = async function () {
   if (!this.client.isConnected()) {
-    // Auto-connect: tap to talk, no manual Connect step needed
-    if (this.state === 'connecting') return; // Already in progress
-    await this._connect();
-    if (!this.client.isConnected()) return; // Connection failed, error shown
+    // If auto-connect is in progress, wait for it
+    if (this._connectPromise) {
+      await this._connectPromise;
+      this._connectPromise = null;
+      if (!this.client.isConnected()) {
+        this._showError('Auto-connect failed. Tap again.');
+        return;
+      }
+    } else if (this.state === 'connecting') {
+      return; // Another manual connect in progress
+    } else {
+      await this._connect();
+      if (!this.client.isConnected()) return;
+    }
   }
 
   try {

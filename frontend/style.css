@@ -217,49 +217,6 @@ body::after {
   flex-shrink: 0;
 }
 
-/* Connect button — compact inline */
-.connect-btn {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-secondary);
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--dur-med) var(--ease-out);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-
-.connect-btn:hover:not(:disabled) {
-  background: var(--bg-glass-hover);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--text-primary);
-}
-
-.connect-btn:active:not(:disabled) {
-  transform: scale(0.96);
-}
-
-.connect-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.connect-btn.connected {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.25);
-  color: #fca5a5;
-}
-
-.connect-btn.connected:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.35);
-}
-
 /* Settings toggle — compact icon */
 .settings-toggle {
   width: 34px;
