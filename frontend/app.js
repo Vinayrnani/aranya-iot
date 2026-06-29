@@ -75,6 +75,13 @@ app.init = async function () {
   // Auto-connect in background so the WebSocket is ready when
   // the user taps the mic.
   this._autoConnect();
+
+  // Re-acquire wake lock if user returns to the page
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && this.sessionToken) {
+      this._requestWakeLock();
+    }
+  });
 };
 
 /**
@@ -235,6 +242,9 @@ app._connect = async function () {
     // Show orb in idle state
     this.els.siriOrb.className = 'siri-orb idle';
 
+    // Keep screen on while using the voice assistant
+    this._requestWakeLock();
+
   } catch (err) {
     console.error('Connection failed:', err);
     this._setStatus('error', 'Connection failed');
@@ -250,6 +260,32 @@ app._handleDisconnect = function () {
   this.isMicOn = false;
   this.sessionToken = null;
   this._connectPromise = null;
+  this._releaseWakeLock();
+};
+
+// ─── Screen Wake Lock (keep screen on during voice interaction) ─────────────
+
+app._wakeLock = null;
+
+app._requestWakeLock = async function () {
+  if (!navigator.wakeLock) return; // API not supported
+  try {
+    if (this._wakeLock) return; // already held
+    this._wakeLock = await navigator.wakeLock.request('screen');
+    this._wakeLock.addEventListener('release', () => {
+      this._wakeLock = null;
+    });
+  } catch (err) {
+    // Not critical — silently ignore (user may have low battery / power-save mode)
+    console.warn('Wake Lock request denied:', err.message);
+  }
+};
+
+app._releaseWakeLock = function () {
+  if (this._wakeLock) {
+    this._wakeLock.release();
+    this._wakeLock = null;
+  }
 };
 
 /**
