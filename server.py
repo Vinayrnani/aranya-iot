@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 FRONTEND_DIR = Path(__file__).parent / "frontend"
 CONVERSATIONS_DIR = Path(__file__).parent / "conversations"
-SYSTEM_PROMPT_PATH = Path(__file__).parent / "system-prompt.txt"
+SYSTEM_PROMPT_PATH = Path(__file__).parent / "system-prompt.md"
 _DEFAULT_SYSTEM_PROMPT = (
     "You are a helpful multilingual voice assistant. "
     "Understand English, Hindi, and Telugu. "
@@ -48,14 +48,14 @@ DEFAULT_MODEL = "gemini-3.1-flash-live-preview"
 
 
 def load_system_prompt() -> str:
-    """Read the system prompt from system-prompt.txt, with live-reload on every read."""
+    """Read the system prompt from system-prompt.md, with live-reload on every read."""
     try:
         if SYSTEM_PROMPT_PATH.exists():
             text = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
             if text:
                 return text
     except Exception as exc:
-        logger.warning(f"Failed to read system-prompt.txt: {exc}")
+        logger.warning(f"Failed to read system-prompt.md: {exc}")
     return _DEFAULT_SYSTEM_PROMPT
 
 

@@ -77,8 +77,8 @@ if not sp:
 print(sp)
 ") || fail "Server response missing or empty systemPrompt field"
 
-if [[ "$SYSTEM_PROMPT" != "You are Aranya resort assistant"* ]]; then
-  fail "Server systemPrompt does not start with 'You are Aranya resort assistant'"
+if [[ "$SYSTEM_PROMPT" != "<role_and_persona>"* ]]; then
+  fail "Server systemPrompt does not start with '<role_and_persona>'"
 fi
 
 pass "Server systemPrompt is valid"
@@ -86,20 +86,20 @@ echo "  Preview (first 100 chars): ${SYSTEM_PROMPT:0:100}..."
 echo ""
 
 # 2. Verify file on disk
-print_color "$YELLOW" "2. Verifying system-prompt.txt file on disk..."
-SYSTEM_PROMPT_FILE="$PROJECT_ROOT/system-prompt.txt"
+print_color "$YELLOW" "2. Verifying system-prompt.md file on disk..."
+SYSTEM_PROMPT_FILE="$PROJECT_ROOT/system-prompt.md"
 
 if [[ ! -f "$SYSTEM_PROMPT_FILE" ]]; then
-  fail "system-prompt.txt does not exist at $SYSTEM_PROMPT_FILE"
+  fail "system-prompt.md does not exist at $SYSTEM_PROMPT_FILE"
 fi
 
 if [[ ! -s "$SYSTEM_PROMPT_FILE" ]]; then
-  fail "system-prompt.txt is empty"
+  fail "system-prompt.md is empty"
 fi
 
 FILE_CONTENT=$(cat "$SYSTEM_PROMPT_FILE")
-if [[ "$FILE_CONTENT" != "You are Aranya"* ]]; then
-  fail "system-prompt.txt does not start with 'You are Aranya'"
+if [[ "$FILE_CONTENT" != "<role_and_persona>"* ]]; then
+  fail "system-prompt.md does not start with '<role_and_persona>'"
 fi
 
 pass "File validation passed"
