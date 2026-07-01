@@ -167,6 +167,7 @@ RESPONSE RULES:
             },
             inputAudioTranscription: {},
             outputAudioTranscription: {},
+            tools: [{ googleSearch: {} }],
             ...config,
           },
         };
