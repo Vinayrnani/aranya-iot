@@ -1,0 +1,59 @@
+- generic "Google Maps" [ref=e9] [box=0,0,780,493]:
+  - generic [ref=e3] [box=0,0,780,493]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e10] [box=0,0,780,493]
+    - search [ref=e15] [box=16,12,376,48]:
+      - button "Menu" [ref=e17] [cursor=pointer] [box=16,12,56,52]:
+        - generic [ref=e18] [box=32,24,24,24]: 
+      - generic [ref=e19] [box=16,12,376,48]:
+        - combobox [ref=e21] [box=80,23,206,24]: Sunset point
+        - button "Search" [ref=e23] [cursor=pointer] [box=290,12,48,52]:
+          - generic [ref=e24] [box=302,24,24,24]: 
+        - button "Close" [ref=e26] [cursor=pointer] [box=338,12,54,50]:
+          - generic [ref=e27] [box=353,24,24,24]: 
+    - generic [ref=e28] [box=0,0,408,493]:
+      - main "Sunset point" [ref=e34] [box=0,0,408,493]:
+        - generic [ref=e35] [box=0,0,408,493]:
+          - generic [ref=e36] [box=0,0,408,240]
+          - generic [ref=e45] [box=0,240,408,120]
+          - region "Actions for Sunset point" [ref=e66] [box=0,373,408,104]
+          - region "Information for Sunset point" [ref=e94] [box=0,494,408,80]
+          - button "Suggest an edit" [ref=e122] [cursor=pointer] [box=124,586,160,48]
+          - generic [ref=e128] [box=0,647,408,52]
+          - button "Add place's phone number" [ref=e133] [box=0,699,408,40]
+          - button "Add hours" [ref=e138] [box=0,739,408,40]
+          - button "Add website" [ref=e143] [box=0,779,408,40]
+          - button "Add a photo" [ref=e148] [box=0,819,408,40]
+          - button "Write a review" [ref=e157] [cursor=pointer] [box=129,888,151,48]
+          - link "About this data" [ref=e165] [cursor=pointer] [box=24,949,112,48]:
+            - /url: https://support.google.com/local-listings?p=how_google_sources&authuser=0&hl=en
+          - generic [ref=e170] [box=24,997,360,72]
+          - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e178] [box=24,1085,360,60]
+      - button "Collapse side panel" [ref=e186] [cursor=pointer] [box=408,223,23,48]:
+        - generic [ref=e187] [box=408,235,24,24]: 
+    - generic [ref=e191] [box=613,0,155,64]:
+      - button "Google apps" [ref=e195] [cursor=pointer] [box=613,13,40,40]:
+        - img [ref=e196] [box=621,21,24,24]
+      - link "Sign in" [ref=e199] [cursor=pointer] [box=667,12,85,40]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fplace%2FSunset%2Bpoint%2F%4018.8238903%2C78.7894992%2C17z%2Fdata%3D!3m1!4b1!4m6!3m5!1s0x3bcd0da9d67beca3%3A0x5c6a304ab3ab9427!8m2!3d18.8238903!4d78.7894992!16s%252Fg%252F11h2hjjpbf%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e200] [box=408,480,372,13]:
+      - generic [box=731,34,29,393]:
+        - button "Show Your Location" [ref=e203] [cursor=pointer] [box=731,338,29,29]:
+          - generic [ref=e205] [box=737,344,18,18]: 
+        - generic [ref=e207] [cursor=pointer] [box=731,370,29,57]:
+          - button "Zoom in" [ref=e208] [box=731,370,29,29]
+          - button "Zoom out" [ref=e211] [box=731,398,29,29]
+      - button "Browse Street View images" [ref=e219] [box=731,430,29,30]
+      - generic [ref=e225] [box=428,381,79,79]:
+        - generic "Interactive map" [ref=e226] [box=430,383,75,75]
+        - generic [ref=e230] [cursor=pointer] [box=430,382,75,76]:
+          - generic [ref=e231] [box=436,434,18,18]: 
+          - generic [ref=e232] [box=457,437,32,13]: Layers
+        - button "Layers" [ref=e233] [cursor=pointer] [box=430,383,75,75]
+    - generic [ref=e235] [box=408,467,372,26]:
+      - contentinfo [ref=e238] [box=411,467,225,26]:
+        - text: Map data ©2026
+        - button "India" [ref=e239] [cursor=pointer] [box=503,467,22,13]
+        - button "Terms" [ref=e240] [cursor=pointer] [box=540,467,28,13]
+        - button "Privacy" [ref=e241] [cursor=pointer] [box=583,467,32,13]
+        - button "Send Product Feedback" [ref=e242] [cursor=pointer] [box=411,480,105,13]
+      - button "100 m" [ref=e244] [cursor=pointer] [box=636,468,123,11]: 100 m

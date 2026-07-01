@@ -1,0 +1,13 @@
+[      77ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?verify=1:0
+[     103ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?verify=1:0
+[    6678ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=4:174
+[   11485ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   11486ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   11487ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   23807ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   23807ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   23807ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   26183ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251

@@ -1,0 +1,12 @@
+{
+  "id": "conv_1782551305379",
+  "timestamp": 1782551305379,
+  "language": "en",
+  "voice": "Kore",
+  "inputTranscript": "మీ పేరేంటి?",
+  "outputTranscript": "నా పేరు  అరణ్య,  నేను  మీ రిసార్ట్  అసిస్టెంట్ని.  మీకు  ఏమైనా  సహాయం  కావాలా?",
+  "inputSampleRate": 16000,
+  "outputSampleRate": 24000,
+  "inputAudioSize": 291200,
+  "outputAudioSize": 245282
+}

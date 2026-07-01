@@ -1,0 +1,8 @@
+[      66ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/:0
+[      74ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/:0
+[   26423ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/:0
+[   26432ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/:0
+[   33136ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/:0
+[   33142ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/:0
+[   33732ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/:0
+[   33739ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/:0

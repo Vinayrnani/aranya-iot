@@ -1,0 +1,117 @@
+[     135ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?e2e-test=1:0
+[     146ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?e2e-test=1:0
+[   15224ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=4:174
+[   16205ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=4:178
+[   16205ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=4:178
+[   16248ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   16248ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   16249ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   29351ms] [LOG] Session resumption update: {newHandle: 37ee4c95-e266-478d-847b-9e5b3b2cb1cf, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[   38194ms] [LOG] Session resumption update: {newHandle: a60360a3-61df-4ae8-a21d-f5033071cb2a, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[   77165ms] [LOG] AUDIO RECEIVED 4 chars @ :3
+[   77168ms] [LOG] AUDIO RECEIVED 8320 chars @ :3
+[   77211ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77272ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[   77305ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77335ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[   77427ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77438ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77472ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[   77521ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[   77571ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77607ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77651ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77703ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77740ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[   77763ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[   77866ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[   77991ms] [LOG] AUDIO RECEIVED 30720 chars @ :3
+[   78038ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[   78210ms] [LOG] AUDIO RECEIVED 28160 chars @ :3
+[   78272ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[   78273ms] [LOG] AUDIO RECEIVED 2560 chars @ :3
+[   78331ms] [LOG] Session resumption update: {newHandle: 00983ffb-1f97-47b9-a963-d5be617181f9, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[   78495ms] [LOG] AUDIO RECEIVED 35840 chars @ :3
+[   78537ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[   78548ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[   78726ms] [LOG] AUDIO RECEIVED 28160 chars @ :3
+[   78763ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[   78765ms] [LOG] AUDIO RECEIVED 2560 chars @ :3
+[   78953ms] [LOG] AUDIO RECEIVED 38400 chars @ :3
+[   79046ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[   79047ms] [LOG] AUDIO RECEIVED 2560 chars @ :3
+[   79256ms] [LOG] AUDIO RECEIVED 33280 chars @ :3
+[   79296ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[   79353ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[   85374ms] [LOG] TURN COMPLETE — chunks so far: 34 @ :9
+[   87080ms] [LOG] Session resumption update: {newHandle: 76a9afe0-fd5e-486b-8dc6-35e9e1493ac5, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[  205155ms] [LOG] AUDIO RECEIVED 4 chars @ :3
+[  205237ms] [LOG] AUDIO RECEIVED 14720 chars @ :3
+[  205292ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  205357ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  205436ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205483ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  205499ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205551ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  205600ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205611ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[  205710ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  205726ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205770ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205781ms] [LOG] AUDIO RECEIVED 2560 chars @ :3
+[  205904ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  205913ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  205953ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  206053ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  206065ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[  206238ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[  206247ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  206393ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  206395ms] [LOG] Session resumption update: {newHandle: 32b47061-75de-4d9b-a382-ecd145937ca4, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[  206425ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  206530ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[  206732ms] [LOG] AUDIO RECEIVED 35840 chars @ :3
+[  206737ms] [LOG] AUDIO RECEIVED 7680 chars @ :3
+[  206885ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[  206924ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  206969ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  207200ms] [LOG] AUDIO RECEIVED 40960 chars @ :3
+[  207230ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  212820ms] [LOG] TURN COMPLETE — chunks so far: 31 @ :9
+[  214254ms] [LOG] Session resumption update: {newHandle: 14d1fb79-a342-4853-ae69-6335ecc564ed, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[  250768ms] [LOG] AUDIO RECEIVED 4 chars @ :3
+[  250823ms] [LOG] AUDIO RECEIVED 6400 chars @ :3
+[  250904ms] [LOG] AUDIO RECEIVED 17920 chars @ :3
+[  250975ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  250984ms] [LOG] AUDIO RECEIVED 5120 chars @ :3
+[  251092ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  251120ms] [LOG] AUDIO RECEIVED 17920 chars @ :3
+[  251184ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  251216ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251258ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251328ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  251367ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251410ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251560ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  251563ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251590ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251648ms] [LOG] AUDIO RECEIVED 10240 chars @ :3
+[  251714ms] [LOG] AUDIO RECEIVED 17920 chars @ :3
+[  251878ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  251892ms] [LOG] AUDIO RECEIVED 17920 chars @ :3
+[  252033ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  252039ms] [LOG] Session resumption update: {newHandle: 6cc7ff82-45dc-4c9f-b66b-91b77ccafd61, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[  252086ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  252170ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  252172ms] [LOG] AUDIO RECEIVED 2560 chars @ :3
+[  252442ms] [LOG] AUDIO RECEIVED 38400 chars @ :3
+[  252449ms] [LOG] AUDIO RECEIVED 7680 chars @ :3
+[  252543ms] [LOG] AUDIO RECEIVED 25600 chars @ :3
+[  252591ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  252649ms] [LOG] AUDIO RECEIVED 15360 chars @ :3
+[  252799ms] [LOG] AUDIO RECEIVED 23040 chars @ :3
+[  252834ms] [LOG] AUDIO RECEIVED 20480 chars @ :3
+[  252886ms] [LOG] AUDIO RECEIVED 12800 chars @ :3
+[  258523ms] [LOG] TURN COMPLETE — chunks so far: 32 @ :9
+[  260070ms] [LOG] Session resumption update: {newHandle: 5f15a903-a485-42f6-b02e-9f5bb6c12d1d, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:264
+[  308565ms] [LOG] Disconnected: 1008 The operation was aborted. @ http://127.0.0.1:8000/app.js?v=4:202

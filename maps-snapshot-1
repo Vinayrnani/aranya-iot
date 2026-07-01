@@ -1,0 +1,65 @@
+- generic "Google Maps" [ref=e21] [box=0,0,780,493]:
+  - generic [ref=e3] [box=0,0,780,493]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e22] [box=0,0,780,493]
+    - search [ref=e27] [box=16,12,376,48]:
+      - button "Menu" [ref=e29] [cursor=pointer] [box=16,12,56,52]:
+        - generic [ref=e30] [box=32,24,24,24]: 
+      - generic [ref=e31] [box=16,12,376,48]:
+        - combobox [ref=e33] [box=80,23,206,24]: 18°39'11.1"N 78°55'58.0"E
+        - button "Search" [ref=e35] [cursor=pointer] [box=290,12,48,52]:
+          - generic [ref=e36] [box=302,24,24,24]: 
+        - button "Close" [ref=e38] [cursor=pointer] [box=338,12,54,50]:
+          - generic [ref=e39] [box=353,24,24,24]: 
+    - generic [ref=e9] [box=0,0,408,493]:
+      - main [ref=e43] [box=0,0,408,493]:
+        - img [ref=e47] [box=0,-8,408,256]
+        - generic [ref=e50] [box=0,240,408,84]:
+          - heading "18°39'11.1\"N 78°55'58.0\"E" [level=1] [ref=e52] [box=24,256,360,28]: 18°39'11.1"N 78°55'58.0"E
+          - heading "18.653069, 78.932763" [level=2] [ref=e53] [box=24,288,360,20]
+        - region "Actions for 18°39'11.1\"N 78°55'58.0\"E" [ref=e55] [box=0,325,408,104]:
+          - button "Directions" [active] [ref=e57] [cursor=pointer] [box=22,335,73,68]
+          - button "Save" [ref=e62] [cursor=pointer] [box=95,335,73,68]
+          - button "Nearby" [ref=e67] [cursor=pointer] [box=168,335,73,68]
+          - button "Send to phone" [ref=e72] [cursor=pointer] [box=240,335,73,84]
+          - button "Share" [ref=e77] [cursor=pointer] [box=313,335,73,68]
+        - button "MW3M+64C Nachupalle, Telangana Learn more about plus codes Copy plus code" [ref=e84] [box=0,446,408,40]:
+          - generic [ref=e85] [box=0,446,408,40]
+        - button "Add a missing place" [ref=e96] [box=0,486,408,40]:
+          - generic [ref=e97] [box=0,486,408,40]
+        - link "Add your business" [ref=e101] [cursor=pointer] [box=0,526,408,40]:
+          - /url: https://business.google.com/create?service=plus&hl=en&authuser=0&gmbsrc=in-en-et-ip-z-gmb-s-z-l~mrc%7Cayb%7Cpg&skiplp=1
+          - generic [ref=e102] [box=0,526,408,40]
+        - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e108] [box=24,566,360,60]:
+          - generic [ref=e109] [box=48,566,233,60]: Get the most out of Google Maps
+          - button "Sign in" [ref=e112] [cursor=pointer] [box=281,572,79,48]
+      - generic [ref=e17] [box=408,223,23,48]:
+        - button "Collapse side panel" [ref=e18] [cursor=pointer] [box=408,223,23,48]:
+          - generic [ref=e19] [box=408,235,24,24]: 
+        - generic [ref=e115] [box=439,234,141,26]: Collapse side panel
+    - generic [ref=e119] [box=613,0,155,64]:
+      - button "Google apps" [ref=e123] [cursor=pointer] [box=613,13,40,40]:
+        - img [ref=e124] [box=621,21,24,24]
+      - link "Sign in" [ref=e127] [cursor=pointer] [box=667,12,85,40]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fplace%2F18%25C2%25B039'11.1%2522N%2B78%25C2%25B055'58.0%2522E%2F%4018.653069%2C78.9301885%2C17z%2Fdata%3D!3m1!4b1!4m4!3m3!8m2!3d18.653069!4d78.9327634%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e128] [box=408,480,372,13]:
+      - generic [box=731,34,29,393]:
+        - button "Show Your Location" [ref=e131] [cursor=pointer] [box=731,338,29,29]:
+          - generic [ref=e133] [box=737,344,18,18]: 
+        - generic [ref=e135] [cursor=pointer] [box=731,370,29,57]:
+          - button "Zoom in" [ref=e136] [box=731,370,29,29]
+          - button "Zoom out" [ref=e139] [box=731,398,29,29]
+      - button "Browse Street View images" [ref=e147] [box=731,430,29,30]
+      - generic [ref=e153] [box=428,381,79,79]:
+        - generic "Interactive map" [ref=e154] [box=430,383,75,75]
+        - generic [ref=e158] [cursor=pointer] [box=430,382,75,76]:
+          - generic [ref=e159] [box=436,434,18,18]: 
+          - generic [ref=e160] [box=457,437,32,13]: Layers
+        - button "Layers" [ref=e161] [cursor=pointer] [box=430,383,75,75]
+    - generic [ref=e163] [box=408,467,372,26]:
+      - contentinfo [ref=e166] [box=411,467,226,26]:
+        - text: Map data ©2026
+        - button "India" [ref=e167] [cursor=pointer] [box=503,467,22,13]
+        - button "Terms" [ref=e168] [cursor=pointer] [box=540,467,28,13]
+        - button "Privacy" [ref=e169] [cursor=pointer] [box=583,467,32,13]
+        - button "Send Product Feedback" [ref=e170] [cursor=pointer] [box=411,480,105,13]
+      - button "100 m" [ref=e172] [cursor=pointer] [box=637,468,122,11]: 100 m

@@ -1,0 +1,6 @@
+[     178ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[     217ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[    4394ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=2:174
+[    5282ms] [ERROR] Failed to parse message: SyntaxError: Unexpected token 'o', "[object ArrayBuffer]" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at ws.onmessage (http://localhost:8000/geminilive.js?v=2:171:28) @ http://localhost:8000/geminilive.js?v=2:180

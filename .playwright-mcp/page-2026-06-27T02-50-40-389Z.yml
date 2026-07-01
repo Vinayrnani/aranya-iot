@@ -1,0 +1,33 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button "English" [ref=e5] [cursor=pointer]
+      - button "हिन्दी" [ref=e6] [cursor=pointer]
+      - button "తెలుగు" [ref=e7] [cursor=pointer]
+    - generic [ref=e8]:
+      - generic [ref=e11]: Ready
+      - generic [ref=e12]:
+        - button "Connect" [ref=e13] [cursor=pointer]
+        - button "Settings" [ref=e14] [cursor=pointer]: ⚙️
+      - generic [ref=e15]: EN
+  - generic [ref=e16]:
+    - generic:
+      - img [ref=e21]
+      - button [ref=e30] [cursor=pointer]:
+        - generic:
+          - img
+      - paragraph [ref=e31]: Press the mic button to start
+      - paragraph [ref=e32]: Supports English, हिन्दी, తెలుగు
+  - generic [ref=e36]:
+    - heading "Settings" [level=3] [ref=e37]
+    - generic [ref=e38]:
+      - generic [ref=e39]: Voice
+      - combobox "Voice" [ref=e40] [cursor=pointer]:
+        - option "Puck"
+        - option "Charon"
+        - option "Kore" [selected]
+        - option "Fenrir"
+        - option "Aoede"
+  - button "Install App" [ref=e41] [cursor=pointer]
+  - generic:
+    - generic: ⚠️

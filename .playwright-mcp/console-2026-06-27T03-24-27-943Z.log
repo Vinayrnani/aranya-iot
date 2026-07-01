@@ -1,0 +1,41 @@
+[     203ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?capture2=1:0
+[     257ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?capture2=1:0
+[   16191ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=4:174
+[   17852ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   18870ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   21017ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   21017ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   21018ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   21258ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   21489ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   43213ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   43213ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   43214ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   43788ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   44780ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   46389ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251
+[   47009ms] [ERROR] Audio playback error: RangeError: byte length of Int16Array should be a multiple of 2
+    at new Int16Array (<anonymous>)
+    at AudioPlayer._playChunk (http://127.0.0.1:8000/audio-handler.js?v=3:233:26)
+    at async AudioPlayer._processQueue (http://127.0.0.1:8000/audio-handler.js?v=3:212:7) @ http://127.0.0.1:8000/audio-handler.js?v=3:251

@@ -1,0 +1,24 @@
+- generic "Google Maps" [ref=e9] [box=0,0,780,493]:
+  - generic [ref=e3] [box=0,0,780,493]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e10] [box=0,0,780,493]
+    - search [ref=e15] [box=16,12,376,48]:
+      - button "Menu" [ref=e17] [cursor=pointer] [box=16,12,56,52]:
+        - generic [ref=e18] [box=32,24,24,24]: 
+      - generic [ref=e19] [box=16,12,376,48]:
+        - combobox [ref=e21] [box=81,24,204,24]: temples near 18.6530690,78.9327634
+        - button "Search" [ref=e23] [cursor=pointer] [box=289,13,48,52]:
+          - generic [ref=e24] [box=301,25,24,24]: 
+        - button "Close" [ref=e26] [cursor=pointer] [box=337,13,54,50]:
+          - generic [ref=e27] [box=352,25,24,24]: 
+    - generic [ref=e28] [box=0,0,408,493]:
+      - main [ref=e34] [box=0,72,408,421]:
+        - generic [ref=e35] [box=0,72,408,421]:
+          - feed "Results for temples near 18.6530690,78.9327634" [ref=e36] [box=0,72,408,384]
+          - checkbox "Update results when map moves" [ref=e138] [cursor=pointer] [box=18,463,241,24]
+      - button "Collapse side panel" [ref=e142] [cursor=pointer] [box=408,223,23,48]:
+        - generic [ref=e143] [box=408,235,24,24]: 
+    - generic [ref=e147] [box=613,0,155,64]:
+      - button "Google apps" [ref=e151] [cursor=pointer] [box=613,13,40,40]:
+        - img [ref=e152] [box=621,21,24,24]
+      - link "Sign in" [ref=e155] [cursor=pointer] [box=667,12,85,40]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https://www.google.com/maps/search/temples%2Bnear%2B18.6530690,78.9327634&service=local&ec=GAZAcQ

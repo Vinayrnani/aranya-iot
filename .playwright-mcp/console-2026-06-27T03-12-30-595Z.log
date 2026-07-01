@@ -1,0 +1,7 @@
+[      71ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?cb=test3:0
+[      86ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?cb=test3:0
+[    9049ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=4:174
+[   13951ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   13951ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   13952ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[  163010ms] [LOG] Disconnected: 1008 The operation was aborted. @ http://127.0.0.1:8000/app.js?v=4:202

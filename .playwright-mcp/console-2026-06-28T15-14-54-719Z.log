@@ -1,0 +1,23 @@
+[      68ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[      81ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[   28697ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=13:163
+[   28697ms] [LOG] [SYSTEM PROMPT] You are Aranya resort assistant — a warm, friendly voice assistant at a resort.
+You can control room lights, AC, fan, an... @ http://localhost:8000/geminilive.js?v=8:144
+[   30218ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[   30219ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[   57169ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[   57175ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[   68013ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=13:163
+[   68014ms] [LOG] [SYSTEM PROMPT] You are Aranya resort assistant — a warm, friendly voice assistant at a resort.
+You can control room lights, AC, fan, an... @ http://localhost:8000/geminilive.js?v=8:144
+[   69213ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[   69214ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[  113566ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[  113623ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[  113628ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[  123416ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=13:163
+[  123417ms] [LOG] [SYSTEM PROMPT] You are Aranya resort assistant — a warm, friendly voice assistant at a resort.
+You can control room lights, AC, fan, an... @ http://localhost:8000/geminilive.js?v=9:148
+[  124619ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[  124620ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=13:167
+[  274862ms] [LOG] Disconnected: 1008 The operation was aborted. @ http://localhost:8000/app.js?v=13:214

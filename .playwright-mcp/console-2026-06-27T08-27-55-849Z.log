@@ -1,0 +1,7 @@
+[     339ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[     382ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[   10188ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=10:182
+[   11249ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=10:186
+[   11249ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=10:186
+[   43118ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[   43143ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0

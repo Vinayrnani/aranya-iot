@@ -1,0 +1,12 @@
+nohup: ignoring input
+[93m[1m!  OPENCODE_SERVER_PASSWORD is not set; server is unsecured.
+[0m
+  ⠀                                ▄     
+  █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█
+  █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+  ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+[0m
+[94m[1m  Web interface:     [0m http://127.0.0.1:8989/
+[1;31m2026-06-26 19:51:04.796642842 [E:onnxruntime:onnxruntime-node, env.cc:227 ThreadMain] pthread_setaffinity_np failed for thread: 23484, index: 0, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Process 23372 detected
+Exiting...

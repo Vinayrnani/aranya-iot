@@ -1,0 +1,36 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - button "English" [ref=e5] [cursor=pointer]
+      - button "हिन्दी" [ref=e6] [cursor=pointer]
+      - button "తెలుగు" [ref=e7] [cursor=pointer]
+    - generic [ref=e8]:
+      - generic [ref=e11]: Connected
+      - generic [ref=e12]:
+        - button "Disconnect" [ref=e42] [cursor=pointer]
+        - button "Settings" [ref=e14] [cursor=pointer]: ⚙️
+      - generic [ref=e15]: EN
+  - generic [ref=e16]:
+    - generic:
+      - img [ref=e20]
+      - button [ref=e29] [cursor=pointer]:
+        - generic:
+          - img
+      - paragraph [ref=e30]: Press the mic button to start
+      - paragraph [ref=e31]: Supports English, हिन्दी, తెలుగు
+    - generic:
+      - generic:
+        - generic: Connected. Press the mic button or Space to start speaking.
+  - generic [ref=e35]:
+    - heading "Settings" [level=3] [ref=e36]
+    - generic [ref=e37]:
+      - generic [ref=e38]: Voice
+      - combobox "Voice" [ref=e39] [cursor=pointer]:
+        - option "Puck"
+        - option "Charon"
+        - option "Kore" [selected]
+        - option "Fenrir"
+        - option "Aoede"
+  - button "Install App" [ref=e40] [cursor=pointer]
+  - generic:
+    - generic: ⚠️

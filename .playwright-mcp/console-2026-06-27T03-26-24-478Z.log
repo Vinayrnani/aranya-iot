@@ -1,0 +1,10 @@
+[      61ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?test=final:0
+[      76ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?test=final:0
+[   10692ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=4:174
+[   11565ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=4:178
+[   11566ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=4:178
+[   11614ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=3:82
+[   11615ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:287
+[   11615ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=4:298
+[   13798ms] [LOG] Session resumption update: {newHandle: ff03f567-e25b-4124-8b2f-529e51c924d9, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:267
+[   16678ms] [LOG] Session resumption update: {newHandle: fece04cf-471a-477f-a977-f03fb5757cb1, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=4:267

@@ -1,0 +1,2726 @@
+{
+  "lang-adherence": {
+    "scenario_id": "lang-adherence",
+    "scenario_name": "Language Adherence Across Turns",
+    "turns": [
+      {
+        "turn_id": "lang-t1",
+        "turn_num": 1,
+        "guest_says": "\u0c28\u0c2e\u0c38\u0c4d\u0c15\u0c3e\u0c30\u0c02, \u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c35\u0c47\u0c2f\u0c02\u0c21\u0c3f.",
+        "assistant_response": "\u0c28\u0c2e\u0c38\u0c4d\u0c15\u0c3e\u0c30\u0c02! \u0c28\u0c47\u0c28\u0c41 \u0c05\u0c30\u0c23\u0c4d\u0c2f \u0c30\u0c3f\u0c38\u0c3e\u0c30\u0c4d\u0c1f\u0c4d \u0c05\u0c38\u0c3f\u0c38\u0c4d\u0c1f\u0c46\u0c02\u0c1f\u0c4d \u0c28\u0c3f. \u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c35\u0c47\u0c38\u0c4d\u0c24\u0c3e\u0c28\u0c41. \u0c30\u0c42\u0c2e\u0c4d \u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d, AC, \u0c2b\u0c4d\u0c2f\u0c3e\u0c28\u0c4d, ambiance \u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u2014 \u0c07\u0c35\u0c28\u0c4d\u0c28\u0c40 \u0c28\u0c47\u0c28\u0c41 \u0c15\u0c02\u0c1f\u0c4d\u0c30\u0c4b\u0c32\u0c4d \u0c1a\u0c47\u0c2f\u0c17\u0c32\u0c28\u0c41.",
+        "context": "Guest arrives at room, starts in Telugu asking for lights",
+        "rules": [
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": false,
+            "evidence": "Response is 19 words for a direct command (expected <= 15)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn includes greeting + capability list"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "lang-t2",
+        "turn_num": 2,
+        "guest_says": "\u0939\u093e\u0901, \u092a\u0902\u0916\u093e \u092d\u0940 \u091a\u0932\u093e \u0926\u094b.",
+        "assistant_response": "\u092a\u0902\u0916\u093e \u091a\u093e\u0932\u0942 \u0915\u0930 \u0926\u093f\u092f\u093e \u0939\u0948\u0964",
+        "context": "Guest switches to Hindi \u2014 adds fan request naturally",
+        "rules": [
+          {
+            "rule": "language_hindi",
+            "passed": true,
+            "evidence": "Detected: hi"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (5 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "lang-t3",
+        "turn_num": 3,
+        "guest_says": "AC \u0c15\u0c42\u0c21\u0c3e \u0c35\u0c47\u0c38\u0c47\u0c2f\u0c02\u0c21\u0c3f. \u0c07\u0c02\u0c15\u0c3e \u0c15\u0c4a\u0c02\u0c21\u0c17\u0c1f\u0c4d\u0c1f\u0c41 \u0c0e\u0c02\u0c24 \u0c26\u0c42\u0c30\u0c02 \u0c07\u0c15\u0c4d\u0c15\u0c21\u0c4d\u0c28\u0c41\u0c02\u0c1a\u0c3f?",
+        "assistant_response": "AC \u0c35\u0c47\u0c38\u0c47\u0c36\u0c3e\u0c28\u0c41. \u0c15\u0c4a\u0c02\u0c21\u0c17\u0c1f\u0c4d\u0c1f\u0c41 \u0c07\u0c15\u0c4d\u0c15\u0c21\u0c4d\u0c28\u0c41\u0c02\u0c1a\u0c3f 6-7 \u0c15\u0c3f\u0c32\u0c4b\u0c2e\u0c40\u0c1f\u0c30\u0c4d\u0c32 \u0c26\u0c42\u0c30\u0c02\u0c32\u0c4b \u0c09\u0c02\u0c26\u0c3f. \u0c09\u0c26\u0c2f\u0c02 4 \u0c17\u0c02\u0c1f\u0c32 \u0c28\u0c41\u0c02\u0c1a\u0c3f \u0c38\u0c3e\u0c2f\u0c02\u0c24\u0c4d\u0c30\u0c02 8:30 \u0c35\u0c30\u0c15\u0c41 \u0c24\u0c46\u0c30\u0c3f\u0c1a\u0c3f \u0c09\u0c02\u0c1f\u0c41\u0c02\u0c26\u0c3f.",
+        "context": "Guest back to Telugu, compound: AC on + temple distance",
+        "rules": [
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "lang-t4",
+        "turn_num": 4,
+        "guest_says": "WiFi password \u0c0f\u0c2e\u0c3f\u0c1f\u0c3f?",
+        "assistant_response": "WiFi password \u0c15\u0c3e\u0c30\u0c4d\u0c21\u0c4d \u0c2e\u0c40 \u0c1f\u0c47\u0c2c\u0c41\u0c32\u0c4d \u0c2e\u0c40\u0c26 \u0c09\u0c02\u0c26\u0c3f. \u0c32\u0c47\u0c26\u0c3e \u0c2b\u0c4d\u0c30\u0c02\u0c1f\u0c4d \u0c21\u0c46\u0c38\u0c4d\u0c15\u0c4d \u0c28\u0c3f \u0c05\u0c21\u0c17\u0c02\u0c21\u0c3f. Anything else I can help you with?",
+        "context": "Guest naturally code-switches Telugu+English (Tenglish) for WiFi query",
+        "rules": [
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: te (code-switch check)"
+          },
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: '\u0c47\u0c2c\u0c41\u0c32\u0c4d \u0c2e\u0c40\u0c26 \u0c09\u0c02\u0c26\u0c3f. \u0c32\u0c47\u0c26\u0c3e \u0c2b\u0c4d\u0c30\u0c02\u0c1f\u0c4d \u0c21\u0c46\u0c38\u0c4d\u0c15\u0c4d \u0c28\u0c3f \u0c05\u0c21\u0c17\u0c02\u0c21\u0c3f. Anything else I can help you with?'"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 1,
+        "overall_pass": false,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "lang-t5",
+        "turn_num": 5,
+        "guest_says": "\u0c38\u0c30\u0c47, \u0c07\u0c2a\u0c4d\u0c2a\u0c41\u0c21\u0c41 \u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c06\u0c2b\u0c4d \u0c1a\u0c47\u0c2f\u0c02\u0c21\u0c3f. \u0c28\u0c47\u0c28\u0c41 \u0c28\u0c3f\u0c26\u0c4d\u0c30\u0c2a\u0c4b\u0c24\u0c3e\u0c28\u0c41.",
+        "assistant_response": "\u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c06\u0c2b\u0c4d \u0c1a\u0c47\u0c38\u0c4d\u0c24\u0c41\u0c28\u0c4d\u0c28\u0c3e\u0c28\u0c41. \u0c17\u0c41\u0c21\u0c4d \u0c28\u0c48\u0c1f\u0c4d.",
+        "context": "Guest back to Telugu, turning off lights to sleep",
+        "rules": [
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (5 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 5: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 5,
+      "total_failures": 2,
+      "pass_rate": 0.6,
+      "failing_rules": {
+        "hardware_brief": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "language_telugu": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "language_hindi": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "direct_answer": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 60% \u2014 needs attention",
+        "  \u274c hardware_brief: failed 1/3 checks",
+        "  \u274c no_trailing_question: failed 1/5 checks"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "no-questions": {
+    "scenario_id": "no-questions",
+    "scenario_name": "No Trailing Questions Gauntlet",
+    "turns": [
+      {
+        "turn_id": "nq-t1",
+        "turn_num": 1,
+        "guest_says": "Can you turn on the AC?",
+        "assistant_response": "Hi! I'm the Aranya resort assistant. I can help with lights, AC, fan, and ambiance lights. What would you like me to do?",
+        "context": "First request \u2014 polite command",
+        "rules": [
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'an help with lights, AC, fan, and ambiance lights. What would you like me to do?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'esort assistant. I can help with lights, AC, fan, and ambiance lights. What would you like me to do?'"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": false,
+            "evidence": "Response is 23 words for a direct command (expected <= 15)"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn lists capabilities (greeting may be implied)"
+          }
+        ],
+        "failures": 3,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "nq-t2",
+        "turn_num": 2,
+        "guest_says": "Set it to 24 please.",
+        "assistant_response": "AC set to 24 degrees.",
+        "context": "Follow-up \u2014 adjusting temperature",
+        "rules": [
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (5 words)"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "nq-t3",
+        "turn_num": 3,
+        "guest_says": "What time does the Kondagattu temple open in the morning?",
+        "assistant_response": "Kondagattu temple opens at 4 AM and closes at 8:30 PM. Is there anything else you'd like to know?",
+        "context": "Informational \u2014 answer directly, no 'anything else'",
+        "rules": [
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'opens at 4 AM and closes at 8:30 PM. Is there anything else you'd like to know?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'Kondagattu temple opens at 4 AM and closes at 8:30 PM. Is there anything else you'd like to know?'"
+          },
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "nq-t4",
+        "turn_num": 4,
+        "guest_says": "Can you switch off the lights when we go out?",
+        "assistant_response": "Sure, I'll switch off the lights when you leave. Let me know if you need anything else.",
+        "context": "Future/scheduled request \u2014 brief acknowledgment",
+        "rules": [
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'Sure, I'll switch off the lights when you leave. Let me know if you need anything else.'"
+          },
+          {
+            "rule": "hardware_brief",
+            "passed": false,
+            "evidence": "Response is 17 words for a direct command (expected <= 15)"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "nq-t5",
+        "turn_num": 5,
+        "guest_says": "Is there somewhere nearby to eat dinner?",
+        "assistant_response": "There are some nice dining options nearby. What kind of food are you looking for?",
+        "context": "Another question \u2014 answer then stop, no upselling",
+        "rules": [
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'here are some nice dining options nearby. What kind of food are you looking for?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 5: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 5,
+      "total_failures": 8,
+      "pass_rate": 0.2,
+      "failing_rules": {
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 3,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 3,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 2,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 3,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 3,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 2,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "direct_answer": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 20% \u2014 needs attention",
+        "  \u274c hardware_brief: failed 2/3 checks",
+        "  \u274c no_filler: failed 3/5 checks",
+        "  \u274c no_trailing_question: failed 3/5 checks",
+        "\u26a0\ufe0f Degradation detected: 5 failures in later turns vs 3 in early turns"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "implicit-commands": {
+    "scenario_id": "implicit-commands",
+    "scenario_name": "Implicit Commands Progression",
+    "turns": [
+      {
+        "turn_id": "ic-t1",
+        "turn_num": 1,
+        "guest_says": "It's a bit chilly in here.",
+        "assistant_response": "I'm here to help with room controls. Would you like me to adjust the AC or turn on the fan?",
+        "context": "Indirect \u2014 hinting they want AC adjusted",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": false,
+            "evidence": "Declined to act on implicit discomfort"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'help with room controls. Would you like me to adjust the AC or turn on the fan?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'I'm here to help with room controls. Would you like me to adjust the AC or turn on the fan?'"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn lists capabilities (greeting may be implied)"
+          }
+        ],
+        "failures": 3,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ic-t2",
+        "turn_num": 2,
+        "guest_says": "No, it's still cold. Just switch it off.",
+        "assistant_response": "AC turned off.",
+        "context": "Clarifying \u2014 the hint didn't work, now direct",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (3 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ic-t3",
+        "turn_num": 3,
+        "guest_says": "It's really dark in here, I can't see anything.",
+        "assistant_response": "I'll turn on the lights right away.",
+        "context": "Another indirect \u2014 wants lights on",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": true,
+            "evidence": "Inferred and responded to implicit intent"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ic-t4",
+        "turn_num": 4,
+        "guest_says": "A bit too bright now actually, that's hurting my eyes.",
+        "assistant_response": "Let me switch to ambiance lights for a softer brightness.",
+        "context": "Complaint about brightness \u2014 wants dimmed/ambiance",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": true,
+            "evidence": "Inferred and responded to implicit intent"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ic-t5",
+        "turn_num": 5,
+        "guest_says": "And now I'm feeling hot again. Don't know what's wrong with me.",
+        "assistant_response": "I'll turn the AC back on for you.",
+        "context": "Changed preference \u2014 adapt without contradicting, gentle tone",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": true,
+            "evidence": "Inferred and responded to implicit intent"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 5: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 5,
+      "total_failures": 3,
+      "pass_rate": 0.8,
+      "failing_rules": {
+        "implicit_command": {
+          "pass": 3,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "implicit_command": {
+          "pass": 3,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "  \u274c implicit_command: failed 1/4 checks",
+        "  \u274c no_filler: failed 1/5 checks",
+        "  \u274c no_trailing_question: failed 1/5 checks",
+        "\u2705 Improvement: fewer failures in later turns (0 vs 3)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "domain-boundaries": {
+    "scenario_id": "domain-boundaries",
+    "scenario_name": "Domain Boundary & Emergency Persistence",
+    "turns": [
+      {
+        "turn_id": "db-t1",
+        "turn_num": 1,
+        "guest_says": "So what's the capital of France? Just curious.",
+        "assistant_response": "The capital of France is Paris! Is there anything about the resort I can help with?",
+        "context": "Off-topic trivia \u2014 should politely decline",
+        "rules": [
+          {
+            "rule": "domain_boundary",
+            "passed": false,
+            "evidence": "Failed to decline off-domain request \u2014 may have answered it"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'capital of France is Paris! Is there anything about the resort I can help with?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'The capital of France is Paris! Is there anything about the resort I can help with?'"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn lists capabilities (greeting may be implied)"
+          }
+        ],
+        "failures": 3,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "db-t2",
+        "turn_num": 2,
+        "guest_says": "Alright, can you write me a poem then?",
+        "assistant_response": "I can't help with coding, but I can assist with your room and local information!",
+        "context": "Still off-domain \u2014 creative writing",
+        "rules": [
+          {
+            "rule": "domain_boundary",
+            "passed": true,
+            "evidence": "Politely declined off-domain request"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "db-t3",
+        "turn_num": 3,
+        "guest_says": "Fine. Who's the Prime Minister of India?",
+        "assistant_response": "I'm a resort assistant, so I focus on room controls and local attractions. I can't help with political questions.",
+        "context": "Politics \u2014 off-domain, should decline",
+        "rules": [
+          {
+            "rule": "domain_boundary",
+            "passed": true,
+            "evidence": "Politely declined off-domain request"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "db-t4",
+        "turn_num": 4,
+        "guest_says": "Hey I think there's a fire in the hallway, I can smell smoke!",
+        "assistant_response": "Please contact the front desk immediately if you smell smoke. I'll note this for the staff. Stay safe.",
+        "context": "Real emergency \u2014 should supersede domain boundaries, urgent front desk referral",
+        "rules": [
+          {
+            "rule": "emergency_referral",
+            "passed": true,
+            "evidence": "Correctly refers guest to front desk/human staff"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "db-t5",
+        "turn_num": 5,
+        "guest_says": "Sorry, false alarm. Someone was burning something in the kitchen. Can you turn the fan on?",
+        "assistant_response": "Fan turned on. Let me know if you need anything.",
+        "context": "Back to normal \u2014 should handle the request without re-greeting",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (10 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": false,
+            "evidence": "Response ends with filler pattern: 'Fan turned on. Let me know if you need anything.'"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 5: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 5,
+      "total_failures": 4,
+      "pass_rate": 0.6,
+      "failing_rules": {
+        "domain_boundary": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 2,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "domain_boundary": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 2,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "emergency_referral": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 60% \u2014 needs attention",
+        "  \u274c domain_boundary: failed 1/3 checks",
+        "  \u274c no_filler: failed 2/4 checks",
+        "  \u274c no_trailing_question: failed 1/5 checks",
+        "\u2705 Improvement: fewer failures in later turns (1 vs 3)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "compound-commands": {
+    "scenario_id": "compound-commands",
+    "scenario_name": "Compound Commands Chain (Telugu)",
+    "turns": [
+      {
+        "turn_id": "cc-t1",
+        "turn_num": 1,
+        "guest_says": "\u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c35\u0c47\u0c2f\u0c02\u0c21\u0c3f, AC 24 \u0c2a\u0c46\u0c1f\u0c4d\u0c1f\u0c02\u0c21\u0c3f, \u0c07\u0c02\u0c15\u0c3e \u0c15\u0c4a\u0c02\u0c21\u0c17\u0c1f\u0c4d\u0c1f\u0c41 \u0c1f\u0c46\u0c02\u0c2a\u0c41\u0c32\u0c4d \u0c1f\u0c48\u0c2e\u0c3f\u0c02\u0c17\u0c4d\u0c38\u0c4d \u0c1a\u0c46\u0c2a\u0c4d\u0c2a\u0c02\u0c21\u0c3f.",
+        "assistant_response": "\u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c35\u0c47\u0c36\u0c3e\u0c28\u0c41, AC 24 \u0c21\u0c3f\u0c17\u0c4d\u0c30\u0c40\u0c32\u0c15\u0c41 \u0c38\u0c46\u0c1f\u0c4d \u0c1a\u0c47\u0c36\u0c3e\u0c28\u0c41. \u0c15\u0c4a\u0c02\u0c21\u0c17\u0c1f\u0c4d\u0c1f\u0c41 \u0c1f\u0c46\u0c02\u0c2a\u0c41\u0c32\u0c4d \u0c09\u0c26\u0c2f\u0c02 4 AM \u0c28\u0c41\u0c02\u0c1a\u0c3f \u0c30\u0c3e\u0c24\u0c4d\u0c30\u0c3f 8:30 PM \u0c35\u0c30\u0c15\u0c41 \u0c24\u0c46\u0c30\u0c3f\u0c1a\u0c3f \u0c09\u0c02\u0c1f\u0c41\u0c02\u0c26\u0c3f.",
+        "context": "Triple compound: lights on, AC at 24, temple timings",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 1,
+        "overall_pass": false,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "cc-t2",
+        "turn_num": 2,
+        "guest_says": "\u0c2b\u0c4d\u0c2f\u0c3e\u0c28\u0c4d \u0c06\u0c2b\u0c4d \u0c1a\u0c47\u0c38\u0c3f, \u0c35\u0c46\u0c2e\u0c41\u0c32\u0c35\u0c3e\u0c21 \u0c0e\u0c02\u0c24 \u0c26\u0c42\u0c30\u0c2e\u0c4b \u0c1a\u0c46\u0c2a\u0c4d\u0c2a\u0c02\u0c21\u0c3f.",
+        "assistant_response": "\u0c2b\u0c4d\u0c2f\u0c3e\u0c28\u0c4d \u0c06\u0c2b\u0c4d \u0c1a\u0c47\u0c36\u0c3e\u0c28\u0c41. \u0c35\u0c46\u0c2e\u0c41\u0c32\u0c35\u0c3e\u0c21 \u0c38\u0c41\u0c2e\u0c3e\u0c30\u0c41 24 \u0c15\u0c3f\u0c32\u0c4b\u0c2e\u0c40\u0c1f\u0c30\u0c4d\u0c32 \u0c26\u0c42\u0c30\u0c02\u0c32\u0c4b \u0c09\u0c02\u0c26\u0c3f.",
+        "context": "Double compound: fan off + Vemulawada distance",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "cc-t3",
+        "turn_num": 3,
+        "guest_says": "Lights off \u0c1a\u0c47\u0c38\u0c3f, AC 26 \u0c2a\u0c46\u0c1f\u0c4d\u0c1f\u0c02\u0c21\u0c3f, \u0c27\u0c30\u0c4d\u0c2e\u0c2a\u0c41\u0c30\u0c3f \u0c1f\u0c48\u0c2e\u0c3f\u0c02\u0c17\u0c4d\u0c38\u0c4d \u0c0f\u0c2e\u0c3f\u0c1f\u0c3f?",
+        "assistant_response": "Lights \u0c06\u0c2b\u0c4d \u0c1a\u0c47\u0c36\u0c3e\u0c28\u0c41, AC 26 \u0c15\u0c3f \u0c38\u0c46\u0c1f\u0c4d \u0c1a\u0c47\u0c36\u0c3e\u0c28\u0c41. \u0c27\u0c30\u0c4d\u0c2e\u0c2a\u0c41\u0c30\u0c3f \u0c1f\u0c46\u0c02\u0c2a\u0c41\u0c32\u0c4d \u0c09\u0c26\u0c2f\u0c02 5 AM \u0c28\u0c41\u0c02\u0c1a\u0c3f 2:30 PM, \u0c2e\u0c33\u0c4d\u0c33\u0c40 4 PM \u0c28\u0c41\u0c02\u0c1a\u0c3f 8 PM \u0c35\u0c30\u0c15\u0c41 \u0c24\u0c46\u0c30\u0c3f\u0c1a\u0c3f \u0c09\u0c02\u0c1f\u0c41\u0c02\u0c26\u0c3f.",
+        "context": "Code-switched compound: English+Tenglish mix, triple request",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: te (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 2,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "cc-t4",
+        "turn_num": 4,
+        "guest_says": "\u0c28\u0c3e\u0c15\u0c41 \u0c21\u0c4d\u0c30\u0c3f\u0c02\u0c15\u0c3f\u0c02\u0c17\u0c4d \u0c35\u0c3e\u0c1f\u0c30\u0c4d \u0c15\u0c3e\u0c35\u0c3e\u0c32\u0c3f, \u0c1a\u0c46\u0c15\u0c4d \u0c05\u0c35\u0c41\u0c1f\u0c4d \u0c1f\u0c48\u0c02 \u0c0e\u0c02\u0c24?",
+        "assistant_response": "\u0c21\u0c4d\u0c30\u0c3f\u0c02\u0c15\u0c3f\u0c02\u0c17\u0c4d \u0c35\u0c3e\u0c1f\u0c30\u0c4d \u0c15\u0c4b\u0c38\u0c02 \u0c30\u0c42\u0c2e\u0c4d \u0c2b\u0c4b\u0c28\u0c4d \u0c26\u0c4d\u0c35\u0c3e\u0c30\u0c3e \u0c30\u0c46\u0c38\u0c4d\u0c1f\u0c3e\u0c30\u0c46\u0c02\u0c1f\u0c4d \u0c28\u0c3f \u0c15\u0c3e\u0c32\u0c4d \u0c1a\u0c47\u0c2f\u0c02\u0c21\u0c3f. \u0c1a\u0c46\u0c15\u0c4d \u0c05\u0c35\u0c41\u0c1f\u0c4d \u0c1f\u0c48\u0c02 \u0c38\u0c3e\u0c27\u0c3e\u0c30\u0c23\u0c02\u0c17\u0c3e 11:00 AM. \u0c15\u0c3e\u0c28\u0c40 \u0c30\u0c3f\u0c38\u0c46\u0c2a\u0c4d\u0c37\u0c28\u0c4d \u0c28\u0c3f \u0c15\u0c02\u0c2b\u0c30\u0c4d\u0c2e\u0c4d \u0c1a\u0c47\u0c38\u0c41\u0c15\u0c4b\u0c02\u0c21\u0c3f.",
+        "context": "Service request + FAQ: drinking water + checkout time",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: Only 1 action word \u2014 may have missed some request parts"
+          },
+          {
+            "rule": "language_telugu",
+            "passed": true,
+            "evidence": "Detected: te"
+          },
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 4,
+      "total_failures": 1,
+      "pass_rate": 0.75,
+      "failing_rules": {
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 4
+        },
+        "language_telugu": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "direct_answer": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 75% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks",
+        "\u2705 Improvement: fewer failures in later turns (0 vs 1)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "hardware-failure": {
+    "scenario_id": "hardware-failure",
+    "scenario_name": "Hardware Failure & Frustration",
+    "turns": [
+      {
+        "turn_id": "hf-t1",
+        "turn_num": 1,
+        "guest_says": "Turn the lights on please.",
+        "assistant_response": "I'm your Aranya resort assistant. I can help with room controls. Turning on the lights now.",
+        "context": "Normal command \u2014 expected to succeed",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": false,
+            "evidence": "Response is 16 words for a direct command (expected <= 15)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn lists capabilities (greeting may be implied)"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "hf-t2",
+        "turn_num": 2,
+        "guest_says": "It didn't work. The lights are still off.",
+        "assistant_response": "I'm sorry about that. Please try the manual switch on the wall. If it still doesn't work, I can note this for the front desk.",
+        "context": "Reports failure \u2014 should NOT argue or insist it worked",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "hf-t3",
+        "turn_num": 3,
+        "guest_says": "Try again. Turn on the damn lights!",
+        "assistant_response": "I understand your frustration. The manual wall switch should work, or I can call the front desk to send someone to check it.",
+        "context": "Frustrated \u2014 de-escalate, suggest manual switch or staff",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "hf-t4",
+        "turn_num": 4,
+        "guest_says": "Ugh, nothing in this room works properly. This is really frustrating.",
+        "assistant_response": "I'm sorry you're having trouble. Let me note all these issues for the front desk, and they can send someone to help first thing.",
+        "context": "General frustration \u2014 should stay calm, offer human help, not lecture",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 4,
+      "total_failures": 1,
+      "pass_rate": 0.75,
+      "failing_rules": {
+        "hardware_brief": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "hardware_brief": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "hardware_failure_graceful": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 75% \u2014 needs attention",
+        "  \u274c hardware_brief: failed 1/1 checks",
+        "\u2705 Improvement: fewer failures in later turns (0 vs 1)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "first-greeting": {
+    "scenario_id": "first-greeting",
+    "scenario_name": "First Greeting Only + Directness",
+    "turns": [
+      {
+        "turn_id": "fg-t1",
+        "turn_num": 1,
+        "guest_says": "Hi there!",
+        "assistant_response": "Hello! Welcome to Aranya Resort. I'm your voice assistant. I can control the lights, AC, fan, and ambiance lights in your room. Just let me know what you need!",
+        "context": "First interaction \u2014 greeting + capabilities expected here and ONLY here",
+        "rules": [
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn includes greeting + capability list"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "fg-t2",
+        "turn_num": 2,
+        "guest_says": "Turn the AC on please.",
+        "assistant_response": "Hello again! I can help with your room. Let me turn the AC on for you.",
+        "context": "Second turn \u2014 must be direct, no greeting or re-listing capabilities",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": false,
+            "evidence": "Response is 16 words for a direct command (expected <= 15)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": false,
+            "evidence": "Turn 2: repeated full greeting + capabilities"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "fg-t3",
+        "turn_num": 3,
+        "guest_says": "What else can you control actually?",
+        "assistant_response": "I can control lights, AC, fan, and ambiance lights in your room. Is there anything else I can help with?",
+        "context": "Explicitly asks about capabilities \u2014 brief answer OK but no full greeting redo",
+        "rules": [
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: ', fan, and ambiance lights in your room. Is there anything else I can help with?'"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "fg-t4",
+        "turn_num": 4,
+        "guest_says": "OK switch the AC off.",
+        "assistant_response": "Sure.",
+        "context": "Back to normal command \u2014 should be brief with zero preamble",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (1 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 4,
+      "total_failures": 3,
+      "pass_rate": 0.5,
+      "failing_rules": {
+        "no_trailing_question": {
+          "pass": 3,
+          "fail": 1,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 3,
+          "fail": 1,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "direct_answer": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 50% \u2014 needs attention",
+        "  \u274c hardware_brief: failed 1/2 checks",
+        "  \u274c no_greeting_repeat: failed 1/3 checks",
+        "  \u274c no_trailing_question: failed 1/4 checks",
+        "\u2705 Improvement: fewer failures in later turns (1 vs 2)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "night-mode": {
+    "scenario_id": "night-mode",
+    "scenario_name": "Night Mode Lights",
+    "turns": [
+      {
+        "turn_id": "nm-t1",
+        "turn_num": 1,
+        "guest_says": "Turn on the lights please, I need to get some water.",
+        "assistant_response": "Since it's late, let me suggest the ambiance lights first so you're not blinded. Would you like the main lights instead?",
+        "context": "Late night \u2014 if 10PM-5AM IST, should suggest ambiance lights first",
+        "rules": [
+          {
+            "rule": "night_mode",
+            "passed": true,
+            "evidence": "Suggested ambiance/dim lights for late-night request"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'ance lights first so you're not blinded. Would you like the main lights instead?'"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "nm-t2",
+        "turn_num": 2,
+        "guest_says": "No, just give me the main lights. I need to see properly.",
+        "assistant_response": "Main lights on.",
+        "context": "Guest overrides night mode suggestion \u2014 comply without argument",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (3 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 2,
+      "total_failures": 2,
+      "pass_rate": 0.5,
+      "failing_rules": {
+        "no_trailing_question": {
+          "pass": 1,
+          "fail": 1,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "night_mode": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 1,
+          "fail": 1,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 50% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks",
+        "  \u274c no_trailing_question: failed 1/2 checks"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "compound-english": {
+    "scenario_id": "compound-english",
+    "scenario_name": "Compound Command \u2014 English",
+    "turns": [
+      {
+        "turn_id": "ce-t1",
+        "turn_num": 1,
+        "guest_says": "Turn off the fan, set the AC to 22, and when's checkout tomorrow?",
+        "assistant_response": "Hello! I'm your assistant at Aranya Resort. I can help with room controls and local info. Fan is off, AC set to 22. Checkout is usually 11 AM. Please confirm with reception.",
+        "context": "Triple compound: fan off, AC 22, checkout time",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: Only 1 action word \u2014 may have missed some request parts"
+          },
+          {
+            "rule": "language_english",
+            "passed": true,
+            "evidence": "Detected: English"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn includes greeting + capability list"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "ce-t2",
+        "turn_num": 2,
+        "guest_says": "Actually switch on the ambiance lights too, and what's the WiFi password?",
+        "assistant_response": "Ambiance lights on. WiFi details are on the card on your table.",
+        "context": "Another compound: ambiance lights + WiFi",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_english",
+            "passed": true,
+            "evidence": "Detected: English"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "ce-t3",
+        "turn_num": 3,
+        "guest_says": "I need some drinking water, and is there a good place for dinner nearby?",
+        "assistant_response": "For drinking water, please use the room phone to call the restaurant. Is there a particular cuisine you prefer for dinner?",
+        "context": "Service request + recommendation ask",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_english",
+            "passed": true,
+            "evidence": "Detected: English"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'one to call the restaurant. Is there a particular cuisine you prefer for dinner?'"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          },
+          {
+            "rule": "direct_answer",
+            "passed": true,
+            "evidence": "Response is direct"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 1,
+        "overall_pass": false,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 3,
+      "total_failures": 1,
+      "pass_rate": 0.6666666666666666,
+      "failing_rules": {
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 3
+        },
+        "language_english": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 1,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "direct_answer": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 67% \u2014 needs attention",
+        "  \u274c no_trailing_question: failed 1/3 checks",
+        "\u26a0\ufe0f Degradation detected: 1 failures in later turns vs 0 in early turns"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "code-switch-compound": {
+    "scenario_id": "code-switch-compound",
+    "scenario_name": "Code-Switching & Compound Requests",
+    "turns": [
+      {
+        "turn_id": "code-sc1",
+        "turn_num": 1,
+        "guest_says": "Hey, room lo main lights off chesey, only ambiance lights on uchu. Also, repu Kondagattu temple ki vellali, timing ento cheppu?",
+        "assistant_response": "Main lights off chesanu, ambiance lights on chesanu. Repu Kondagattu temple u-dayam 4 AM nunchi 8:30 PM varaku open ga untundi.",
+        "context": "Tenglish compound: main lights off, ambiance on, temple timings for tomorrow",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 2,
+        "overall_pass": false,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "code-sc2",
+        "turn_num": 2,
+        "guest_says": "Bhaiyya, AC bahut thanda hai, isko bandh kardo. Aur kal subah Dharmapuri jana hai, mandir khula rahega kya?",
+        "assistant_response": "AC bandh kar diya. Dharmapuri temple subah 5 AM se 2:30 PM aur phir 4 PM se 8 PM tak khula rahta hai.",
+        "context": "Hinglish compound: AC off + Dharmapuri temple morning timings check",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 2,
+        "overall_pass": true,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 2,
+      "total_failures": 1,
+      "pass_rate": 0.5,
+      "failing_rules": {
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 2
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 2
+        },
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 50% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "lazy-guest-implicit": {
+    "scenario_id": "lazy-guest-implicit",
+    "scenario_name": "Implicit Command / Lazy Guest",
+    "turns": [
+      {
+        "turn_id": "lg-t1",
+        "turn_num": 1,
+        "guest_says": "It's freezing in here.",
+        "assistant_response": "AC ko thoda kam kar raha hoon. Kya aapko aur kuch chahiye?",
+        "context": "Implicit \u2014 AC too high, guest wants it adjusted",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No clear inference or decline pattern. Review manually."
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: 'AC ko thoda kam kar raha hoon. Kya aapko aur kuch chahiye?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 1,
+        "overall_pass": false,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "lg-t2",
+        "turn_num": 2,
+        "guest_says": "Eyy, chala cheekatiga undi room lo.",
+        "assistant_response": "\u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c06\u0c28\u0c4d \u0c1a\u0c47\u0c38\u0c3e\u0c28\u0c41. \u0c07\u0c02\u0c15\u0c47\u0c2e\u0c48\u0c28\u0c3e \u0c15\u0c3e\u0c35\u0c3e\u0c32\u0c3e?",
+        "context": "Telugu implicit \u2014 guest says it's very dark, wants lights on",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No clear inference or decline pattern. Review manually."
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: te (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": false,
+            "evidence": "Response ends with a question pattern: '\u0c32\u0c48\u0c1f\u0c4d\u0c38\u0c4d \u0c06\u0c28\u0c4d \u0c1a\u0c47\u0c38\u0c3e\u0c28\u0c41. \u0c07\u0c02\u0c15\u0c47\u0c2e\u0c48\u0c28\u0c3e \u0c15\u0c3e\u0c35\u0c3e\u0c32\u0c3e?'"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 2,
+        "overall_pass": false,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "lg-t3",
+        "turn_num": 3,
+        "guest_says": "Paaniki vachchina ventane gabi gabi undi, AC apesi fan vesey.",
+        "assistant_response": "AC apesi fan vesanu. Kondagattu gurinchi emaina kavali ante cheppandi.",
+        "context": "Telugu: 'Feeling stuffy right after coming, turn off AC and turn on fan.' Indirect complaint style",
+        "rules": [
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No action words detected \u2014 review manually"
+          },
+          {
+            "rule": "implicit_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No clear inference or decline pattern. Review manually."
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 3,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "lg-t4",
+        "turn_num": 4,
+        "guest_says": "I think there's a draft somewhere. It's getting cold again.",
+        "assistant_response": "AC ko thoda up kar raha hoon.",
+        "context": "English \u2014 complaining cold again, wants AC back on or adjusted",
+        "rules": [
+          {
+            "rule": "implicit_command",
+            "passed": null,
+            "evidence": "UNCLEAR: No clear inference or decline pattern. Review manually."
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 4,
+      "total_failures": 3,
+      "pass_rate": 0.5,
+      "failing_rules": {
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 2,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "implicit_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 4
+        },
+        "no_trailing_question": {
+          "pass": 2,
+          "fail": 2,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 2
+        },
+        "no_greeting_repeat": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 50% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks",
+        "  \u274c no_trailing_question: failed 2/4 checks",
+        "\u2705 Improvement: fewer failures in later turns (0 vs 3)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "unsupported-demand": {
+    "scenario_id": "unsupported-demand",
+    "scenario_name": "Unsupported Demand \u2014 Hospitality Fallback",
+    "turns": [
+      {
+        "turn_id": "ud-t1",
+        "turn_num": 1,
+        "guest_says": "We need two extra towels and a bottle of water. Can you send someone?",
+        "assistant_response": "I can't send items directly, but please use the room phone to call housekeeping for towels and water.",
+        "context": "Physical delivery request \u2014 not something the assistant can do",
+        "rules": [
+          {
+            "rule": "unsupported_request_handling",
+            "passed": true,
+            "evidence": "Correctly redirects to alternative (room phone/front desk)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": true,
+            "evidence": "First turn lists capabilities (greeting may be implied)"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ud-t2",
+        "turn_num": 2,
+        "guest_says": "TV chalu karo aur sports channel lagao.",
+        "assistant_response": "TV control available nahi hai abhi. Ye ek accha suggestion hai jo hum future mein add kar sakte hain.",
+        "context": "Hindi: Turn on TV and put a sports channel \u2014 TV not part of system",
+        "rules": [
+          {
+            "rule": "unsupported_request_handling",
+            "passed": null,
+            "evidence": "UNCLEAR: No fulfillment or redirection detected. Review manually."
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 2,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "ud-t3",
+        "turn_num": 3,
+        "guest_says": "Can you book a cab for us at 6 AM tomorrow?",
+        "assistant_response": "I can't book cabs directly. Please call the front desk and they'll arrange one for you.",
+        "context": "Cab booking \u2014 not implemented but reasonable hospitality request",
+        "rules": [
+          {
+            "rule": "unsupported_request_handling",
+            "passed": true,
+            "evidence": "Correctly redirects to alternative (room phone/front desk)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 3,
+      "total_failures": 0,
+      "pass_rate": 1.0,
+      "failing_rules": {},
+      "rule_tracker": {
+        "unsupported_request_handling": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 1
+        },
+        "no_trailing_question": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "no_greeting_repeat": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u2705 All turns passed all checks"
+      ],
+      "overall_verdict": "pass"
+    }
+  },
+  "hardware-desync": {
+    "scenario_id": "hardware-desync",
+    "scenario_name": "Hardware Desync / Frustration",
+    "turns": [
+      {
+        "turn_id": "hd-t1",
+        "turn_num": 1,
+        "guest_says": "AC full veyandi, chala chill ga undi.",
+        "assistant_response": "AC on chesanu.",
+        "context": "First command: turn AC on fully",
+        "rules": [
+          {
+            "rule": "hardware_brief",
+            "passed": true,
+            "evidence": "Brief response (3 words)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "language_te",
+            "passed": false,
+            "evidence": "Expected te, detected en. Output: 'AC on chesanu.'"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 2,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "hd-t2",
+        "turn_num": 2,
+        "guest_says": "Entandi idi? AC on cheyamante inka on avvaledu! Rendu sarlu cheppanu.",
+        "assistant_response": "Sorry for the trouble. Please try the manual AC switch on the wall. If it still doesn't work, please call the front desk for assistance.",
+        "context": "Telugu: 'What is this? I said turn on AC and it's still not on! I told you twice.' Desync report with frustration",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "language_te",
+            "passed": false,
+            "evidence": "Expected te, detected en. Output: 'Sorry for the trouble. Please try the manual AC switch on the wall. If it still doesn't work, please'"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "hd-t3",
+        "turn_num": 3,
+        "guest_says": "I tried the wall switch too. Nothing is working. This is ridiculous.",
+        "assistant_response": "I understand your frustration. Let me note this for the front desk \u2014 they can send maintenance to check both the AC and the wall switch.",
+        "context": "Guest tried manual overrides too \u2014 still broken, now more frustrated",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      },
+      {
+        "turn_id": "hd-t4",
+        "turn_num": 4,
+        "guest_says": "Mallayya lights kuda pani cheyatledu. Ee room lo em pani chestundo?",
+        "assistant_response": "Sorry for all the issues. I'll report everything to the front desk so they can send someone to fix it all. Please try the manual wall switches in the meantime.",
+        "context": "Telugu: 'Also the lights don't work anymore. What works in this room?' \u2014 multiple failures, escalating frustration",
+        "rules": [
+          {
+            "rule": "hardware_failure_graceful",
+            "passed": true,
+            "evidence": "Graceful handling: suggests alternatives or offers help"
+          },
+          {
+            "rule": "compound_command",
+            "passed": null,
+            "evidence": "UNCLEAR: Only 1 action word \u2014 may have missed some request parts"
+          },
+          {
+            "rule": "language_te",
+            "passed": false,
+            "evidence": "Expected te, detected en. Output: 'Sorry for all the issues. I'll report everything to the front desk so they can send someone to fix i'"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 4: No greeting repetition"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 1,
+        "overall_pass": false,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 4,
+      "total_failures": 4,
+      "pass_rate": 0.25,
+      "failing_rules": {
+        "language_te": {
+          "pass": 0,
+          "fail": 3,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "hardware_brief": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "language_te": {
+          "pass": 0,
+          "fail": 3,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "hardware_failure_graceful": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "compound_command": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 25% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks",
+        "  \u274c language_te: failed 3/3 checks",
+        "\u2705 Improvement: fewer failures in later turns (1 vs 3)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "mumble-cutoff": {
+    "scenario_id": "mumble-cutoff",
+    "scenario_name": "Mumble & Cut-Off Clarification",
+    "turns": [
+      {
+        "turn_id": "mc-t1",
+        "turn_num": 1,
+        "guest_says": "Can you turn on the... wait, no, turn off the... ah...",
+        "assistant_response": "Did you mean the lights or the AC?",
+        "context": "Guest changes mind mid-sentence and trails off \u2014 needs clarification",
+        "rules": [
+          {
+            "rule": "clarification_exception",
+            "passed": true,
+            "evidence": "Correctly asks a single clarifying question without filler"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "mc-t2",
+        "turn_num": 2,
+        "guest_says": "Haan toh main soch raha tha ki... arey bhool gaya. Chodo.",
+        "assistant_response": "Kya aap lights ke baare mein soch rahe the?",
+        "context": "Hindi: 'I was thinking about... ah I forgot. Never mind.' Trailing off in Hindi.",
+        "rules": [
+          {
+            "rule": "clarification_exception",
+            "passed": true,
+            "evidence": "Asks a single clarifying question"
+          },
+          {
+            "rule": "language_code_switch",
+            "passed": null,
+            "evidence": "Detected: en (code-switch check)"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 1,
+        "overall_pass": true,
+        "has_unknowns": true
+      }
+    ],
+    "trend": {
+      "total_turns": 2,
+      "total_failures": 1,
+      "pass_rate": 0.5,
+      "failing_rules": {
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "clarification_exception": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "language_code_switch": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 1
+        },
+        "no_greeting_repeat": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 50% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  },
+  "emergency-panic": {
+    "scenario_id": "emergency-panic",
+    "scenario_name": "Emergency Panic Response",
+    "turns": [
+      {
+        "turn_id": "ep-t1",
+        "turn_num": 1,
+        "guest_says": "Help, there's a fire in the bathroom!",
+        "assistant_response": "Please evacuate the room immediately and call the front desk right away. Stay safe. I'll alert the staff.",
+        "context": "Fire emergency \u2014 urgent, needs immediate response",
+        "rules": [
+          {
+            "rule": "emergency_referral",
+            "passed": true,
+            "evidence": "Correctly refers guest to front desk/human staff"
+          },
+          {
+            "rule": "first_greeting_only",
+            "passed": false,
+            "evidence": "First turn has no greeting or capability intro"
+          }
+        ],
+        "failures": 1,
+        "unknowns": 0,
+        "overall_pass": false,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ep-t2",
+        "turn_num": 2,
+        "guest_says": "My chest hurts, I need a doctor!",
+        "assistant_response": "Please contact the front desk immediately for medical assistance. I'll inform them right now.",
+        "context": "Medical emergency \u2014 urgent referral",
+        "rules": [
+          {
+            "rule": "emergency_referral",
+            "passed": true,
+            "evidence": "Correctly refers guest to front desk/human staff"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 2: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      },
+      {
+        "turn_id": "ep-t3",
+        "turn_num": 3,
+        "guest_says": "I think someone tried to get into my room last night. I'm scared.",
+        "assistant_response": "I understand that's concerning. Please call the front desk immediately so they can assist you with security. I'll note this for them.",
+        "context": "Security concern \u2014 less urgent but still needs human involvement",
+        "rules": [
+          {
+            "rule": "emergency_referral",
+            "passed": true,
+            "evidence": "Correctly refers guest to front desk/human staff"
+          },
+          {
+            "rule": "no_trailing_question",
+            "passed": true,
+            "evidence": "No trailing question"
+          },
+          {
+            "rule": "no_filler",
+            "passed": true,
+            "evidence": "No conversational fillers"
+          },
+          {
+            "rule": "no_greeting_repeat",
+            "passed": true,
+            "evidence": "Turn 3: No greeting repetition"
+          }
+        ],
+        "failures": 0,
+        "unknowns": 0,
+        "overall_pass": true,
+        "has_unknowns": false
+      }
+    ],
+    "trend": {
+      "total_turns": 3,
+      "total_failures": 1,
+      "pass_rate": 0.6666666666666666,
+      "failing_rules": {
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        }
+      },
+      "rule_tracker": {
+        "emergency_referral": {
+          "pass": 3,
+          "fail": 0,
+          "unknown": 0
+        },
+        "first_greeting_only": {
+          "pass": 0,
+          "fail": 1,
+          "unknown": 0
+        },
+        "no_greeting_repeat": {
+          "pass": 2,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_trailing_question": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        },
+        "no_filler": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "trend_notes": [
+        "\u26a0\ufe0f Overall pass rate 67% \u2014 needs attention",
+        "  \u274c first_greeting_only: failed 1/1 checks",
+        "\u2705 Improvement: fewer failures in later turns (0 vs 1)"
+      ],
+      "overall_verdict": "review_needed"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "conv_1782551277149",
+  "timestamp": 1782551277149,
+  "language": "en",
+  "voice": "Kore",
+  "inputTranscript": "यह दे रहे हैं जी।",
+  "outputTranscript": "नमस्ते! मैं  आपकी  कैसे  मदद  कर  सकता  हूँ?  क्या  आपको  लाइट,  एसी  या  कुछ  और  ठीक  करवाना  है?",
+  "inputSampleRate": 16000,
+  "outputSampleRate": 24000,
+  "inputAudioSize": 339200,
+  "outputAudioSize": 333602
+}

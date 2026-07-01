@@ -1,0 +1,8 @@
+[     542ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ https://viva-voice.onrender.com/:0
+[     571ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ https://viva-voice.onrender.com/:0
+[    1154ms] [LOG] WebSocket connected @ https://viva-voice.onrender.com/app.js?v=14:156
+[    1154ms] [LOG] [SYSTEM PROMPT] You are Aranya resort assistant — a warm, friendly voice assistant at a resort.
+You are located near Nachupalle, Kodimia... @ https://viva-voice.onrender.com/geminilive.js?v=9:148
+[    2227ms] [LOG] Live session ready @ https://viva-voice.onrender.com/app.js?v=14:160
+[    2228ms] [LOG] Live session ready @ https://viva-voice.onrender.com/app.js?v=14:160
+[  153387ms] [LOG] Disconnected: 1008 The operation was aborted. @ https://viva-voice.onrender.com/app.js?v=14:207

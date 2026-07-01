@@ -1,0 +1,265 @@
+- generic "Google Maps" [ref=e9]:
+  - generic [ref=e3]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e10]
+    - search [ref=e15]:
+      - button "Menu" [ref=e17] [cursor=pointer]:
+        - generic [ref=e18]: 
+      - generic [ref=e19]:
+        - combobox [ref=e297]: Hotels
+        - button "Search" [ref=e23] [cursor=pointer]:
+          - generic [ref=e24]: 
+        - generic [ref=e172]:
+          - generic [ref=e173]: 
+          - button "Cancel search nearby" [ref=e175] [cursor=pointer]:
+            - generic [ref=e176]: 
+    - generic [ref=e28]:
+      - main [ref=e298]:
+        - generic [ref=e299]:
+          - feed "Results for Hotels" [ref=e300]:
+            - region "Available filters for this search" [ref=e302]:
+              - generic [ref=e305]:
+                - button "Rating" [active] [ref=e307] [cursor=pointer]:
+                  - generic [ref=e308]:
+                    - generic [ref=e310]: Rating
+                    - generic [ref=e311]: 
+                - button "Hours" [ref=e313] [cursor=pointer]:
+                  - generic [ref=e314]:
+                    - generic [ref=e316]: Hours
+                    - generic [ref=e317]: 
+                - button "All filters" [ref=e319] [cursor=pointer]:
+                  - generic [ref=e320]:
+                    - generic [ref=e322]: 
+                    - generic [ref=e323]: All filters
+            - generic [ref=e324]:
+              - generic [ref=e326]:
+                - heading "Results" [level=1] [ref=e327]
+                - button "Learn more about legal disclosure regarding public reviews on Google Maps" [ref=e331]:
+                  - generic [ref=e335]: 
+              - button "Share" [ref=e339]:
+                - generic [ref=e340] [cursor=pointer]:
+                  - generic [ref=e341]: 
+                  - generic [ref=e342]: Share
+            - article "Sriyans Restaurant & Lodge" [ref=e344]:
+              - link "Sriyans Restaurant & Lodge" [ref=e345] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Sriyans+Restaurant+%26+Lodge/data=!4m7!3m6!1s0x3bcd1754a2899745:0x8d2fdd9bac72e545!8m2!3d18.6703234!4d78.9335915!16s%2Fg%2F11hbbtf595!19sChIJRZeJolQXzTsRReVyrJvdL40?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Sriyans Restaurant & Lodge
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "3.6 stars": "3.6"
+                          - generic:
+                            - generic:
+                              - generic: Hotel
+                              - generic: · kondagattu jagtial
+                            - generic:
+                              - generic: 090104 56456
+                  - button "Get directions to Sriyans Restaurant & Lodge" [ref=e346] [cursor=pointer]:
+                    - generic [ref=e348]: 
+                    - generic [ref=e349]: Directions
+            - article "Odhelu Rooms" [ref=e352]:
+              - link "Odhelu Rooms" [ref=e353] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Odhelu+Rooms/data=!4m7!3m6!1s0x3bcd17e5756f4d3b:0x6a3ab4bf6fe6b64c!8m2!3d18.6731843!4d78.9326943!16s%2Fg%2F11sf6_6hcy!19sChIJO01vdeUXzTsRTLbmb7-0Omo?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Odhelu Rooms
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.8 stars": "4.8"
+                          - generic:
+                            - generic:
+                              - generic: Hotel
+                              - generic: · Kondagattu, Karimnagar Rd
+                            - generic:
+                              - generic: 079810 13035
+                  - button "Get directions to Odhelu Rooms" [ref=e354] [cursor=pointer]:
+                    - generic [ref=e356]: 
+                    - generic [ref=e357]: Directions
+            - article "Brundavanam family Resorts" [ref=e360]:
+              - link "Brundavanam family Resorts" [ref=e361] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Brundavanam+family+Resorts/data=!4m7!3m6!1s0x3bcd1a1a3f026c89:0xc347822473277974!8m2!3d18.650845!4d78.9201536!16s%2Fg%2F11dy77p502!19sChIJiWwCPxoazTsRdHkncySCR8M?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Brundavanam family Resorts
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.0 stars": "4.0"
+                          - generic:
+                            - generic:
+                              - generic: Resort hotel
+                              - generic: · Nachupally x Road
+                            - generic:
+                              - generic: 081060 03456
+                  - button "Get directions to Brundavanam family Resorts" [ref=e362] [cursor=pointer]:
+                    - generic [ref=e364]: 
+                    - generic [ref=e365]: Directions
+            - article "Sri Durga Rooms" [ref=e368]:
+              - link "Sri Durga Rooms" [ref=e369] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Sri+Durga+Rooms/data=!4m7!3m6!1s0x3bcd171c64d98a7d:0xe3f5279359dc5918!8m2!3d18.6732807!4d78.9332114!16s%2Fg%2F11trfv1ghc!19sChIJfYrZZBwXzTsRGFncWZMn9eM?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Sri Durga Rooms
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.4 stars": "4.4"
+                          - generic:
+                            - generic:
+                              - generic: Hotel
+                              - generic: · Karimnagar Road Kondagattu, Kondagattu
+                            - generic:
+                              - generic: 088853 14674
+                  - button "Get directions to Sri Durga Rooms" [ref=e370] [cursor=pointer]:
+                    - generic [ref=e372]: 
+                    - generic [ref=e373]: Directions
+            - article "Haritha Tourism Hotel-Kondagattu" [ref=e376]:
+              - link "Haritha Tourism Hotel-Kondagattu" [ref=e377] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Haritha+Tourism+Hotel-Kondagattu/data=!4m10!3m9!1s0x3bcd10ae66c04017:0x1585fafccd4d694!5m2!4m1!1i2!8m2!3d18.6776364!4d78.9220992!16s%2Fg%2F11clvs7wl3!19sChIJF0DAZq4QzTsRlNbUzK9fWAE?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Haritha Tourism Hotel-Kondagattu
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "3.8 stars": "3.8"
+                          - generic:
+                            - generic:
+                              - generic: Hotel
+                            - generic:
+                              - generic: 094933 70431
+                  - generic:
+                    - link "Visit Haritha Tourism Hotel-Kondagattu's website" [ref=e378] [cursor=pointer]:
+                      - /url: https://tourism.telangana.gov.in/hotels/KondagattuHotel
+                      - generic [ref=e380]: 
+                      - generic [ref=e381]: Website
+                    - button "Get directions to Haritha Tourism Hotel-Kondagattu" [ref=e382] [cursor=pointer]:
+                      - generic [ref=e384]: 
+                      - generic [ref=e385]: Directions
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img "Pool available":
+                          - generic: 
+                          - generic: Pool
+                        - img "Air-conditioned available":
+                          - generic: 
+                          - generic: Air-conditioned
+                        - img "Wi-Fi available":
+                          - generic: 
+                          - generic: Wi-Fi
+                        - img "Parking available":
+                          - generic: 
+                          - generic: Parking
+            - article "Kondagattu Kura Katha" [ref=e388]:
+              - link "Kondagattu Kura Katha" [ref=e389] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Kondagattu+Kura+Katha/data=!4m7!3m6!1s0x3bcd17ceb0b941df:0xda8f5d5af5303404!8m2!3d18.6699367!4d78.9339114!16s%2Fg%2F11z36x2rl2!19sChIJ30G5sM4XzTsRBDQw9Vpdj9o?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Kondagattu Kura Katha
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.0 stars": "4.0"
+                          - generic:
+                            - generic:
+                              - generic: Hotel
+                              - generic: · Karimnagar Rd, near Petrol Bunk
+                  - button "Get directions to Kondagattu Kura Katha" [ref=e390] [cursor=pointer]:
+                    - generic [ref=e392]: 
+                    - generic [ref=e393]: Directions
+            - generic [ref=e428]:
+              - generic [ref=e430]: 
+              - generic [ref=e431]:
+                - text: You're seeing a limited view of Google Maps.
+                - button "Learn more about limited view" [ref=e432] [cursor=pointer]: Learn more
+            - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e436]:
+              - generic [ref=e437]: Get the most out of Google Maps
+              - button "Sign in" [ref=e440] [cursor=pointer]:
+                - generic [ref=e442]: Sign in
+          - generic [ref=e447]:
+            - text: About pricing
+            - link "About pricing" [ref=e448] [cursor=pointer]:
+              - /url: https://support.google.com/websearch/answer/6276008
+              - generic [ref=e449]: 
+          - checkbox "Update results when map moves" [ref=e451] [cursor=pointer]:
+            - generic [ref=e453]: 
+            - text: Update results when map moves
+      - button "Collapse side panel" [ref=e107] [cursor=pointer]:
+        - generic [ref=e108]: 
+    - generic [ref=e112]:
+      - button "Google apps" [ref=e116] [cursor=pointer]:
+        - img [ref=e117]
+      - link "Sign in" [ref=e120] [cursor=pointer]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2FHotels%2F%4018.653069%2C78.9327634%2C17z%2Fdata%3D!4m7!2m6!3m5!1sHotels!2s18.653069%2C78.9327634!4m2!1d78.9327634!2d18.653069%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e121]:
+      - generic [ref=e274]:
+        - generic [ref=e275]:
+          - generic [ref=e276]:
+            - button "15 min" [disabled] [ref=e278]:
+              - text: 15 min
+              - generic [ref=e279]: 
+            - radiogroup [ref=e280]:
+              - generic [ref=e281]:
+                - radio "Walking" [ref=e283] [cursor=pointer]:
+                  - img "Walking" [ref=e284]:
+                    - generic [ref=e286]: 
+                - radio "Driving" [checked] [ref=e288]:
+                  - img "Driving" [ref=e289]:
+                    - generic [ref=e291]: 
+          - generic [ref=e292]: No travel times for this place. Select another place
+        - switch "Turn off travel time tool" [checked] [ref=e294] [cursor=pointer]
+      - generic:
+        - button "Show Your Location" [ref=e124] [cursor=pointer]:
+          - generic [ref=e126]: 
+        - generic [ref=e128] [cursor=pointer]:
+          - button "Zoom in" [ref=e129]
+          - button "Zoom out" [ref=e132]
+      - button "Browse Street View images" [ref=e140]
+      - generic [ref=e146]:
+        - generic "Interactive map" [ref=e147]
+        - generic [ref=e151] [cursor=pointer]:
+          - generic [ref=e152]: 
+          - generic [ref=e153]: Layers
+        - button "Layers" [ref=e154] [cursor=pointer]
+    - generic [ref=e156]:
+      - contentinfo [ref=e159]:
+        - text: Map data ©2026
+        - button "India" [ref=e160] [cursor=pointer]
+        - button "Terms" [ref=e161] [cursor=pointer]
+        - button "Privacy" [ref=e162] [cursor=pointer]
+        - button "Send Product Feedback" [ref=e163] [cursor=pointer]
+      - button "100 m" [ref=e165] [cursor=pointer]: 100 m

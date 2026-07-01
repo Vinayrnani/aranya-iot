@@ -1,0 +1,512 @@
+{
+  "meta": {
+    "description": "Viva Voice — System Prompt Compliance Scenarios",
+    "version": "1.0",
+    "created": "2026-07-01",
+    "rules_reference": {
+      "language_english": "Response must be in English (match guest language). See <language_rules>",
+      "language_hindi": "Response must be in Hindi (match guest language). See <language_rules>",
+      "language_telugu": "Response must be in Telugu (match guest language). See <language_rules>",
+      "language_default_telugu": "When language is uncertain, default to Telugu. See <language_rules> #2",
+      "language_code_switch": "If guest mixes languages, match their style. See <language_rules> #4",
+      "language_no_formal": "Use conversational Hinglish/Tenglish, not pure translations. See <language_rules> #5",
+      "no_trailing_question": "Response must NOT end with a question. See <critical_voice_rules> #1-2",
+      "no_filler": "Response must NOT end with conversational fillers. See <critical_voice_rules> #2",
+      "stop_generating": "Response must stop naturally after answering. See <critical_voice_rules> #3",
+      "hardware_brief": "Direct command responses must be extremely brief. See <critical_voice_rules> hardware section",
+      "first_greeting_only": "Greeting + capabilities listed only on first turn. See <behavioral_constraints> #1-2",
+      "no_greeting_repeat": "No greeting or capability re-listing on subsequent turns. See <behavioral_constraints> #2",
+      "direct_answer": "Answer the query directly without preamble. See <behavioral_constraints> #3",
+      "night_mode": "For lights 10PM-5AM, suggest ambiance lights first. See <behavioral_constraints> #4",
+      "implicit_command": "Handle discomfort as implicit command (e.g., 'I'm cold' → AC). See <capabilities>",
+      "compound_command": "Handle ALL parts of multi-part request in one response. See <compound_commands>",
+      "domain_boundary": "Politely decline unrelated topics. See <domain_boundaries>",
+      "emergency_referral": "For emergencies, advise front desk urgently. See <domain_boundaries>",
+      "hardware_failure_graceful": "On hardware failure report, don't argue — suggest manual alternative. See <hardware_desync>",
+      "unsupported_request_handling": "Unsupported hospitality requests must get polite fallback + redirection, not fake fulfillment. See <capabilities_and_implicit_commands>",
+      "clarification_exception": "When guest trails off mid-sentence, AI may ask ONE clarifying question — but no filler or capability relisting. See <behavioral_constraints> clarification exception"
+    }
+  },
+  "scenarios": [
+    {
+      "id": "lang-adherence",
+      "name": "Language Adherence Across Turns",
+      "description": "Guest switches naturally between Telugu, Hindi, and English over multiple turns. Tests that the assistant matches language correctly every time and never defaults to English.",
+      "primary_language": "te",
+      "guest_profile": "A Telugu-speaking family guest who is comfortable mixing Hindi and English",
+      "turns": [
+        {
+          "id": "lang-t1",
+          "guest_says": "నమస్కారం, లైట్స్ వేయండి.",
+          "context": "Guest arrives at room, starts in Telugu asking for lights",
+          "rules": ["language_telugu", "hardware_brief", "no_trailing_question", "first_greeting_only"]
+        },
+        {
+          "id": "lang-t2",
+          "guest_says": "हाँ, पंखा भी चला दो.",
+          "context": "Guest switches to Hindi — adds fan request naturally",
+          "rules": ["language_hindi", "hardware_brief", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "lang-t3",
+          "guest_says": "AC కూడా వేసేయండి. ఇంకా కొండగట్టు ఎంత దూరం ఇక్కడ్నుంచి?",
+          "context": "Guest back to Telugu, compound: AC on + temple distance",
+          "rules": ["language_telugu", "compound_command", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "lang-t4",
+          "guest_says": "WiFi password ఏమిటి?",
+          "context": "Guest naturally code-switches Telugu+English (Tenglish) for WiFi query",
+          "rules": ["language_code_switch", "direct_answer", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "lang-t5",
+          "guest_says": "సరే, ఇప్పుడు లైట్స్ ఆఫ్ చేయండి. నేను నిద్రపోతాను.",
+          "context": "Guest back to Telugu, turning off lights to sleep",
+          "rules": ["language_telugu", "hardware_brief", "no_trailing_question", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["language_consistency_across_turns", "no_greeting_drift"]
+    },
+    {
+      "id": "no-questions",
+      "name": "No Trailing Questions Gauntlet",
+      "description": "Guest makes several service requests back to back. Tests that the assistant NEVER ends a turn with a question or filler, even as the interaction stretches on.",
+      "primary_language": "en",
+      "guest_profile": "An English-speaking guest who gives short, direct requests",
+      "turns": [
+        {
+          "id": "nq-t1",
+          "guest_says": "Can you turn on the AC?",
+          "context": "First request — polite command",
+          "rules": ["no_trailing_question", "no_filler", "hardware_brief", "first_greeting_only"]
+        },
+        {
+          "id": "nq-t2",
+          "guest_says": "Set it to 24 please.",
+          "context": "Follow-up — adjusting temperature",
+          "rules": ["no_trailing_question", "no_filler", "hardware_brief", "no_greeting_repeat"]
+        },
+        {
+          "id": "nq-t3",
+          "guest_says": "What time does the Kondagattu temple open in the morning?",
+          "context": "Informational — answer directly, no 'anything else'",
+          "rules": ["no_trailing_question", "no_filler", "direct_answer", "no_greeting_repeat"]
+        },
+        {
+          "id": "nq-t4",
+          "guest_says": "Can you switch off the lights when we go out?",
+          "context": "Future/scheduled request — brief acknowledgment",
+          "rules": ["no_trailing_question", "no_filler", "hardware_brief", "no_greeting_repeat"]
+        },
+        {
+          "id": "nq-t5",
+          "guest_says": "Is there somewhere nearby to eat dinner?",
+          "context": "Another question — answer then stop, no upselling",
+          "rules": ["no_trailing_question", "no_filler", "direct_answer", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["filler_frequency_increases", "question_creep"]
+    },
+    {
+      "id": "implicit-commands",
+      "name": "Implicit Commands Progression",
+      "description": "Guest expresses discomfort indirectly instead of giving direct commands. Tests that the assistant infers intent and handles escalation naturally across turns.",
+      "primary_language": "en",
+      "guest_profile": "A guest who is too polite or tired to give direct orders — speaks indirectly",
+      "turns": [
+        {
+          "id": "ic-t1",
+          "guest_says": "It's a bit chilly in here.",
+          "context": "Indirect — hinting they want AC adjusted",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "first_greeting_only"]
+        },
+        {
+          "id": "ic-t2",
+          "guest_says": "No, it's still cold. Just switch it off.",
+          "context": "Clarifying — the hint didn't work, now direct",
+          "rules": ["hardware_brief", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "ic-t3",
+          "guest_says": "It's really dark in here, I can't see anything.",
+          "context": "Another indirect — wants lights on",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "ic-t4",
+          "guest_says": "A bit too bright now actually, that's hurting my eyes.",
+          "context": "Complaint about brightness — wants dimmed/ambiance",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "ic-t5",
+          "guest_says": "And now I'm feeling hot again. Don't know what's wrong with me.",
+          "context": "Changed preference — adapt without contradicting, gentle tone",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["context_retention_across_turns", "escalation_handling"]
+    },
+    {
+      "id": "domain-boundaries",
+      "name": "Domain Boundary & Emergency Persistence",
+      "description": "Guest asks out-of-domain questions mixed with a genuine emergency. Tests that the assistant stays in role and doesn't get pulled into unrelated topics.",
+      "primary_language": "en",
+      "guest_profile": "A curious guest who tests boundaries, then faces a real emergency",
+      "turns": [
+        {
+          "id": "db-t1",
+          "guest_says": "So what's the capital of France? Just curious.",
+          "context": "Off-topic trivia — should politely decline",
+          "rules": ["domain_boundary", "no_trailing_question", "no_filler", "first_greeting_only"]
+        },
+        {
+          "id": "db-t2",
+          "guest_says": "Alright, can you write me a poem then?",
+          "context": "Still off-domain — creative writing",
+          "rules": ["domain_boundary", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "db-t3",
+          "guest_says": "Fine. Who's the Prime Minister of India?",
+          "context": "Politics — off-domain, should decline",
+          "rules": ["domain_boundary", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "db-t4",
+          "guest_says": "Hey I think there's a fire in the hallway, I can smell smoke!",
+          "context": "Real emergency — should supersede domain boundaries, urgent front desk referral",
+          "rules": ["emergency_referral", "no_trailing_question"]
+        },
+        {
+          "id": "db-t5",
+          "guest_says": "Sorry, false alarm. Someone was burning something in the kitchen. Can you turn the fan on?",
+          "context": "Back to normal — should handle the request without re-greeting",
+          "rules": ["hardware_brief", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["domain_strictness_consistency", "emergency_recovery"]
+    },
+    {
+      "id": "compound-commands",
+      "name": "Compound Commands Chain (Telugu)",
+      "description": "Guest gives multi-part requests in Telugu. Tests that the assistant handles ALL parts in one response instead of asking follow-ups.",
+      "primary_language": "te",
+      "guest_profile": "A Telugu-speaking guest who bundles requests naturally the way people do",
+      "turns": [
+        {
+          "id": "cc-t1",
+          "guest_says": "లైట్స్ వేయండి, AC 24 పెట్టండి, ఇంకా కొండగట్టు టెంపుల్ టైమింగ్స్ చెప్పండి.",
+          "context": "Triple compound: lights on, AC at 24, temple timings",
+          "rules": ["compound_command", "language_telugu", "no_trailing_question", "first_greeting_only"]
+        },
+        {
+          "id": "cc-t2",
+          "guest_says": "ఫ్యాన్ ఆఫ్ చేసి, వెములవాడ ఎంత దూరమో చెప్పండి.",
+          "context": "Double compound: fan off + Vemulawada distance",
+          "rules": ["compound_command", "language_telugu", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "cc-t3",
+          "guest_says": "Lights off చేసి, AC 26 పెట్టండి, ధర్మపురి టైమింగ్స్ ఏమిటి?",
+          "context": "Code-switched compound: English+Tenglish mix, triple request",
+          "rules": ["compound_command", "language_code_switch", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "cc-t4",
+          "guest_says": "నాకు డ్రింకింగ్ వాటర్ కావాలి, చెక్ అవుట్ టైం ఎంత?",
+          "context": "Service request + FAQ: drinking water + checkout time",
+          "rules": ["compound_command", "language_telugu", "direct_answer", "no_trailing_question", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["compound_completeness", "no_partial_answers"]
+    },
+    {
+      "id": "hardware-failure",
+      "name": "Hardware Failure & Frustration",
+      "description": "Guest reports a command didn't work and gets progressively frustrated. Tests that the assistant de-escalates gracefully and never argues.",
+      "primary_language": "en",
+      "guest_profile": "A tired guest whose room has a faulty light switch",
+      "turns": [
+        {
+          "id": "hf-t1",
+          "guest_says": "Turn the lights on please.",
+          "context": "Normal command — expected to succeed",
+          "rules": ["hardware_brief", "no_trailing_question", "first_greeting_only"]
+        },
+        {
+          "id": "hf-t2",
+          "guest_says": "It didn't work. The lights are still off.",
+          "context": "Reports failure — should NOT argue or insist it worked",
+          "rules": ["hardware_failure_graceful", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "hf-t3",
+          "guest_says": "Try again. Turn on the damn lights!",
+          "context": "Frustrated — de-escalate, suggest manual switch or staff",
+          "rules": ["hardware_failure_graceful", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "hf-t4",
+          "guest_says": "Ugh, nothing in this room works properly. This is really frustrating.",
+          "context": "General frustration — should stay calm, offer human help, not lecture",
+          "rules": ["hardware_failure_graceful", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["patience_retention", "no_argument_escalation"]
+    },
+    {
+      "id": "first-greeting",
+      "name": "First Greeting Only + Directness",
+      "description": "Tests that the welcome greeting with capability list appears EXACTLY ONCE and every subsequent response is direct and greeting-free.",
+      "primary_language": "en",
+      "guest_profile": "A returning guest who already knows how the system works",
+      "turns": [
+        {
+          "id": "fg-t1",
+          "guest_says": "Hi there!",
+          "context": "First interaction — greeting + capabilities expected here and ONLY here",
+          "rules": ["first_greeting_only", "no_trailing_question"]
+        },
+        {
+          "id": "fg-t2",
+          "guest_says": "Turn the AC on please.",
+          "context": "Second turn — must be direct, no greeting or re-listing capabilities",
+          "rules": ["hardware_brief", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "fg-t3",
+          "guest_says": "What else can you control actually?",
+          "context": "Explicitly asks about capabilities — brief answer OK but no full greeting redo",
+          "rules": ["direct_answer", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "fg-t4",
+          "guest_says": "OK switch the AC off.",
+          "context": "Back to normal command — should be brief with zero preamble",
+          "rules": ["hardware_brief", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["greeting_frequency", "preamble_creep"]
+    },
+    {
+      "id": "night-mode",
+      "name": "Night Mode Lights",
+      "description": "Tests late-night light requests. Server runs in IST (UTC+5:30). If run outside 10PM-5AM IST, night mode rule won't apply — but check that the assistant doesn't add unnecessary commentary.",
+      "primary_language": "en",
+      "guest_profile": "A guest who just woke up in the middle of the night",
+      "turns": [
+        {
+          "id": "nm-t1",
+          "guest_says": "Turn on the lights please, I need to get some water.",
+          "context": "Late night — if 10PM-5AM IST, should suggest ambiance lights first",
+          "rules": ["night_mode", "no_trailing_question", "first_greeting_only"]
+        },
+        {
+          "id": "nm-t2",
+          "guest_says": "No, just give me the main lights. I need to see properly.",
+          "context": "Guest overrides night mode suggestion — comply without argument",
+          "rules": ["hardware_brief", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["override_handling"]
+    },
+    {
+      "id": "compound-english",
+      "name": "Compound Command — English",
+      "description": "Multi-part English requests. Separate from the Telugu compound scenario to isolate language effects.",
+      "primary_language": "en",
+      "guest_profile": "An English-speaking guest who piles on requests in one breath",
+      "turns": [
+        {
+          "id": "ce-t1",
+          "guest_says": "Turn off the fan, set the AC to 22, and when's checkout tomorrow?",
+          "context": "Triple compound: fan off, AC 22, checkout time",
+          "rules": ["compound_command", "language_english", "no_trailing_question", "first_greeting_only"]
+        },
+        {
+          "id": "ce-t2",
+          "guest_says": "Actually switch on the ambiance lights too, and what's the WiFi password?",
+          "context": "Another compound: ambiance lights + WiFi",
+          "rules": ["compound_command", "language_english", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "ce-t3",
+          "guest_says": "I need some drinking water, and is there a good place for dinner nearby?",
+          "context": "Service request + recommendation ask",
+          "rules": ["compound_command", "language_english", "no_trailing_question", "no_greeting_repeat", "direct_answer"]
+        }
+      ],
+      "drift_checks": ["compound_completeness", "no_partial_answers"]
+    },
+    {
+      "id": "code-switch-compound",
+      "name": "Code-Switching & Compound Requests",
+      "description": "Guest from Hyderabad/Telangana mixes Telugu and English (Tenglish) rapidly, packing multiple requests into one breath. Tests that the assistant executes hardware first, provides info second, matches language, and goes silent.",
+      "primary_language": "code_switch",
+      "guest_profile": "A Telangana guest who code-switches naturally — speaks Telugu with English loanwords in the same sentence",
+      "turns": [
+        {
+          "id": "code-sc1",
+          "guest_says": "Hey, room lo main lights off chesey, only ambiance lights on uchu. Also, repu Kondagattu temple ki vellali, timing ento cheppu?",
+          "context": "Tenglish compound: main lights off, ambiance on, temple timings for tomorrow",
+          "rules": ["compound_command", "language_code_switch", "no_trailing_question", "no_filler", "first_greeting_only"]
+        },
+        {
+          "id": "code-sc2",
+          "guest_says": "Bhaiyya, AC bahut thanda hai, isko bandh kardo. Aur kal subah Dharmapuri jana hai, mandir khula rahega kya?",
+          "context": "Hinglish compound: AC off + Dharmapuri temple morning timings check",
+          "rules": ["compound_command", "language_code_switch", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["compound_completeness", "language_consistency_across_turns"]
+    },
+    {
+      "id": "lazy-guest-implicit",
+      "name": "Implicit Command / Lazy Guest",
+      "description": "Guest never gives direct commands — just complains about the environment. Tests that the assistant infers intent and acts without being explicitly told to.",
+      "primary_language": "en",
+      "guest_profile": "A tired or indirect guest who expects the assistant to read between the lines",
+      "turns": [
+        {
+          "id": "lg-t1",
+          "guest_says": "It's freezing in here.",
+          "context": "Implicit — AC too high, guest wants it adjusted",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "first_greeting_only"]
+        },
+        {
+          "id": "lg-t2",
+          "guest_says": "Eyy, chala cheekatiga undi room lo.",
+          "context": "Telugu implicit — guest says it's very dark, wants lights on",
+          "rules": ["implicit_command", "language_code_switch", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "lg-t3",
+          "guest_says": "Paaniki vachchina ventane gabi gabi undi, AC apesi fan vesey.",
+          "context": "Telugu: 'Feeling stuffy right after coming, turn off AC and turn on fan.' Indirect complaint style",
+          "rules": ["compound_command", "implicit_command", "language_code_switch", "no_trailing_question", "no_greeting_repeat"]
+        },
+        {
+          "id": "lg-t4",
+          "guest_says": "I think there's a draft somewhere. It's getting cold again.",
+          "context": "English — complaining cold again, wants AC back on or adjusted",
+          "rules": ["implicit_command", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["context_retention_across_turns", "escalation_handling"]
+    },
+    {
+      "id": "unsupported-demand",
+      "name": "Unsupported Demand — Hospitality Fallback",
+      "description": "Guest treats the assistant as a full-service butler, asking for things the system can't do (physical delivery, TV control). Tests that the assistant gracefully redirects instead of pretending.",
+      "primary_language": "en",
+      "guest_profile": "A guest who doesn't understand what an IoT assistant can or can't do",
+      "turns": [
+        {
+          "id": "ud-t1",
+          "guest_says": "We need two extra towels and a bottle of water. Can you send someone?",
+          "context": "Physical delivery request — not something the assistant can do",
+          "rules": ["unsupported_request_handling", "no_trailing_question", "no_filler", "first_greeting_only"]
+        },
+        {
+          "id": "ud-t2",
+          "guest_says": "TV chalu karo aur sports channel lagao.",
+          "context": "Hindi: Turn on TV and put a sports channel — TV not part of system",
+          "rules": ["unsupported_request_handling", "language_code_switch", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "ud-t3",
+          "guest_says": "Can you book a cab for us at 6 AM tomorrow?",
+          "context": "Cab booking — not implemented but reasonable hospitality request",
+          "rules": ["unsupported_request_handling", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["consistent_fallback", "no_false_fulfillment"]
+    },
+    {
+      "id": "hardware-desync",
+      "name": "Hardware Desync / Frustration",
+      "description": "Guest sent a command but the relay failed or network dropped the packet. Guest is annoyed and says they told the assistant twice. Tests that the assistant doesn't argue back.",
+      "primary_language": "te",
+      "guest_profile": "A frustrated Telugu-speaking guest whose room hardware keeps failing",
+      "turns": [
+        {
+          "id": "hd-t1",
+          "guest_says": "AC full veyandi, chala chill ga undi.",
+          "context": "First command: turn AC on fully",
+          "rules": ["hardware_brief", "no_trailing_question", "language_telugu", "first_greeting_only"]
+        },
+        {
+          "id": "hd-t2",
+          "guest_says": "Entandi idi? AC on cheyamante inka on avvaledu! Rendu sarlu cheppanu.",
+          "context": "Telugu: 'What is this? I said turn on AC and it's still not on! I told you twice.' Desync report with frustration",
+          "rules": ["hardware_failure_graceful", "language_telugu", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "hd-t3",
+          "guest_says": "I tried the wall switch too. Nothing is working. This is ridiculous.",
+          "context": "Guest tried manual overrides too — still broken, now more frustrated",
+          "rules": ["hardware_failure_graceful", "language_code_switch", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        },
+        {
+          "id": "hd-t4",
+          "guest_says": "Mallayya lights kuda pani cheyatledu. Ee room lo em pani chestundo?",
+          "context": "Telugu: 'Also the lights don't work anymore. What works in this room?' — multiple failures, escalating frustration",
+          "rules": ["hardware_failure_graceful", "compound_command", "language_telugu", "no_trailing_question", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["patience_retention", "no_argument_escalation"]
+    },
+    {
+      "id": "mumble-cutoff",
+      "name": "Mumble & Cut-Off Clarification",
+      "description": "Guest hits push-to-talk but trails off mid-sentence, or someone talks over them. Tests that the assistant can ask a SINGLE clarifying question (exception to no_trailing_question).",
+      "primary_language": "en",
+      "guest_profile": "A distracted guest who starts speaking before thinking",
+      "turns": [
+        {
+          "id": "mc-t1",
+          "guest_says": "Can you turn on the... wait, no, turn off the... ah...",
+          "context": "Guest changes mind mid-sentence and trails off — needs clarification",
+          "rules": ["clarification_exception", "first_greeting_only"]
+        },
+        {
+          "id": "mc-t2",
+          "guest_says": "Haan toh main soch raha tha ki... arey bhool gaya. Chodo.",
+          "context": "Hindi: 'I was thinking about... ah I forgot. Never mind.' Trailing off in Hindi.",
+          "rules": ["clarification_exception", "language_code_switch", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["clarification_escalation"]
+    },
+    {
+      "id": "emergency-panic",
+      "name": "Emergency Panic Response",
+      "description": "Worst-case scenario where guest needs immediate human help. Tests that the assistant drops the cheerful persona and urgently directs to front desk.",
+      "primary_language": "en",
+      "guest_profile": "A guest in genuine distress",
+      "turns": [
+        {
+          "id": "ep-t1",
+          "guest_says": "Help, there's a fire in the bathroom!",
+          "context": "Fire emergency — urgent, needs immediate response",
+          "rules": ["emergency_referral", "first_greeting_only"]
+        },
+        {
+          "id": "ep-t2",
+          "guest_says": "My chest hurts, I need a doctor!",
+          "context": "Medical emergency — urgent referral",
+          "rules": ["emergency_referral", "no_greeting_repeat"]
+        },
+        {
+          "id": "ep-t3",
+          "guest_says": "I think someone tried to get into my room last night. I'm scared.",
+          "context": "Security concern — less urgent but still needs human involvement",
+          "rules": ["emergency_referral", "no_trailing_question", "no_filler", "no_greeting_repeat"]
+        }
+      ],
+      "drift_checks": ["urgency_consistency"]
+    }
+  ]
+}

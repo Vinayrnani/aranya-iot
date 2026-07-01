@@ -1,0 +1,65 @@
+- generic "Google Maps" [ref=e9] [box=0,0,780,493]:
+  - generic [ref=e3] [box=0,0,780,493]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e10] [box=0,0,780,493]
+    - search [ref=e15] [box=16,12,376,187]:
+      - button "Menu" [ref=e17] [cursor=pointer] [box=16,12,56,52]:
+        - generic [ref=e18] [box=32,24,24,24]: 
+      - generic [ref=e19] [box=16,12,376,48]:
+        - generic [ref=e20] [box=80,23,168,24]:
+          - generic [ref=e170] [box=80,23,168,26]: Search nearby 18°39'11.1"N 78°55'58.0"E
+          - combobox "Search nearby 18°39'11.1\"N 78°55'58.0\"E" [expanded] [active] [ref=e171] [box=80,23,168,24]
+        - button "Search" [ref=e23] [cursor=pointer] [box=250,12,48,52]:
+          - generic [ref=e24] [box=262,24,24,24]: 
+        - generic [ref=e172] [box=313,19,71,32]:
+          - generic [ref=e173] [box=320,26,28,18]: 
+          - button "Cancel search nearby" [ref=e175] [cursor=pointer] [box=349,23,28,24]
+      - grid "Suggestions" [ref=e177] [box=16,60,376,139]:
+        - row "Restaurants nearby" [ref=e180] [cursor=pointer] [box=36,80,344,40]:
+          - gridcell "Restaurants nearby" [ref=e181] [box=36,80,344,40]
+        - row "Hotels nearby" [ref=e192] [cursor=pointer] [box=36,144,344,40]:
+          - gridcell "Hotels nearby" [ref=e193] [box=36,144,344,40]
+        - row "Bars and pubs nearby" [ref=e204] [cursor=pointer] [box=36,208,344,40]:
+          - gridcell "Bars and pubs nearby" [ref=e205] [box=36,208,344,40]
+    - generic [ref=e28] [box=0,0,408,493]:
+      - main [ref=e214] [box=0,0,408,493]:
+        - generic [ref=e215] [box=0,0,408,493]:
+          - img [ref=e219] [box=0,-8,408,256]
+          - generic [ref=e222] [box=0,240,408,20]
+          - region "Actions for" [ref=e225] [box=0,273,408,104]
+          - link "About this data" [ref=e257] [cursor=pointer] [box=24,411,112,48]:
+            - /url: https://support.google.com/local-listings?p=how_google_sources&authuser=0&hl=en
+          - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e263] [box=24,459,360,60]
+      - button "Collapse side panel" [ref=e107] [cursor=pointer] [box=408,223,23,48]:
+        - generic [ref=e108] [box=408,235,24,24]: 
+    - generic [ref=e112] [box=613,0,155,64]:
+      - button "Google apps" [ref=e116] [cursor=pointer] [box=613,13,40,40]:
+        - img [ref=e117] [box=621,21,24,24]
+      - link "Sign in" [ref=e120] [cursor=pointer] [box=667,12,85,40]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fplace%2F%2F%4018.653069%2C78.9327634%2C17z%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e121] [box=408,480,372,13]:
+      - generic [ref=e274] [box=435,364,318,96]:
+        - generic [ref=e275] [box=435,364,318,64]:
+          - generic [ref=e276] [box=451,372,301,24]
+          - generic [ref=e292] [box=451,396,301,24]: No travel times for this place. Select another place
+        - switch "Turn off travel time tool" [checked] [ref=e294] [cursor=pointer] [box=450,441,26,10]
+      - generic [box=731,34,29,393]:
+        - button "Show Your Location" [ref=e124] [cursor=pointer] [box=731,338,29,29]:
+          - generic [ref=e126] [box=737,344,18,18]: 
+        - generic [ref=e128] [cursor=pointer] [box=731,370,29,57]:
+          - button "Zoom in" [ref=e129] [box=731,370,29,29]
+          - button "Zoom out" [ref=e132] [box=731,398,29,29]
+      - button "Browse Street View images" [ref=e140] [box=731,430,29,30]
+      - generic [ref=e146] [box=428,381,79,79]:
+        - generic "Interactive map" [ref=e147] [box=430,383,75,75]
+        - generic [ref=e151] [cursor=pointer] [box=430,382,75,76]:
+          - generic [ref=e152] [box=436,434,18,18]: 
+          - generic [ref=e153] [box=457,437,32,13]: Layers
+        - button "Layers" [ref=e154] [cursor=pointer] [box=430,383,75,75]
+    - generic [ref=e156] [box=408,467,372,26]:
+      - contentinfo [ref=e159] [box=411,467,226,26]:
+        - text: Map data ©2026
+        - button "India" [ref=e160] [cursor=pointer] [box=503,467,22,13]
+        - button "Terms" [ref=e161] [cursor=pointer] [box=540,467,28,13]
+        - button "Privacy" [ref=e162] [cursor=pointer] [box=583,467,32,13]
+        - button "Send Product Feedback" [ref=e163] [cursor=pointer] [box=411,480,105,13]
+      - button "100 m" [ref=e165] [cursor=pointer] [box=637,468,122,11]: 100 m

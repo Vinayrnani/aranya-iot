@@ -1,0 +1,15 @@
+[     113ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[     148ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[    4030ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=5:179
+[    4975ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=5:183
+[    4975ms] [LOG] Live session ready @ http://localhost:8000/app.js?v=5:183
+[   49930ms] [LOG] Session resumption update: {newHandle: 80da0c51-603f-4f8a-9bbd-2a85a64b3f0e, resumable: true} @ http://localhost:8000/geminilive.js?v=5:264
+[   50756ms] [LOG] Turn saved: conv_1782541447386 @ http://localhost:8000/app.js?v=5:213
+[   52098ms] [LOG] Session resumption update: {newHandle: 5e92dfa3-9624-48ab-aadd-1be9f846039f, resumable: true} @ http://localhost:8000/geminilive.js?v=5:264
+[   53826ms] [LOG] Session resumption update: {newHandle: 984213ba-1620-49b0-8bcf-b5ec8ed8e302, resumable: true} @ http://localhost:8000/geminilive.js?v=5:264
+[   55058ms] [LOG] Turn saved: conv_1782541450843 @ http://localhost:8000/app.js?v=5:213
+[   56733ms] [LOG] Session resumption update: {newHandle: 7664b3e9-167d-4003-8cd0-bde09e9f73ba, resumable: true} @ http://localhost:8000/geminilive.js?v=5:264
+[   58244ms] [LOG] Session resumption update: {newHandle: 96c70532-ce22-4702-9205-95c990197d57, resumable: true} @ http://localhost:8000/geminilive.js?v=5:264
+[   58245ms] [LOG] Turn saved: conv_1782541455146 @ http://localhost:8000/app.js?v=5:213
+[   58883ms] [LOG] Disconnected: 1000  @ http://localhost:8000/app.js?v=5:227
+[   58888ms] [LOG] Disconnect-saved turn: conv_1782541458333 @ http://localhost:8000/app.js?v=5:232

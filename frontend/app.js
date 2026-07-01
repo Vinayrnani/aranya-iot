@@ -18,6 +18,7 @@ const app = {
   isMicOn: false,
   conversation: [],
   sessionToken: null,
+  _isFirstTurn: true,     // Track first user turn per WebSocket session
 
   // Caption bar state
   captionLines: [],         // Finalized lines: [{ role, text, dimmed }]
@@ -254,6 +255,7 @@ app._connect = async function () {
 };
 
 app._handleDisconnect = function () {
+  this._isFirstTurn = true;
   this._setStatus('idle', 'Disconnected');
   this.els.micBtn.classList.remove('active');
   this.els.siriOrb.className = 'siri-orb';
@@ -329,6 +331,15 @@ app._startMic = async function () {
 
     // Clear caption bar for a fresh turn
     this._clearCaptions();
+
+    // Send session flag before the first audio of each turn.
+    // Gemini uses this to decide greeting protocol per behavioral_constraints.
+    if (this._isFirstTurn) {
+      this.client.sendText('[SESSION_START = TRUE]');
+      this._isFirstTurn = false;
+    } else {
+      this.client.sendText('[SESSION_START = FALSE]');
+    }
 
     // Set up audio capture
     this.capture.onChunk = (base64PCM) => {

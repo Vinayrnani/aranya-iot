@@ -1,0 +1,5 @@
+[     210ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[     237ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[   29695ms] [LOG] WebSocket connected @ http://localhost:8000/app.js:174
+[   29852ms] [LOG] Disconnected: 1007 Invalid JSON payload received. Unknown name "responseModalities" at 'setup': Cannot find field.
+Invalid JSON payload receiv @ http://localhost:8000/app.js:202

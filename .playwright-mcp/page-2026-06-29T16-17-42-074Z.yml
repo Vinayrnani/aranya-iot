@@ -1,0 +1,196 @@
+- generic "Google Maps" [ref=e2]:
+  - generic [ref=e3]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e8]
+    - search [ref=e14]:
+      - button "Menu" [ref=e16] [cursor=pointer]:
+        - generic [ref=e17]: 
+      - generic [ref=e18]:
+        - combobox [ref=e160]: Things to do
+        - button "Search" [ref=e23] [cursor=pointer]:
+          - generic [ref=e24]: 
+        - button "Close" [ref=e161] [cursor=pointer]:
+          - generic [ref=e162]: 
+    - generic [ref=e163]:
+      - main [ref=e169]:
+        - generic [ref=e170]:
+          - feed "Results for Things to do" [ref=e171]:
+            - region "Available filters for this search" [ref=e173]:
+              - generic [ref=e176]:
+                - button "Rating" [active] [ref=e178] [cursor=pointer]:
+                  - generic [ref=e179]:
+                    - generic [ref=e181]: Rating
+                    - generic [ref=e182]: 
+                - button "Hours" [ref=e184] [cursor=pointer]:
+                  - generic [ref=e185]:
+                    - generic [ref=e187]: Hours
+                    - generic [ref=e188]: 
+                - button "All filters" [ref=e190] [cursor=pointer]:
+                  - generic [ref=e191]:
+                    - generic [ref=e193]: 
+                    - generic [ref=e194]: All filters
+            - generic [ref=e195]:
+              - generic [ref=e197]:
+                - heading "Results" [level=1] [ref=e198]
+                - button "Learn more about legal disclosure regarding public reviews on Google Maps" [ref=e202]:
+                  - generic [ref=e206]: 
+              - button "Share" [ref=e210]:
+                - generic [ref=e211] [cursor=pointer]:
+                  - generic [ref=e212]: 
+                  - generic [ref=e213]: Share
+            - article "Anthargaon Lake View Point" [ref=e215]:
+              - link "Anthargaon Lake View Point" [ref=e216] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Anthargaon+Lake+View+Point/data=!4m7!3m6!1s0x3bcd13072e0187a3:0xddf01ad15c116546!8m2!3d18.7682155!4d78.8966112!16s%2Fg%2F11jsztrq2s!19sChIJo4cBLgcTzTsRRmURXNEa8N0?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Anthargaon Lake View Point
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.4 stars": "4.4"
+                          - generic:
+                            - generic:
+                              - generic: Tourist attraction
+                              - generic: · QV9W+7JQ
+                            - generic:
+                              - generic:
+                                - generic: Open 24 hours
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+            - article "Sri Anjaneya Swamy Temple | Kondagattu" [ref=e219]:
+              - link "Sri Anjaneya Swamy Temple | Kondagattu" [ref=e220] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Sri+Anjaneya+Swamy+Temple+%7C+Kondagattu/data=!4m7!3m6!1s0x3bcd10ae08cc0bcd:0xd8f229af43e24c2f!8m2!3d18.6793967!4d78.9228999!16s%2Fg%2F1tg5y2dv!19sChIJzQvMCK4QzTsRL0ziQ68p8tg?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Sri Anjaneya Swamy Temple | Kondagattu
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.6 stars 17,291 Reviews":
+                                  - text: "4.6"
+                                  - text: (17,291)
+                          - generic:
+                            - generic:
+                              - generic: Tourist attraction
+                              - generic:
+                                - text: ·
+                                - img "Wheelchair accessible entrance" [ref=e221] [cursor=pointer]:
+                                  - generic [ref=e222]: 
+                              - generic: · Muthyampet Rd
+                            - generic:
+                              - generic: Hindu temple with multiple festivals
+                            - generic:
+                              - generic:
+                                - generic: Closed · Opens 6 am Tue
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic: On-site services
+            - article "Elgandal Fort" [ref=e225]:
+              - link "Elgandal Fort" [ref=e226] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/Elgandal+Fort/data=!4m7!3m6!1s0x3bccde3f79eca31d:0x58326f7f49f4bbab!8m2!3d18.4210653!4d79.0408223!16zL20vMGN6Mjh2!19sChIJHaPseT_ezDsRq7v0SX9vMlg?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Elgandal Fort
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.3 stars": "4.3"
+                          - generic:
+                            - generic:
+                              - generic: Tourist attraction
+                              - generic: · C2FR+J43, Banks Of Manair River, 10 Kilometres From Karimnagar On Kamareddy Road
+                            - generic:
+                              - generic: Remains of a spired hilltop fortress
+                            - generic:
+                              - generic:
+                                - generic: Closed · Opens 9 am Tue
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+            - article "GULLY VIBE'S" [ref=e229]:
+              - link "GULLY VIBE'S" [ref=e230] [cursor=pointer]:
+                - /url: https://www.google.com/maps/place/GULLY+VIBE%27S/data=!4m7!3m6!1s0x3bcd1395a7bbcd61:0x5be4ee59d8aa8356!8m2!3d18.7957313!4d78.9019455!16s%2Fg%2F11l2n4pbxd!19sChIJYc27p5UTzTsRVoOq2Fnu5Fs?authuser=0&hl=en&rclk=1
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: GULLY VIBE'S
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "4.9 stars": "4.9"
+                          - generic:
+                            - generic:
+                              - generic: Tourist attraction
+                              - generic: · QWW2+2PX
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+            - generic [ref=e265]:
+              - generic [ref=e267]: 
+              - generic [ref=e268]:
+                - text: You're seeing a limited view of Google Maps.
+                - button "Learn more about limited view" [ref=e269] [cursor=pointer]: Learn more
+            - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e273]:
+              - generic [ref=e274]: Get the most out of Google Maps
+              - button "Sign in" [ref=e277] [cursor=pointer]:
+                - generic [ref=e279]: Sign in
+          - checkbox "Update results when map moves" [ref=e282] [cursor=pointer]:
+            - generic [ref=e284]: 
+            - text: Update results when map moves
+      - button "Collapse side panel" [ref=e286] [cursor=pointer]:
+        - generic [ref=e287]: 
+    - generic [ref=e103]:
+      - button "Google apps" [ref=e107] [cursor=pointer]:
+        - img [ref=e108]
+      - link "Sign in" [ref=e111] [cursor=pointer]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2FThings%2Bto%2Bdo%2F%4018.653069%2C78.9327634%2C13z%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e288]:
+      - generic:
+        - button "Show Your Location" [ref=e114] [cursor=pointer]:
+          - generic [ref=e116]: 
+        - generic [ref=e118] [cursor=pointer]:
+          - button "Zoom in" [ref=e119]
+          - button "Zoom out" [ref=e122]
+      - button "Browse Street View images" [ref=e130]
+      - generic [ref=e136]:
+        - generic "Interactive map" [ref=e137]
+        - generic [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]: 
+          - generic [ref=e143]: Layers
+        - button "Layers" [ref=e144] [cursor=pointer]
+    - generic [ref=e146]:
+      - contentinfo [ref=e149]:
+        - text: Map data ©2026
+        - button "India" [ref=e150] [cursor=pointer]
+        - button "Terms" [ref=e151] [cursor=pointer]
+        - button "Privacy" [ref=e152] [cursor=pointer]
+        - button "Send Product Feedback" [ref=e153] [cursor=pointer]
+      - button "2 km" [ref=e155] [cursor=pointer]: 2 km

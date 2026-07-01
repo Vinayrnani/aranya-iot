@@ -1,0 +1,4 @@
+[     173ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://localhost:8000/:0
+[     221ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:8000/:0
+[    9325ms] [LOG] WebSocket connected @ http://localhost:8000/app.js?v=3:174
+[  163467ms] [LOG] Disconnected: 1008 The operation was aborted. @ http://localhost:8000/app.js?v=3:202

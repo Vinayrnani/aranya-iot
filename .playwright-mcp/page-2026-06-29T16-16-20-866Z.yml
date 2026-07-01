@@ -1,0 +1,110 @@
+- generic "Google Maps" [ref=e9]:
+  - generic [ref=e3]:
+    - application "Map · Use arrow keys to pan the map. · Get details about a place by pressing its corresponding number key." [ref=e10]
+    - search [ref=e15]:
+      - button "Menu" [ref=e17] [cursor=pointer]:
+        - generic [ref=e18]: 
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - generic [ref=e170]: Search nearby 18°39'11.1"N 78°55'58.0"E
+          - combobox "Search nearby 18°39'11.1\"N 78°55'58.0\"E" [expanded] [active] [ref=e171]
+        - button "Search" [ref=e23] [cursor=pointer]:
+          - generic [ref=e24]: 
+        - generic [ref=e172]:
+          - generic [ref=e173]: 
+          - button "Cancel search nearby" [ref=e175] [cursor=pointer]:
+            - generic [ref=e176]: 
+      - grid "Suggestions" [ref=e177]:
+        - row "Restaurants nearby" [ref=e180] [cursor=pointer]:
+          - gridcell "Restaurants nearby" [ref=e181]:
+            - generic [ref=e184]: 
+            - generic [ref=e185]:
+              - generic [ref=e187]: Restaurants
+              - generic [ref=e189]: nearby
+        - row "Hotels nearby" [ref=e192] [cursor=pointer]:
+          - gridcell "Hotels nearby" [ref=e193]:
+            - generic [ref=e196]: 
+            - generic [ref=e197]:
+              - generic [ref=e199]: Hotels
+              - generic [ref=e201]: nearby
+        - row "Bars and pubs nearby" [ref=e204] [cursor=pointer]:
+          - gridcell "Bars and pubs nearby" [ref=e205]:
+            - generic [ref=e208]: 
+            - generic [ref=e209]:
+              - generic [ref=e211]: Bars and pubs
+              - generic [ref=e213]: nearby
+    - generic [ref=e28]:
+      - main [ref=e214]:
+        - generic [ref=e215]:
+          - img [ref=e219]
+          - generic [ref=e222]:
+            - generic:
+              - heading [level=1]
+          - region "Actions for" [ref=e225]:
+            - button "Directions" [ref=e227] [cursor=pointer]:
+              - generic [ref=e229]: 
+              - generic [ref=e230]: Directions
+            - button "Save" [ref=e232] [cursor=pointer]:
+              - generic [ref=e234]: 
+              - generic [ref=e235]: Save
+            - button "Nearby" [ref=e237] [cursor=pointer]:
+              - generic [ref=e239]: 
+              - generic [ref=e240]: Nearby
+            - button "Send to phone" [ref=e242] [cursor=pointer]:
+              - generic [ref=e244]: 
+              - generic [ref=e245]: Send to phone
+            - button "Share" [ref=e247] [cursor=pointer]:
+              - generic [ref=e249]: 
+              - generic [ref=e250]: Share
+          - link "About this data" [ref=e257] [cursor=pointer]:
+            - /url: https://support.google.com/local-listings?p=how_google_sources&authuser=0&hl=en
+            - generic [ref=e259]: About this data
+          - heading "Get the most out of Google Maps Sign in" [level=2] [ref=e263]:
+            - generic [ref=e264]: Get the most out of Google Maps
+            - button "Sign in" [ref=e267] [cursor=pointer]:
+              - generic [ref=e269]: Sign in
+      - button "Collapse side panel" [ref=e107] [cursor=pointer]:
+        - generic [ref=e108]: 
+    - generic [ref=e112]:
+      - button "Google apps" [ref=e116] [cursor=pointer]:
+        - img [ref=e117]
+      - link "Sign in" [ref=e120] [cursor=pointer]:
+        - /url: https://accounts.google.com/ServiceLogin?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2Fmaps%2Fplace%2F%2F%4018.653069%2C78.9327634%2C17z%3Fved%3D1t%253A314688&service=local&ec=GAZAcQ
+    - generic [ref=e121]:
+      - generic [ref=e274]:
+        - generic [ref=e275]:
+          - generic [ref=e276]:
+            - button "15 min" [disabled] [ref=e278]:
+              - text: 15 min
+              - generic [ref=e279]: 
+            - radiogroup [ref=e280]:
+              - generic [ref=e281]:
+                - radio "Walking" [ref=e283] [cursor=pointer]:
+                  - img "Walking" [ref=e284]:
+                    - generic [ref=e286]: 
+                - radio "Driving" [checked] [ref=e288]:
+                  - img "Driving" [ref=e289]:
+                    - generic [ref=e291]: 
+          - generic [ref=e292]: No travel times for this place. Select another place
+        - switch "Turn off travel time tool" [checked] [ref=e294] [cursor=pointer]
+      - generic:
+        - button "Show Your Location" [ref=e124] [cursor=pointer]:
+          - generic [ref=e126]: 
+        - generic [ref=e128] [cursor=pointer]:
+          - button "Zoom in" [ref=e129]
+          - button "Zoom out" [ref=e132]
+      - button "Browse Street View images" [ref=e140]
+      - generic [ref=e146]:
+        - generic "Interactive map" [ref=e147]
+        - generic [ref=e151] [cursor=pointer]:
+          - generic [ref=e152]: 
+          - generic [ref=e153]: Layers
+        - button "Layers" [ref=e154] [cursor=pointer]
+    - generic [ref=e156]:
+      - contentinfo [ref=e159]:
+        - text: Map data ©2026
+        - button "India" [ref=e160] [cursor=pointer]
+        - button "Terms" [ref=e161] [cursor=pointer]
+        - button "Privacy" [ref=e162] [cursor=pointer]
+        - button "Send Product Feedback" [ref=e163] [cursor=pointer]
+      - button "100 m" [ref=e165] [cursor=pointer]: 100 m

@@ -1,0 +1,17 @@
+[     231ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ http://127.0.0.1:8000/?e2e-test=1:0
+[     254ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://127.0.0.1:8000/?e2e-test=1:0
+[   19096ms] [LOG] WebSocket connected @ http://127.0.0.1:8000/app.js?v=5:179
+[   19949ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=5:183
+[   19951ms] [LOG] Live session ready @ http://127.0.0.1:8000/app.js?v=5:183
+[   20011ms] [ERROR] Failed to start audio capture: NotFoundError: Requested device not found @ http://127.0.0.1:8000/audio-handler.js?v=4:82
+[   20012ms] [ERROR] Capture error: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=5:301
+[   20012ms] [ERROR] Failed to start mic: NotFoundError: Requested device not found @ http://127.0.0.1:8000/app.js?v=5:312
+[   53545ms] [LOG] Session resumption update: {newHandle: b13907fc-b57d-4878-9790-1fd5d93a26d7, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=5:264
+[   68086ms] [LOG] Session resumption update: {newHandle: 10bd14d3-6131-41b2-892f-da3a31e26cdc, resumable: true} @ http://127.0.0.1:8000/geminilive.js?v=5:264
+[   96941ms] [LOG] Conversation saved: conv_1782536593989 @ :2
+[  106349ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/conversations/save:0
+[  106350ms] [ERROR] Export failed: Error: Server export failed: 405
+    at ConversationRecorder.exportToServer (http://127.0.0.1:8000/conversations.js?v=1:400:13)
+    at async eval (eval at evaluate (:303:30), <anonymous>:4:30)
+    at async <anonymous>:329:30 @ :5
+[  218600ms] [LOG] Disconnected: 1008 The operation was aborted. @ http://127.0.0.1:8000/app.js?v=5:212
